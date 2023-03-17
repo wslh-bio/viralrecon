@@ -59,6 +59,7 @@ include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_NO_BARCODES        } from '../mod
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_BARCODE_COUNT      } from '../modules/local/multiqc_tsv_from_list'
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_GUPPYPLEX_COUNT    } from '../modules/local/multiqc_tsv_from_list'
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_NEXTCLADE          } from '../modules/local/multiqc_tsv_from_list'
+include { WSLH_REPORT                                             } from '../modules/local/wslh_report'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -534,6 +535,14 @@ workflow NANOPORE {
         )
         multiqc_report = MULTIQC.out.report.toList()
     }
+    //
+    // MODULE: WSLH_REPORT creates postrun script inline with wslh standards
+    WSLH_REPORT(
+        MULTIQC.out.csv,
+        ARTIC_MINION.out.bam_primertrimmed.flatten().filter(Path).collect(),
+        ch_pangolin_multiqc.flatten().filter(Path).collect(),
+        NEXTCLADE_RUN.out.csv.flatten().filter(Path).collect()
+    )
 }
 
 /*

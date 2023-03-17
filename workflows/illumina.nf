@@ -62,6 +62,7 @@ include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../mod
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_FAIL_READS         } from '../modules/local/multiqc_tsv_from_list'
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_FAIL_MAPPED        } from '../modules/local/multiqc_tsv_from_list'
 include { MULTIQC_TSV_FROM_LIST as MULTIQC_TSV_NEXTCLADE          } from '../modules/local/multiqc_tsv_from_list'
+include { WSLH_REPORT                                             } from '../modules/local/wslh_report'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -639,6 +640,14 @@ workflow ILLUMINA {
         )
         multiqc_report = MULTIQC.out.report.toList()
     }
+    //
+    // MODULE: WSLH_REPORT creates postrun script inline with wslh standards
+    WSLH_REPORT(
+        MULTIQC.out.csv_variants,
+        ch_bam.flatten().filter(Path).collect(),
+        ch_pangolin_multiqc.flatten().filter(Path).collect(),
+        ch_nextclade_report.flatten().filter(Path).collect()
+    )
 }
 
 /*

@@ -217,7 +217,7 @@ def combine_results(summary_file, samtools_file, pangolin_file, nextclade_file, 
                        '# Trimmed reads (iVar)':'num_trimmed_reads_iVar', '% Non-host reads (Kraken 2)':'percent_non-host_reads_kraken2',
                        '% Mapped reads':'percent_mapped_reads', '# Mapped reads':'num_mapped_reads',
                        'Coverage median':'coverage_median', '% Coverage > 1x':'percent_coverage>1x',
-                       '% Coverage > 10x':'percent_coverage>1x', '# SNPs':'num_SNPs', '# INDELs':'num_INDELs',
+                       '% Coverage > 10x':'percent_coverage>10x', '# SNPs':'num_SNPs', '# INDELs':'num_INDELs',
                        '# Missense variants':'num_missense_variants', '# Ns per 100kb consensus':'num_Ns_per_100kb_consensus' })
     df1.to_csv(wslh_output, index=False)
 

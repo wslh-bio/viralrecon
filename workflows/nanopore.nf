@@ -63,6 +63,7 @@ include { PREPARE_GENOME      } from '../subworkflows/local/prepare_genome_nanop
 include { SNPEFF_SNPSIFT      } from '../subworkflows/local/snpeff_snpsift'
 include { VARIANTS_LONG_TABLE } from '../subworkflows/local/variants_long_table'
 include { FILTER_BAM_SAMTOOLS } from '../subworkflows/local/filter_bam_samtools'
+include { WSLH_REPORT         } from '../modules/local/wslh_report'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -534,6 +535,14 @@ workflow NANOPORE {
         )
         multiqc_report = MULTIQC.out.report.toList()
     }
+    //
+    // MODULE: WSLH_REPORT creates postrun script inline with wslh standards
+    WSLH_REPORT(
+        MULTIQC.out.csv,
+        ARTIC_MINION.out.bam_primertrimmed.flatten().filter(Path).collect(),
+        ch_pangolin_multiqc.flatten().filter(Path).collect(),
+        NEXTCLADE_RUN.out.csv.flatten().filter(Path).collect()
+    )
 }
 
 /*

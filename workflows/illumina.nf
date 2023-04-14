@@ -75,6 +75,7 @@ include { ASSEMBLY_UNICYCLER      } from '../subworkflows/local/assembly_unicycl
 include { ASSEMBLY_MINIA          } from '../subworkflows/local/assembly_minia'
 include { BAM_TRIM_PRIMERS_IVAR   } from '../subworkflows/local/bam_trim_primers_ivar'
 include { FASTQ_TRIM_FASTP_FASTQC } from '../subworkflows/local/fastq_trim_fastp_fastqc'
+include { WSLH_REPORT             } from '../modules/local/wslh_report'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -642,6 +643,14 @@ workflow ILLUMINA {
         )
         multiqc_report = MULTIQC.out.report.toList()
     }
+    //
+    // MODULE: WSLH_REPORT creates postrun script inline with wslh standards
+    WSLH_REPORT(
+        MULTIQC.out.csv_variants,
+        ch_bam.flatten().filter(Path).collect(),
+        ch_pangolin_multiqc.flatten().filter(Path).collect(),
+        ch_nextclade_report.flatten().filter(Path).collect()
+    )
 }
 
 /*

@@ -31,6 +31,7 @@ process WSLH_REPORT {
         -b $bam_files \\
         -p $pangolin_reports \\
         -n $nextclade_reports \\
-        -wv ${workflow.manifest.version}
+        -wv ${workflow.manifest.version} \\
+        -rn ${workflow.runName}
     """
 }

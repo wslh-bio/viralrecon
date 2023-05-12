@@ -64,6 +64,16 @@ def parse_args(args=None):
         default="",
         help="The version of the workflow.",
     )
+    parser.add_argument(
+        "-rn",
+        "--run_name",
+        type=str,
+        nargs='+',
+        action='store',
+        dest="RUN_NAME",
+        default="",
+        help="The name of the run.",
+    )
     return parser.parse_args(args)
 
 def get_summary_file(summary):
@@ -219,7 +229,7 @@ def combine_results(summary_file, samtools_file, pangolin_file, nextclade_file, 
                        'Coverage median':'coverage_median', '% Coverage > 1x':'percent_coverage>1x',
                        '% Coverage > 10x':'percent_coverage>10x', '# SNPs':'num_SNPs', '# INDELs':'num_INDELs',
                        '# Missense variants':'num_missense_variants', '# Ns per 100kb consensus':'num_Ns_per_100kb_consensus' })
-    df1.to_csv(wslh_output, index=False)
+    df1.to_csv(wslh_output[0]+"_viralrecon_report.csv", index=False)
 
 def main(args=None):
     args = parse_args(args)
@@ -228,7 +238,7 @@ def main(args=None):
     pangolin_file = get_pangolin_data(pangolin_list=args.PANGOLIN)
     nextclade_file = get_nextclade_data(nextclade_list=args.NEXTCLADE)
     samtools_file = samtools_coverage(bam_list=args.BAM_FILES)
-    combine_results(sum_file, samtools_file, pangolin_file, nextclade_file, workflow_version=args.WORKFLOW_VERSION, wslh_output="wslh_report.csv")
+    combine_results(sum_file, samtools_file, pangolin_file, nextclade_file, workflow_version=args.WORKFLOW_VERSION, wslh_output=args.RUN_NAME)
 
 if __name__ == "__main__":
     sys.exit(main())

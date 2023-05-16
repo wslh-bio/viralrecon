@@ -15,3 +15,5 @@ reports:
     display: "Per-sample amplicon coverage PDF file"
   "**/bandage/*.png":
     display: "Assembly BANDAGE image"
+  "*_viralrecon_report.csv":
+    display: "WSLH Report"

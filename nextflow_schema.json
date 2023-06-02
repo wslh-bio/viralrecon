@@ -34,7 +34,8 @@
                     "enum": [
                         "illumina",
                         "nanopore"
-                    ]
+                    ],
+                    "default":"illumina"
                 },
                 "protocol": {
                     "type": "string",
@@ -43,7 +44,8 @@
                     "enum": [
                         "metagenomic",
                         "amplicon"
-                    ]
+                    ],
+                    "default":"amplicon"
                 },
                 "outdir": {
                     "type": "string",
@@ -71,7 +73,8 @@
                     "type": "string",
                     "description": "Name of viral reference genome.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "You can find the keys to specify the genomes in the [Genomes config file](https://github.com/nf-core/configs/blob/master/conf/pipeline/viralrecon/genomes.config)."
+                    "help_text": "You can find the keys to specify the genomes in the [Genomes config file](https://github.com/nf-core/configs/blob/master/conf/pipeline/viralrecon/genomes.config).",
+                    "default":"MN908947.3"
                 },
                 "fasta": {
                     "type": "string",

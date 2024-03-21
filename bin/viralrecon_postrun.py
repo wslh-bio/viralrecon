@@ -231,6 +231,40 @@ def combine_results(summary_file, samtools_file, pangolin_file, nextclade_file, 
                        '# Missense variants':'num_missense_variants', '# Ns per 100kb consensus':'num_Ns_per_100kb_consensus' })
     df1.to_csv(wslh_output[0]+"_viralrecon_report.csv", index=False)
 
+    return wslh_output[0]+"_viralrecon_report.csv"
+
+def wslh_qc_filter(viralrecon_report, wslh_output):
+    # Read the spreadsheet into a DataFrame
+    df = pd.read_csv(viralrecon_report)
+
+    # Apply criteria to fill the 'WSLH_qc' column
+    mask_ntc = (
+        ((df['sample_id'].str.contains('VQ')) & (df['1X_coverage_after_trimming'] < 10)) |
+        ((df['1X_coverage_after_trimming'].isna()))
+    )
+
+    mask_other = (
+        (~mask_ntc) &
+        (df['depth_after_trimming'] >= 100) &
+        (df['1X_coverage_after_trimming'] >= 90) &
+        (df['pangolin_lineage'].notna()) &
+        (df['pangolin_scorpio_call'].notna())
+    )
+    
+    df.loc[(mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_pass'
+    df.loc[(~mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_fail'
+    df.loc[(mask_other & df['sample_id'].str.contains('VR')), 'WSLH_qc'] = 'pass'
+    df.loc[(~mask_other & df['sample_id'].str.contains('VR')), 'WSLH_qc'] = 'fail'
+
+    # Set 'unassigned_failed_qc' for rows with blanks in 'pangolin_lineage'
+    #df.loc[df['pangolin_lineage'].isna() & df['sample_id'].str.contains('VR'), 'pangolin_lineage'] = 'unassigned_failed_qc'
+
+    # Reindex columns
+    df = df.reindex(columns = ['sample_id', 'WSLH_qc', 'pangolin_lineage', 'nextclade_clade', 'pangolin_scorpio_call', 'pangolin_qc_status', 'num_raw_reads', 'num_trimmed_reads_fastp', 'percent_non-host_reads_kraken2', 'percent_mapped_reads', 'num_mapped_reads', 'depth_after_trimming', '1X_coverage_after_trimming', 'coverage_median', 'percent_coverage>1x', 'percent_coverage>10x', 'num_SNPs', 'num_INDELs', 'num_missense_variants', 'num_Ns_per_100kb_consensus', 'num_trimmed_reads_iVar', 'nextclade_qc.overallStatus', 'pangolin_conflict', 'pangolin_ambiguity_score', 'pangolin_scorpio_support', 'pangolin_scorpio_conflict', 'pangolin_scorpio_notes', 'pangolin_version', 'pangolin_pangolin_version', 'pangolin_scorpio_version', 'pangolin_constellation_version', 'pangolin_is_designated', 'nextclade_qc.overallScore', 'pangolin_qc_notes', 'pangolin_note', 'viralrecon_version', 'sample'])
+
+    # Save the updated DataFrame to a new spreadsheet
+    df.to_csv(wslh_output[0]+"_viralrecon_report.csv", index=False)
+
 def main(args=None):
     args = parse_args(args)
 
@@ -238,7 +272,7 @@ def main(args=None):
     pangolin_file = get_pangolin_data(pangolin_list=args.PANGOLIN)
     nextclade_file = get_nextclade_data(nextclade_list=args.NEXTCLADE)
     samtools_file = samtools_coverage(bam_list=args.BAM_FILES)
-    combine_results(sum_file, samtools_file, pangolin_file, nextclade_file, workflow_version=args.WORKFLOW_VERSION, wslh_output=args.RUN_NAME)
-
+    report = combine_results(sum_file, samtools_file, pangolin_file, nextclade_file, workflow_version=args.WORKFLOW_VERSION, wslh_output=args.RUN_NAME)
+    wslh_qc_filter(report, wslh_output=args.RUN_NAME)
 if __name__ == "__main__":
     sys.exit(main())

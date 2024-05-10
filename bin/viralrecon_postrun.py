@@ -248,6 +248,7 @@ def wslh_qc_filter(viralrecon_report, wslh_output):
         (df['depth_after_trimming'] >= 100) &
         (df['1X_coverage_after_trimming'] >= 90) &
         (df['pangolin_lineage'].notna()) &
+        (df['num_Ns_per_100kb_consensus'] <= 10000) &
         (df['pangolin_scorpio_call'].notna())
     )
     

@@ -320,7 +320,7 @@ class IvarVariants:
                     print("Conflicting variants in position %s. Skipped" % row.POS)
                     continue
                 alt_pos = alt_pos[0]
-                first_index = row.Index if first_index == None else first_index
+                first_index = row.Index if first_index is None else first_index
                 if alt_pos < last_pos:
                     split_rows_dict[first_index] = pd.DataFrame(rows_groups)
                     rows_groups = []
@@ -338,17 +338,17 @@ class IvarVariants:
             consec_rows (pd.DataFrame): Consecutive rows aimed to be merged
             af_threshold (float): Allele Frequency threshold used to exclude outliers
 
-        Returns: 
+        Returns:
             clean_consec_rows (pd.DataFrame): Consecutive rows without AF outliers
         """
         if len(consec_rows) <= 1:
             print("Cannot determine AF outlier with less than 2 rows. Skipped")
             return consec_rows
-        
+
         consec_rows["AF"] = consec_rows["FILENAME"].str.split(":").str[8]
         all_afs = consec_rows["AF"].astype(float)
         af_median = all_afs.median()
-        
+
         if len(consec_rows) == 2:
             if np.diff(all_afs)[0] <= af_threshold:
                 consec_rows["AF"] = False
@@ -423,11 +423,15 @@ class IvarVariants:
             outlier_rows_list = outlier_rows.values.tolist()
             merged_rowlist.extend(outlier_rows_list)
         return merged_rowlist
-    
+
     def get_rows_diff(self, consec_rows, clean_rows):
-        diff_rows = consec_rows.merge(clean_rows.drop_duplicates(),
-            on=list(clean_rows.columns), how='left', indicator=True)
-        diff_rows = diff_rows[diff_rows['_merge'] == "left_only"]
+        diff_rows = consec_rows.merge(
+            clean_rows.drop_duplicates(),
+            on=list(clean_rows.columns),
+            how="left",
+            indicator=True,
+        )
+        diff_rows = diff_rows[diff_rows["_merge"] == "left_only"]
         diff_rows = diff_rows.drop("_merge", axis=1)
         return diff_rows
 
@@ -442,8 +446,8 @@ class IvarVariants:
 
         def include_rows(vcf_df, first_index, rows_to_merge):
             indexes_to_merge = [
-                    x for x in range(first_index, first_index + len(rows_to_merge))
-                ]
+                x for x in range(first_index, first_index + len(rows_to_merge))
+            ]
             for index, row in zip(indexes_to_merge, rows_to_merge):
                 try:
                     vcf_df.loc[index] = row
@@ -478,10 +482,12 @@ class IvarVariants:
                 if not outlier_rows.empty:
                     rows_to_merge = outlier_rows.values.tolist()
                     vcf_df = include_rows(vcf_df, first_index, rows_to_merge)
-                    first_index = first_index+len(rows_to_merge)+1
+                    first_index = first_index + len(rows_to_merge) + 1
                 if self.find_consecutive(clean_rows).empty:
                     rows_to_merge = clean_rows.values.tolist()
                     vcf_df = include_rows(vcf_df, first_index, rows_to_merge)
+                    # if any(y in (25646, 25647, 25648) for y in row_set["POS"].values):
+                    #    import pdb; pdb.set_trace()
                     continue
                 rows_to_merge = self.merge_rows(clean_rows)
                 vcf_df.loc[first_index] = rows_to_merge
@@ -495,7 +501,7 @@ class IvarVariants:
         Returns:
             header: String containing all the vcf header lines separated by newline.
         """
-        ## Define VCF header
+        # Define VCF header
         header_source = ["##fileformat=VCFv4.2", "##source=iVar"]
         if self.ref_fasta:
             header_contig = []

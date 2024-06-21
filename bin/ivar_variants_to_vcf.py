@@ -45,7 +45,14 @@ def parse_args(args=None):
         "--merge_af_threshold",
         type=float,
         default=0.25,
-        help="Only merge variants within a range of Allele Frequency. Useful to distinguish haplotypes",
+        help="Only merge variants within a range of Allele Frequency. Useful to distinguish haplotypes.",
+    )
+    parser.add_argument(
+        "-cf",
+        "--consensus_af",
+        type=float,
+        default=0.75,
+        help="Allele Frenquecy threshold used to include variants in consensus sequence.",
     )
     parser.add_argument(
         "-is",
@@ -78,6 +85,7 @@ class IvarVariants:
         freq_threshold=None,
         bad_qual_threshold=None,
         merge_af_threshold=None,
+        consensus_af=None,
         ignore_stbias=None,
         ignore_merge=None,
         fasta=None,
@@ -104,9 +112,13 @@ class IvarVariants:
         except Exception:
             print("Invalid merge af threshold. Setting it to 0.25")
             self.merge_af_threshold = 0.25
+        try:
+            self.consensus_af = float(consensus_af)
+        except Exception:
+            print("Invalid consensus af threshold. Setting it to 0.75")
+            self.consensus_af = 0.75
         self.ignore_stbias = ignore_stbias
         self.ignore_merge = ignore_merge
-
         if not self.file_out:
             exit("Output file not provided. Aborting...")
         if fasta:
@@ -238,7 +250,10 @@ class IvarVariants:
             consecutive_df(pd.DataFrame): dataframe only with variants in
             consecutive positions, including those with duplicates
         """
-        consecutive_mask = vcf_df["POS"].diff() <= 1
+        try:
+            consecutive_mask = vcf_df["POS"].diff() <= 1
+        except TypeError:
+            import pdb; pdb.set_trace()
         consecutive_mask = consecutive_mask | consecutive_mask.shift(-1)
         consecutive_df = vcf_df[consecutive_mask]
         return consecutive_df
@@ -342,7 +357,7 @@ class IvarVariants:
             clean_consec_rows (pd.DataFrame): Consecutive rows without AF outliers
         """
         if len(consec_rows) <= 1:
-            print("Cannot determine AF outlier with less than 2 rows. Skipped")
+            # "Cannot define outliers with less than 2 rows.
             return consec_rows
 
         consec_rows["AF"] = consec_rows["FILENAME"].str.split(":").str[8]
@@ -350,7 +365,9 @@ class IvarVariants:
         af_median = all_afs.median()
 
         if len(consec_rows) == 2:
-            if np.diff(all_afs)[0] <= af_threshold:
+            if abs(np.diff(all_afs)[0]) <= af_threshold:
+                consec_rows["AF"] = True
+            else:
                 consec_rows["AF"] = False
         else:
             consec_rows["AF"] = np.where(
@@ -377,8 +394,37 @@ class IvarVariants:
         stats_to_merge = ":".join([freqs_to_merge, depths_to_merge])
         consec_rows.at[merged_index, "FILENAME"] += f":{stats_to_merge}"
         consec_rows.at[merged_index, "FORMAT"] += ":MERGED_AF:MERGED_DP"
+        lowest_af = min(freqs_to_merge.split(","))
+        filecol_list = consec_rows.at[merged_index, "FILENAME"].split(":")
+        filecol_list[8] = lowest_af
+        consec_rows.at[merged_index, "FILENAME"] = ":".join(filecol_list)
         merged_row = consec_rows.loc[merged_index].values.tolist()
         return merged_row
+
+
+    def create_merge_rowlist(self, clean_rows_list):
+        """Merge all the given rows in a single one for each dataframe of consecutive
+        rows in a given list
+
+        Args:
+            clean_rows_list (list(pd.DataFrame())): Dataframes with consecutive rows
+
+        Returns:
+            rows_to_merge (list(list())): List of merged rows as a list of values
+        """
+        rows_to_merge = []
+        for rowbatch in clean_rows_list:
+            if rowbatch.empty:
+                continue
+            if len(rowbatch) == 1:
+                rows_to_merge.append(rowbatch.values.tolist()[0])
+            else:
+                if self.find_consecutive(rowbatch).empty:
+                    continue
+                merged_row = self.merge_rows(rowbatch)
+                rows_to_merge.append(merged_row)
+        return rows_to_merge
+
 
     def handle_dup_rows(self, row_set):
         """Split dataframe with multiple variants in the same position and create a list
@@ -403,50 +449,210 @@ class IvarVariants:
         merged_rowlist = []
         for indexlist in index_product_list:
             consec_rows = row_set.loc[indexlist, :]
-            clean_rows = self.exclude_af_outliers(
-                consec_rows.copy(), self.merge_af_threshold
-            )
-            if self.find_consecutive(clean_rows).empty:
-                continue
-            merged_row = self.merge_rows(clean_rows)
-            merged_rowlist.append(merged_row)
-
-        for row in merged_rowlist:
-            dropped_rowlist = [x for x in merged_rowlist if x != row]
-            if any(row[4] == rowdrop[4] for rowdrop in dropped_rowlist):
-                merged_rowlist.remove(row)
-        if not clean_rows.equals(consec_rows):
-            outlier_rows = self.get_rows_diff(consec_rows, clean_rows)
-        else:
-            outlier_rows = pd.DataFrame()
-        if not outlier_rows.empty:
-            outlier_rows_list = outlier_rows.values.tolist()
-            merged_rowlist.extend(outlier_rows_list)
+            clean_rows_list = self.merge_ref_alt(consec_rows.copy())
+            cleaned_ref_rows_list = self.remove_edge_ref(clean_rows_list)
+            batch_rowlist = self.create_merge_rowlist(cleaned_ref_rows_list.copy())
+            merged_rowlist.extend(batch_rowlist)
         return merged_rowlist
 
-    def get_rows_diff(self, consec_rows, clean_rows):
-        diff_rows = consec_rows.merge(
-            clean_rows.drop_duplicates(),
-            on=list(clean_rows.columns),
-            how="left",
-            indicator=True,
+
+    def get_ref_rowset(self, row_set):
+        """Create a new row for each variant row in the dataframe emulating the
+        reference for that position
+
+        Args:
+            row_set (pd.DataFrame()): A certain group of consecutive variants
+
+        Returns:
+            merged_ref_rows: Same Df but with duplicated rows that emulate reference
+            for each variant position.
+        """
+        ref_row_set = row_set.copy()
+        ref_row_set["ALT"] = ref_row_set["REF"]
+        ref_row_set["ALT_CODON"] = ref_row_set["REF_CODON"]
+        filecol = ref_row_set["FILENAME"].values.tolist()
+        ref_filecol = []
+        for row in filecol:
+            split_vals = row.split(":")
+            split_vals[8] = str(round(1 - float(split_vals[8]), 3))
+            split_vals[5] = split_vals[2]
+            ref_filecol.append(":".join(split_vals))
+        ref_row_set["FILENAME"] = ref_filecol
+        merged_ref_rows = pd.concat([row_set, ref_row_set]).sort_values("POS").reset_index(drop=True)
+        return merged_ref_rows
+
+
+    def merge_rule_check(self, alt_dictlist):
+        """Evaluate a list of possible codons and decide if they can be merged together
+        based on certain conditions regarding Allele Frequency
+
+        Args:
+            alt_dictlist (list(dict()): A list of dictionaries with consecutive locus
+
+        Returns:
+            consec_series (list(dict()): Same list but only with validated locus
+        """
+        consec_series = []
+        def is_subset(maindict, subdict):
+            for key, value in subdict.items():
+                if key not in maindict or maindict[key] != value:
+                    return False
+            return True
+        for altdict in alt_dictlist:
+            if len(altdict) <= 1:
+                consec_series.append(altdict)
+                continue
+            af_list = [x["AF"] for x in altdict.values()]
+            key_list = list(altdict.keys())
+            if any(af >= self.consensus_af for af in af_list):
+                consec_series.append(altdict)
+                continue
+            distances = []
+            for i in range(len(altdict) - 1):
+                key1 = key_list[i]
+                key2 = key_list[i + 1]
+                distance = abs(altdict[key2]["AF"] - altdict[key1]["AF"])
+                distances.append(distance)
+            if all(dist < self.merge_af_threshold for dist in distances):
+                consec_series.append(altdict)
+            for i, dist in enumerate(distances):
+                if dist <= self.merge_af_threshold and af_list[i] <= self.consensus_af:
+                    close_pair = {key_list[i]: altdict[i], key_list[i+1]:altdict[i+1]}
+                else:
+                    close_pair = {key_list[i]: altdict[i]}
+                if not any(is_subset(d, close_pair) for d in consec_series):
+                    consec_series.append(close_pair)
+            if all(dist > self.merge_af_threshold for dist in distances):
+                for i in range(len(af_list)):
+                    if not any(is_subset(d, close_pair) for d in consec_series):
+                        consec_series.append({key_list[i]: altdict[i]})
+
+        return consec_series
+
+
+    def merge_ref_alt(self, consec_rows):
+        """Create a list of all possible combinations of REF and ALT consecutive codons 
+        following certain conditions of similarity using Allele Frequency values
+
+        Args:
+            consec_rows (_type_): _description_
+
+        Returns:
+            clean_rows_list (list(pd.DataFrame)): _description_
+        """
+        # Compare variants AF with REF and group those with more similarity
+        merged_ref_rows = self.get_ref_rowset(consec_rows.copy())
+        merged_ref_rows["AF"] = merged_ref_rows["FILENAME"].str.split(":").str[8]
+        ref_rows = merged_ref_rows[
+            merged_ref_rows["REF_CODON"] == merged_ref_rows["ALT_CODON"]
+        ].reset_index(drop=True)
+        alt_rows = merged_ref_rows[
+            merged_ref_rows["REF_CODON"] != merged_ref_rows["ALT_CODON"]
+        ].reset_index(drop=True)
+        ref_dict = {
+            x:{"AF": float(y), "set":"ref"} for x,y in ref_rows["AF"].to_dict().items()
+        }
+        alt_dict = {
+            x:{"AF": float(y), "set":"alt"} for x,y in alt_rows["AF"].to_dict().items()
+        }
+        alt_combinations = list(
+            product(*[ [(k, alt_dict[k]), (k, ref_dict[k])] for k in alt_dict.keys()])
         )
-        diff_rows = diff_rows[diff_rows["_merge"] == "left_only"]
-        diff_rows = diff_rows.drop("_merge", axis=1)
-        return diff_rows
+        combined_dictlist = [dict(comb) for comb in alt_combinations]
+        # Keep together only those codons that fulfill certain similarity rules
+        consec_series = self.merge_rule_check(combined_dictlist)
+        clean_rows_list = []
+        for rowdict in consec_series:
+            consec_rowsdict = {}
+            for key, vals in rowdict.items():
+                if vals["set"] == "alt":
+                    consec_rowsdict[key] = alt_rows.loc[int(key)]
+                else:
+                    consec_rowsdict[key] = ref_rows.loc[int(key)]
+            consec_df = pd.DataFrame.from_dict(consec_rowsdict, orient="index")
+            if self.consensus_merge is True:
+                if any(x >= self.consensus_af for x in consec_df["AF"].astype(float)):
+                    consensus_dfs = consec_df.groupby(
+                        consec_df["AF"].astype(float) >= self.consensus_af
+                    )
+                    for _, df in consensus_dfs:
+                        df = df.drop("AF", axis=1)
+                        if not self.find_consecutive(df).empty:
+                            clean_rows_list.append(df)
+                        else:
+                            for _, row in df.groupby("POS"):
+                                clean_rows_list.append(row)
+                else:
+                    for _, row in consec_df.drop("AF", axis=1).groupby("POS"):
+                        clean_rows_list.append(row)
+            else:
+                clean_loc_df = consec_df.drop("AF", axis=1)
+                if not clean_loc_df.empty:
+                    clean_rows_list.append(clean_loc_df)
+
+        return clean_rows_list
+    
+    def remove_edge_ref(self, clean_rows_list):
+        """Remove reference nucleotides from both edges of the variant codon
+
+        Args:
+            clean_rows_list (List(pd.DataFrame)): List of variants to be merged
+        Returns:
+            cleaned_ref_rows_list (List(pd.DataFrame)): List of rows without edge refs 
+        """
+        def indexes_are_consecutive(idx_list):
+            """Returns True if ints in list are consecutive, or just 1 element"""
+            return sorted(idx_list) == list(range(min(idx_list), max(idx_list)+1))
+        
+        #def remove_subsets(cleaned_ref_rows_list):
+        #    """Remove those dataframes which are subsets of another one in the list"""
+        #    def is_subset(df1, df2):
+        #        """Returns True if df1 is a subset of df2"""
+        #        return len(df1.merge(df2)) == len(df1)
+        #    max_length = max(len(df) for df in cleaned_ref_rows_list)
+        #    largest_dfs = [df for df in cleaned_ref_rows_list if len(df) == max_length]
+        #    other_dfs = [df for df in cleaned_ref_rows_list if len(df) < max_length]
+        #    if not other_dfs:
+        #        return largest_dfs
+        #    final_ref_rows_list = largest_dfs
+        #    for smalldf in other_dfs:
+        #        if not any(is_subset(smalldf, bigdf) for bigdf in largest_dfs):
+        #            final_ref_rows_list.append(smalldf)
+        #    return final_ref_rows_list
+        
+        cleaned_ref_rows_list = []
+        for df in clean_rows_list:
+            ref_col = df["REF"]
+            alt_col = df["ALT"]
+            idx_matches = [
+                idx for idx in alt_col.index if alt_col[idx] == ref_col[idx]
+            ]
+            if not idx_matches:
+                cleaned_ref_rows_list.append(df)
+                continue
+            if len(df) == 3 and idx_matches == [1]:
+                cleaned_ref_rows_list.append(df)
+                continue
+            if indexes_are_consecutive(idx_matches):
+                df = df.drop(idx_matches, axis=0)
+                if not df.empty:
+                    cleaned_ref_rows_list.append(df)
+        #final_ref_rows_list = remove_subsets(cleaned_ref_rows_list)
+        return cleaned_ref_rows_list
 
     def process_vcf_df(self, vcf_df):
         """Merge rows with consecutive SNPs that passed all filters and without NAs
 
         Args:
             vcf_df - dataframe from self.initiate_vcf_df()
+            consensus - wether to merge only variants meeting consensus AF criteria
         Returns:
             processed_vcf_df: dataframe with consecutive variants merged
         """
 
-        def include_rows(vcf_df, first_index, rows_to_merge):
+        def include_rows(vcf_df, last_index, rows_to_merge):
             indexes_to_merge = [
-                x for x in range(first_index, first_index + len(rows_to_merge))
+                x for x in range(last_index, last_index + len(rows_to_merge))
             ]
             for index, row in zip(indexes_to_merge, rows_to_merge):
                 try:
@@ -464,35 +670,20 @@ class IvarVariants:
         same_codon_consecutive = self.get_same_codon(splitted_groups)
         split_rows_dict = self.split_by_codon(same_codon_consecutive)
         for _, row_set in sorted(split_rows_dict.items()):
-            first_index = vcf_df.tail(1).index[0] + 1
+            last_index = vcf_df.tail(1).index[0] + 1
             vcf_df = vcf_df.drop(row_set.Index)
             # Redundant "Index" column is generated by Itertuples in split_by_codon()
             row_set = row_set.drop(["Index"], axis=1)
             if self.find_duplicates(row_set):
                 rows_to_merge = self.handle_dup_rows(row_set.copy())
-                vcf_df = include_rows(vcf_df, first_index, rows_to_merge)
             else:
-                clean_rows = self.exclude_af_outliers(
-                    row_set.copy(), self.merge_af_threshold
-                )
-                if not row_set.equals(clean_rows):
-                    outlier_rows = self.get_rows_diff(row_set.copy(), clean_rows)
-                else:
-                    outlier_rows = pd.DataFrame()
-                if not outlier_rows.empty:
-                    rows_to_merge = outlier_rows.values.tolist()
-                    vcf_df = include_rows(vcf_df, first_index, rows_to_merge)
-                    first_index = first_index + len(rows_to_merge) + 1
-                if self.find_consecutive(clean_rows).empty:
-                    rows_to_merge = clean_rows.values.tolist()
-                    vcf_df = include_rows(vcf_df, first_index, rows_to_merge)
-                    # if any(y in (25646, 25647, 25648) for y in row_set["POS"].values):
-                    #    import pdb; pdb.set_trace()
-                    continue
-                rows_to_merge = self.merge_rows(clean_rows)
-                vcf_df.loc[first_index] = rows_to_merge
+                clean_rows_list = self.merge_ref_alt(row_set.copy())
+                cleaned_ref_rows_list = self.remove_edge_ref(clean_rows_list)
+                rows_to_merge = self.create_merge_rowlist(cleaned_ref_rows_list.copy())
+            vcf_df = include_rows(vcf_df, last_index, rows_to_merge)
+        vcf_df = vcf_df[vcf_df["REF"] != vcf_df["ALT"]]
         vcf_df = vcf_df.sort_index().reset_index(drop=True)
-        processed_vcf_df = vcf_df.sort_values("POS")
+        processed_vcf_df = vcf_df.drop_duplicates().sort_values("POS")
         return processed_vcf_df
 
     def get_vcf_header(self):
@@ -550,26 +741,34 @@ class IvarVariants:
         return header
 
     def write_vcf(self):
-        """Merge the vcf header and table and write them into a file
-
-        Returns:
-            header: String containing all the vcf header lines separated by newline.
-        """
+        """Merge the vcf header and table and write them into a file"""
         vcf_header = "\n".join(self.get_vcf_header())
         vcf_table = self.initiate_vcf_df()
-        if not self.ignore_merge:
-            vcf_table = self.process_vcf_df(vcf_table)
-        try:
-            vcf_table = vcf_table.drop(["REF_CODON", "ALT_CODON"], axis=1)
-        except KeyError:
-            pass
-        # Workaround because itertuples cannot handle special characters in column names
-        vcf_table = vcf_table.rename(
-            columns={"REGION": "#CHROM", "FILENAME": self.filename}
-        )
-        with open(self.file_out, "w") as file_out:
-            file_out.write(vcf_header + "\n")
-        vcf_table.to_csv(self.file_out, sep="\t", index=False, header=True, mode="a")
+
+        def export_vcf(vcf_table, consensus=True):
+            self.consensus_merge = consensus
+            if not self.ignore_merge:
+                processed_vcf = self.process_vcf_df(vcf_table)
+            try:
+                processed_vcf = processed_vcf.drop(["REF_CODON", "ALT_CODON"], axis=1)
+            except KeyError:
+                pass
+            # Workaround because itertuples cannot handle special characters in column names
+            processed_vcf = processed_vcf.rename(
+                columns={"REGION": "#CHROM", "FILENAME": self.filename}
+            )
+            if consensus:
+                filepath = self.file_out
+            else:
+                basename = os.path.splitext(os.path.basename(self.file_out))[0]
+                filename = str(basename) + "_merge_annot.vcf"
+                filepath = os.path.join(os.path.dirname(self.file_out), filename)
+            with open(filepath, "w") as file_out:
+                file_out.write(vcf_header + "\n")
+            processed_vcf.to_csv(filepath, sep="\t", index=False, header=True, mode="a")
+
+        export_vcf(vcf_table, consensus=True)
+        export_vcf(vcf_table, consensus=False)
         return
 
 
@@ -599,6 +798,7 @@ def main(args=None):
         freq_threshold=args.allele_freq_threshold,
         bad_qual_threshold=args.bad_quality_threshold,
         merge_af_threshold=args.merge_af_threshold,
+        consensus_af=args.consensus_af,
         ignore_stbias=args.ignore_strand_bias,
         ignore_merge=args.ignore_merge_codons,
         fasta=args.fasta,

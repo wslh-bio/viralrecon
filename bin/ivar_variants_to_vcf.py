@@ -250,10 +250,7 @@ class IvarVariants:
             consecutive_df(pd.DataFrame): dataframe only with variants in
             consecutive positions, including those with duplicates
         """
-        try:
-            consecutive_mask = vcf_df["POS"].diff() <= 1
-        except TypeError:
-            import pdb; pdb.set_trace()
+        consecutive_mask = vcf_df["POS"].diff() <= 1
         consecutive_mask = consecutive_mask | consecutive_mask.shift(-1)
         consecutive_df = vcf_df[consecutive_mask]
         return consecutive_df
@@ -345,37 +342,6 @@ class IvarVariants:
             split_rows_dict[first_index] = pd.DataFrame(rows_groups)
         return split_rows_dict
 
-    def exclude_af_outliers(self, consec_rows, af_threshold):
-        """Remove rows containing variants that differ more than the AF threshold
-        from the rest of the variants taking the median as mid position.
-
-        Args:
-            consec_rows (pd.DataFrame): Consecutive rows aimed to be merged
-            af_threshold (float): Allele Frequency threshold used to exclude outliers
-
-        Returns:
-            clean_consec_rows (pd.DataFrame): Consecutive rows without AF outliers
-        """
-        if len(consec_rows) <= 1:
-            # "Cannot define outliers with less than 2 rows.
-            return consec_rows
-
-        consec_rows["AF"] = consec_rows["FILENAME"].str.split(":").str[8]
-        all_afs = consec_rows["AF"].astype(float)
-        af_median = all_afs.median()
-
-        if len(consec_rows) == 2:
-            if abs(np.diff(all_afs)[0]) <= af_threshold:
-                consec_rows["AF"] = True
-            else:
-                consec_rows["AF"] = False
-        else:
-            consec_rows["AF"] = np.where(
-                abs(all_afs - af_median) <= af_threshold, True, False
-            )
-        clean_consec_rows = consec_rows[consec_rows["AF"] == True]
-        clean_consec_rows = clean_consec_rows.drop("AF", axis=1)
-        return clean_consec_rows
 
     def merge_rows(self, consec_rows):
         """Merge certain columns from a set of rows into the position of the first one
@@ -535,10 +501,10 @@ class IvarVariants:
         following certain conditions of similarity using Allele Frequency values
 
         Args:
-            consec_rows (_type_): _description_
+            consec_rows (list(pd.DataFrame)): List of dataframes with consecutive rows
 
         Returns:
-            clean_rows_list (list(pd.DataFrame)): _description_
+            clean_rows_list (list(pd.DataFrame)): Filtered list with viable combinations
         """
         # Compare variants AF with REF and group those with more similarity
         merged_ref_rows = self.get_ref_rowset(consec_rows.copy())
@@ -575,10 +541,14 @@ class IvarVariants:
                     consensus_dfs = consec_df.groupby(
                         consec_df["AF"].astype(float) >= self.consensus_af
                     )
-                    for _, df in consensus_dfs:
+                    for af_in_consensus, df in consensus_dfs:
                         df = df.drop("AF", axis=1)
-                        if not self.find_consecutive(df).empty:
-                            clean_rows_list.append(df)
+                        if af_in_consensus is True:
+                            if not self.find_consecutive(df).empty:
+                                clean_rows_list.append(df)
+                            else:
+                                for _, row in df.groupby("POS"):
+                                    clean_rows_list.append(row)
                         else:
                             for _, row in df.groupby("POS"):
                                 clean_rows_list.append(row)
@@ -604,21 +574,23 @@ class IvarVariants:
             """Returns True if ints in list are consecutive, or just 1 element"""
             return sorted(idx_list) == list(range(min(idx_list), max(idx_list)+1))
         
-        #def remove_subsets(cleaned_ref_rows_list):
-        #    """Remove those dataframes which are subsets of another one in the list"""
-        #    def is_subset(df1, df2):
-        #        """Returns True if df1 is a subset of df2"""
-        #        return len(df1.merge(df2)) == len(df1)
-        #    max_length = max(len(df) for df in cleaned_ref_rows_list)
-        #    largest_dfs = [df for df in cleaned_ref_rows_list if len(df) == max_length]
-        #    other_dfs = [df for df in cleaned_ref_rows_list if len(df) < max_length]
-        #    if not other_dfs:
-        #        return largest_dfs
-        #    final_ref_rows_list = largest_dfs
-        #    for smalldf in other_dfs:
-        #        if not any(is_subset(smalldf, bigdf) for bigdf in largest_dfs):
-        #            final_ref_rows_list.append(smalldf)
-        #    return final_ref_rows_list
+        def remove_subsets(cleaned_ref_rows_list):
+            """Remove those dataframes which are subsets of another one in the list"""
+
+            def is_subset(df1, df2):
+                """Returns True if df1 is a subset of df2"""
+                return len(df1.merge(df2)) == len(df1)
+            
+            max_length = max(len(df) for df in cleaned_ref_rows_list)
+            largest_dfs = [df for df in cleaned_ref_rows_list if len(df) == max_length]
+            other_dfs = [df for df in cleaned_ref_rows_list if len(df) < max_length]
+            if not other_dfs:
+                return largest_dfs
+            final_ref_rows_list = largest_dfs
+            for smalldf in other_dfs:
+                if not any(is_subset(smalldf, bigdf) for bigdf in largest_dfs):
+                    final_ref_rows_list.append(smalldf)
+            return final_ref_rows_list
         
         cleaned_ref_rows_list = []
         for df in clean_rows_list:
@@ -637,8 +609,8 @@ class IvarVariants:
                 df = df.drop(idx_matches, axis=0)
                 if not df.empty:
                     cleaned_ref_rows_list.append(df)
-        #final_ref_rows_list = remove_subsets(cleaned_ref_rows_list)
-        return cleaned_ref_rows_list
+        final_ref_rows_list = remove_subsets(cleaned_ref_rows_list)
+        return final_ref_rows_list
 
     def process_vcf_df(self, vcf_df):
         """Merge rows with consecutive SNPs that passed all filters and without NAs

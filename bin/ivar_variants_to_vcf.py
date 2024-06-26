@@ -36,7 +36,7 @@ def parse_args(args=None):
     parser.add_argument(
         "-bq",
         "--bad_quality_threshold",
-        type=float,
+        type=int,
         default=20,
         help="Only output variants where ALT_QUAL is greater than this number (default: 20).",
     )
@@ -342,7 +342,6 @@ class IvarVariants:
             split_rows_dict[first_index] = pd.DataFrame(rows_groups)
         return split_rows_dict
 
-
     def merge_rows(self, consec_rows):
         """Merge certain columns from a set of rows into the position of the first one
 
@@ -367,7 +366,6 @@ class IvarVariants:
         merged_row = consec_rows.loc[merged_index].values.tolist()
         return merged_row
 
-
     def create_merge_rowlist(self, clean_rows_list):
         """Merge all the given rows in a single one for each dataframe of consecutive
         rows in a given list
@@ -390,7 +388,6 @@ class IvarVariants:
                 merged_row = self.merge_rows(rowbatch)
                 rows_to_merge.append(merged_row)
         return rows_to_merge
-
 
     def handle_dup_rows(self, row_set):
         """Split dataframe with multiple variants in the same position and create a list
@@ -421,7 +418,6 @@ class IvarVariants:
             merged_rowlist.extend(batch_rowlist)
         return merged_rowlist
 
-
     def get_ref_rowset(self, row_set):
         """Create a new row for each variant row in the dataframe emulating the
         reference for that position
@@ -444,9 +440,10 @@ class IvarVariants:
             split_vals[5] = split_vals[2]
             ref_filecol.append(":".join(split_vals))
         ref_row_set["FILENAME"] = ref_filecol
-        merged_ref_rows = pd.concat([row_set, ref_row_set]).sort_values("POS").reset_index(drop=True)
+        merged_ref_rows = (
+            pd.concat([row_set, ref_row_set]).sort_values("POS").reset_index(drop=True)
+        )
         return merged_ref_rows
-
 
     def merge_rule_check(self, alt_dictlist):
         """Evaluate a list of possible codons and decide if they can be merged together
@@ -459,11 +456,13 @@ class IvarVariants:
             consec_series (list(dict()): Same list but only with validated locus
         """
         consec_series = []
+
         def is_subset(maindict, subdict):
             for key, value in subdict.items():
                 if key not in maindict or maindict[key] != value:
                     return False
             return True
+
         for altdict in alt_dictlist:
             if len(altdict) <= 1:
                 consec_series.append(altdict)
@@ -483,7 +482,10 @@ class IvarVariants:
                 consec_series.append(altdict)
             for i, dist in enumerate(distances):
                 if dist <= self.merge_af_threshold and af_list[i] <= self.consensus_af:
-                    close_pair = {key_list[i]: altdict[i], key_list[i+1]:altdict[i+1]}
+                    close_pair = {
+                        key_list[i]: altdict[i],
+                        key_list[i + 1]: altdict[i + 1],
+                    }
                 else:
                     close_pair = {key_list[i]: altdict[i]}
                 if not any(is_subset(d, close_pair) for d in consec_series):
@@ -495,9 +497,8 @@ class IvarVariants:
 
         return consec_series
 
-
     def merge_ref_alt(self, consec_rows):
-        """Create a list of all possible combinations of REF and ALT consecutive codons 
+        """Create a list of all possible combinations of REF and ALT consecutive codons
         following certain conditions of similarity using Allele Frequency values
 
         Args:
@@ -516,13 +517,15 @@ class IvarVariants:
             merged_ref_rows["REF_CODON"] != merged_ref_rows["ALT_CODON"]
         ].reset_index(drop=True)
         ref_dict = {
-            x:{"AF": float(y), "set":"ref"} for x,y in ref_rows["AF"].to_dict().items()
+            x: {"AF": float(y), "set": "ref"}
+            for x, y in ref_rows["AF"].to_dict().items()
         }
         alt_dict = {
-            x:{"AF": float(y), "set":"alt"} for x,y in alt_rows["AF"].to_dict().items()
+            x: {"AF": float(y), "set": "alt"}
+            for x, y in alt_rows["AF"].to_dict().items()
         }
         alt_combinations = list(
-            product(*[ [(k, alt_dict[k]), (k, ref_dict[k])] for k in alt_dict.keys()])
+            product(*[[(k, alt_dict[k]), (k, ref_dict[k])] for k in alt_dict.keys()])
         )
         combined_dictlist = [dict(comb) for comb in alt_combinations]
         # Keep together only those codons that fulfill certain similarity rules
@@ -561,26 +564,27 @@ class IvarVariants:
                     clean_rows_list.append(clean_loc_df)
 
         return clean_rows_list
-    
+
     def remove_edge_ref(self, clean_rows_list):
         """Remove reference nucleotides from both edges of the variant codon
 
         Args:
             clean_rows_list (List(pd.DataFrame)): List of variants to be merged
         Returns:
-            cleaned_ref_rows_list (List(pd.DataFrame)): List of rows without edge refs 
+            cleaned_ref_rows_list (List(pd.DataFrame)): List of rows without edge refs
         """
+
         def indexes_are_consecutive(idx_list):
             """Returns True if ints in list are consecutive, or just 1 element"""
-            return sorted(idx_list) == list(range(min(idx_list), max(idx_list)+1))
-        
+            return sorted(idx_list) == list(range(min(idx_list), max(idx_list) + 1))
+
         def remove_subsets(cleaned_ref_rows_list):
             """Remove those dataframes which are subsets of another one in the list"""
 
             def is_subset(df1, df2):
                 """Returns True if df1 is a subset of df2"""
                 return len(df1.merge(df2)) == len(df1)
-            
+
             max_length = max(len(df) for df in cleaned_ref_rows_list)
             largest_dfs = [df for df in cleaned_ref_rows_list if len(df) == max_length]
             other_dfs = [df for df in cleaned_ref_rows_list if len(df) < max_length]
@@ -591,14 +595,12 @@ class IvarVariants:
                 if not any(is_subset(smalldf, bigdf) for bigdf in largest_dfs):
                     final_ref_rows_list.append(smalldf)
             return final_ref_rows_list
-        
+
         cleaned_ref_rows_list = []
         for df in clean_rows_list:
             ref_col = df["REF"]
             alt_col = df["ALT"]
-            idx_matches = [
-                idx for idx in alt_col.index if alt_col[idx] == ref_col[idx]
-            ]
+            idx_matches = [idx for idx in alt_col.index if alt_col[idx] == ref_col[idx]]
             if not idx_matches:
                 cleaned_ref_rows_list.append(df)
                 continue
@@ -704,10 +706,10 @@ class IvarVariants:
         ]
         if not self.ignore_merge:
             header_format.append(
-                '##FORMAT=<ID=MERGED_AF,Number=1,Type=Float,Description="Frequency of each merged variant comma separated">'
+                '##FORMAT=<ID=MERGED_AF,Number=A,Type=Float,Description="Frequency of each merged variant comma separated">'
             )
             header_format.append(
-                '##FORMAT=<ID=MERGED_DP,Number=1,Type=Float,Description="Total Depth of each merged variant comma separated">'
+                '##FORMAT=<ID=MERGED_DP,Number=A,Type=Float,Description="Total Depth of each merged variant comma separated">'
             )
         header = header_source + header_info + header_filter + header_format
         return header

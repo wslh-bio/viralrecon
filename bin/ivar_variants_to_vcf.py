@@ -142,9 +142,9 @@ class IvarVariants:
         """Calculate strand-bias fisher test.
 
         Args:
-            row - a row from ivar.tsv dataframe as list
+            row (pd.Series)- a row from ivar.tsv dataframe as series
         Returns:
-            Whether it passes the filter ("") or not. ("sb")
+            str(): Whether it passes the filter ("") or not. ("sb")
         """
         data_matrix = np.array(
             [
@@ -162,7 +162,7 @@ class IvarVariants:
         """Apply all the filters to a row and return its output merged
 
         Args:
-            row (list): A row from from ivar.tsv dataframe as list
+            row (pd.Series)- a row from ivar.tsv dataframe as series
 
         Returns:
             vcf_filter (str): Results from each filter joined by ';'
@@ -262,7 +262,7 @@ class IvarVariants:
             consecutive_df (pd.DataFrame): Consecutive variants from find_consecutive()
 
         Returns:
-            split_rows_list(list): List of dataframes with consecutive rows
+            split_rows_list (list): List of dataframes with consecutive rows
         """
         # Numpy raises a warning from a pandas function that is wrongly set as deprecated
         with warnings.catch_warnings():
@@ -317,7 +317,7 @@ class IvarVariants:
             same_codon_rows (list(pd.DataFrame)): Groups from get_same_codon()
 
         Returns:
-            split_rows_dict(dict[index:pd.DataFrame]): Dictionary containing dataframe
+            split_rows_dict(dict(index:pd.DataFrame)): Dictionary containing dataframe
             with rows belonging to the same codon as values and the index of the first
             row as keys, which is the position where the rows are going to be merged.
         """
@@ -397,7 +397,7 @@ class IvarVariants:
             row_set (pd.DataFrame): Consecutive variants df from split_rows_dict()
 
         Returns:
-            merged_rowlist(list(list)): List of merged rows from merge_rows()
+            merged_rowlist (list(list)): List of merged rows from merge_rows()
         """
         # Numpy raises a warning from a pandas function that is wrongly set as deprecated
         # https://github.com/numpy/numpy/issues/24889
@@ -619,7 +619,6 @@ class IvarVariants:
 
         Args:
             vcf_df - dataframe from self.initiate_vcf_df()
-            consensus - wether to merge only variants meeting consensus AF criteria
         Returns:
             processed_vcf_df: dataframe with consecutive variants merged
         """
@@ -715,7 +714,7 @@ class IvarVariants:
         return header
 
     def write_vcf(self):
-        """Merge the vcf header and table and write them into a file"""
+        """Process ivar.tsv, merge the vcf header and table and write them into a file"""
         vcf_header = "\n".join(self.get_vcf_header())
         vcf_table = self.initiate_vcf_df()
 
@@ -752,8 +751,6 @@ def make_dir(path):
         Create directory if it doesn't exist.
     Args:
         path - path where the directory will be created.
-    Returns:
-        None
     """
     if not len(path) == 0:
         try:
@@ -761,6 +758,7 @@ def make_dir(path):
         except OSError as exception:
             if exception.errno != errno.EEXIST:
                 raise
+    return
 
 
 def main(args=None):

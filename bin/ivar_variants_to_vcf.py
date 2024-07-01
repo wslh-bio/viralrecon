@@ -430,12 +430,15 @@ class IvarVariants:
             for each variant position.
         """
         ref_row_set = row_set.copy()
+        #ref_row_set["REF_DP"] = ref_row_set["FILENAME"].str.split(":").str[2]
         ref_row_set["ALT"] = ref_row_set["REF"]
+        #np.where(ref_row_set["REF_DP"] == "0", row_set["ALT"], row_set["REF"]
         ref_row_set["ALT_CODON"] = ref_row_set["REF_CODON"]
         filecol = ref_row_set["FILENAME"].values.tolist()
         ref_filecol = []
         for row in filecol:
             split_vals = row.split(":")
+            #if split_vals[2] != 0:
             split_vals[8] = str(round(1 - float(split_vals[8]), 3))
             split_vals[5] = split_vals[2]
             ref_filecol.append(":".join(split_vals))
@@ -508,14 +511,21 @@ class IvarVariants:
             clean_rows_list (list(pd.DataFrame)): Filtered list with viable combinations
         """
         # Compare variants AF with REF and group those with more similarity
+
         merged_ref_rows = self.get_ref_rowset(consec_rows.copy())
         merged_ref_rows["AF"] = merged_ref_rows["FILENAME"].str.split(":").str[8]
-        ref_rows = merged_ref_rows[
-            merged_ref_rows["REF_CODON"] == merged_ref_rows["ALT_CODON"]
-        ].reset_index(drop=True)
         alt_rows = merged_ref_rows[
             merged_ref_rows["REF_CODON"] != merged_ref_rows["ALT_CODON"]
         ].reset_index(drop=True)
+        ref_rows = merged_ref_rows[
+            merged_ref_rows["REF_CODON"] == merged_ref_rows["ALT_CODON"]
+        ].reset_index(drop=True)
+        ref_rows["REF_DP"] = ref_rows["FILENAME"].str.split(":").str[2]
+        for col in ["AF", "ALT", "ALT_CODON", "FILENAME"]:
+            ref_rows[col] = np.where(
+                ref_rows["REF_DP"] == "0", alt_rows[col], ref_rows[col]
+            )
+        ref_rows = ref_rows.drop("REF_DP", axis=1)
         ref_dict = {
             x: {"AF": float(y), "set": "ref"}
             for x, y in ref_rows["AF"].to_dict().items()

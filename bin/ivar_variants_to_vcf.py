@@ -430,17 +430,17 @@ class IvarVariants:
             for each variant position.
         """
         ref_row_set = row_set.copy()
-        #ref_row_set["REF_DP"] = ref_row_set["FILENAME"].str.split(":").str[2]
         ref_row_set["ALT"] = ref_row_set["REF"]
-        #np.where(ref_row_set["REF_DP"] == "0", row_set["ALT"], row_set["REF"]
         ref_row_set["ALT_CODON"] = ref_row_set["REF_CODON"]
         filecol = ref_row_set["FILENAME"].values.tolist()
         ref_filecol = []
         for row in filecol:
+            # values = GT:DP:REF_DP:REF_RV:REF_QUAL:ALT_DP:ALT_RV:ALT_QUAL:ALT_FREQ
             split_vals = row.split(":")
-            #if split_vals[2] != 0:
-            split_vals[8] = str(round(1 - float(split_vals[8]), 3))
-            split_vals[5] = split_vals[2]
+            ref_dp = split_vals[2]
+            total_dp = split_vals[1]
+            split_vals[8] = str(round(int(ref_dp)/int(total_dp), 3))
+            split_vals[5] = ref_dp
             ref_filecol.append(":".join(split_vals))
         ref_row_set["FILENAME"] = ref_filecol
         merged_ref_rows = (

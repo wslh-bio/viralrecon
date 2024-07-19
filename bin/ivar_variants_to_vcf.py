@@ -646,6 +646,7 @@ class IvarVariants:
 
         clean_vcf_df = vcf_df[vcf_df["INFO"] == "TYPE=SNP"]
         clean_vcf_df = clean_vcf_df[clean_vcf_df["FILTER"] == "PASS"].dropna()
+        clean_vcf_df = clean_vcf_df.drop_duplicates(subset=['REGION', 'POS', 'REF', 'ALT'])
         consecutive_df = self.find_consecutive(clean_vcf_df)
         if consecutive_df.empty:
             return vcf_df

@@ -41,7 +41,14 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open",
-                    "default": "s3://dev-wslh-sequencing-analyses"
+                    "default": ""
+                },
+                "bucket": {
+                    "type":"string",
+                    "format": "directory-path",
+                    "description": "The output bucket where the results will be saved.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "email": {
                     "type": "string",
@@ -358,7 +365,7 @@
                 "kraken2_db": {
                     "type": "string",
                     "format": "path",
-                    "default": "s3://dev-wslh-sequencing-analyses/kraken2_dbs/kraken2_human.tar.gz",
+                    "default": "s3://dev-wslh-sequencing-archive/kraken2_dbs/kraken2_human.tar.gz",
                     "fa_icon": "fab fa-gitkraken",
                     "description": "Full path to Kraken2 database built from host genome.",
                     "hidden": true

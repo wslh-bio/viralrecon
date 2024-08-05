@@ -439,7 +439,7 @@ class IvarVariants:
             split_vals = row.split(":")
             ref_dp = split_vals[2]
             total_dp = split_vals[1]
-            split_vals[8] = str(round(int(ref_dp)/int(total_dp), 3))
+            split_vals[8] = str(round(int(ref_dp) / int(total_dp), 3))
             split_vals[5] = ref_dp
             ref_filecol.append(":".join(split_vals))
         ref_row_set["FILENAME"] = ref_filecol
@@ -460,44 +460,55 @@ class IvarVariants:
         """
         consec_series = []
 
-        def is_subset(maindict, subdict):
-            for key, value in subdict.items():
-                if key not in maindict or maindict[key] != value:
-                    return False
-            return True
-
         for altdict in alt_dictlist:
             if len(altdict) <= 1:
                 consec_series.append(altdict)
                 continue
             af_list = [x["AF"] for x in altdict.values()]
             key_list = list(altdict.keys())
-            if any(af >= self.consensus_af for af in af_list):
-                consec_series.append(altdict)
-                continue
             distances = []
             for i in range(len(altdict) - 1):
                 key1 = key_list[i]
                 key2 = key_list[i + 1]
                 distance = abs(altdict[key2]["AF"] - altdict[key1]["AF"])
                 distances.append(distance)
+
+            # If all af > consensus_af keep just this combination and return
+            if all(af > self.consensus_af for af in af_list):
+                consec_series = [altdict]
+                return consec_series
+
+            # If any af == 0 combination not posible. Continue
+            if any(af == 0 for af in af_list):
+                continue
+
+            # If all distances < distance threshold, haplotype is valid
             if all(dist < self.merge_af_threshold for dist in distances):
                 consec_series.append(altdict)
-            for i, dist in enumerate(distances):
-                if dist <= self.merge_af_threshold and af_list[i] <= self.consensus_af:
-                    close_pair = {
-                        key_list[i]: altdict[i],
-                        key_list[i + 1]: altdict[i + 1],
-                    }
-                else:
-                    close_pair = {key_list[i]: altdict[i]}
-                if not any(is_subset(d, close_pair) for d in consec_series):
-                    consec_series.append(close_pair)
-            if all(dist > self.merge_af_threshold for dist in distances):
-                for i in range(len(af_list)):
-                    if not any(is_subset(d, close_pair) for d in consec_series):
-                        consec_series.append({key_list[i]: altdict[i]})
+                continue
 
+            # If any distance > distance threshold, check if needed nucleotide af is > af_consensus
+            correct = False
+            single_add = {}
+            for idx, dist in enumerate(distances):
+                if dist > self.merge_af_threshold:
+                    for i in range(idx, idx + 1):
+                        if af_list[i] > self.consensus_af:
+                            single_add[0] = altdict[i]
+                            if single_add not in consec_series:
+                                consec_series.append(single_add)
+                            correct = True
+                        else:
+                            correct = False
+                            break
+                else:
+                    correct = True
+
+                if not correct:
+                    break
+
+            if correct:
+                consec_series.append(altdict)
         return consec_series
 
     def merge_ref_alt(self, consec_rows):
@@ -511,7 +522,6 @@ class IvarVariants:
             clean_rows_list (list(pd.DataFrame)): Filtered list with viable combinations
         """
         # Compare variants AF with REF and group those with more similarity
-
         merged_ref_rows = self.get_ref_rowset(consec_rows.copy())
         merged_ref_rows["AF"] = merged_ref_rows["FILENAME"].str.split(":").str[8]
         alt_rows = merged_ref_rows[
@@ -520,12 +530,6 @@ class IvarVariants:
         ref_rows = merged_ref_rows[
             merged_ref_rows["REF_CODON"] == merged_ref_rows["ALT_CODON"]
         ].reset_index(drop=True)
-        ref_rows["REF_DP"] = ref_rows["FILENAME"].str.split(":").str[2]
-        for col in ["AF", "ALT", "ALT_CODON", "FILENAME"]:
-            ref_rows[col] = np.where(
-                ref_rows["REF_DP"] == "0", alt_rows[col], ref_rows[col]
-            )
-        ref_rows = ref_rows.drop("REF_DP", axis=1)
         ref_dict = {
             x: {"AF": float(y), "set": "ref"}
             for x, y in ref_rows["AF"].to_dict().items()
@@ -539,7 +543,9 @@ class IvarVariants:
         )
         combined_dictlist = [dict(comb) for comb in alt_combinations]
         # Keep together only those codons that fulfill certain similarity rules
+
         consec_series = self.merge_rule_check(combined_dictlist)
+
         clean_rows_list = []
         for rowdict in consec_series:
             consec_rowsdict = {}
@@ -572,7 +578,6 @@ class IvarVariants:
                 clean_loc_df = consec_df.drop("AF", axis=1)
                 if not clean_loc_df.empty:
                     clean_rows_list.append(clean_loc_df)
-
         return clean_rows_list
 
     def remove_edge_ref(self, clean_rows_list):
@@ -622,6 +627,7 @@ class IvarVariants:
                 if not df.empty:
                     cleaned_ref_rows_list.append(df)
         final_ref_rows_list = remove_subsets(cleaned_ref_rows_list)
+
         return final_ref_rows_list
 
     def process_vcf_df(self, vcf_df):
@@ -644,9 +650,10 @@ class IvarVariants:
                     print(f"Invalid row found: {str(row)}. Skipped")
             return vcf_df
 
+        # Clean ivar tsv duplicates due to duplicated annotation
+        vcf_df = vcf_df.drop_duplicates(subset=["REGION", "POS", "REF", "ALT"])
         clean_vcf_df = vcf_df[vcf_df["INFO"] == "TYPE=SNP"]
         clean_vcf_df = clean_vcf_df[clean_vcf_df["FILTER"] == "PASS"].dropna()
-        clean_vcf_df = clean_vcf_df.drop_duplicates(subset=['REGION', 'POS', 'REF', 'ALT'])
         consecutive_df = self.find_consecutive(clean_vcf_df)
         if consecutive_df.empty:
             return vcf_df

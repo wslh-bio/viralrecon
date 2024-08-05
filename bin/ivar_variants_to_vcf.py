@@ -366,7 +366,7 @@ class IvarVariants:
         merged_row = consec_rows.loc[merged_index].values.tolist()
         return merged_row
 
-    def create_merge_rowlist(self, clean_rows_list):
+    def merge_hap_vcf(self, clean_rows_list):
         """Merge all the given rows in a single one for each dataframe of consecutive
         rows in a given list
 
@@ -412,9 +412,9 @@ class IvarVariants:
         merged_rowlist = []
         for indexlist in index_product_list:
             consec_rows = row_set.loc[indexlist, :]
-            clean_rows_list = self.merge_ref_alt(consec_rows.copy())
+            clean_rows_list = self.get_haplotypes(consec_rows.copy())
             cleaned_ref_rows_list = self.remove_edge_ref(clean_rows_list)
-            batch_rowlist = self.create_merge_rowlist(cleaned_ref_rows_list.copy())
+            batch_rowlist = self.merge_hap_vcf(cleaned_ref_rows_list.copy())
             merged_rowlist.extend(batch_rowlist)
         return merged_rowlist
 
@@ -511,7 +511,7 @@ class IvarVariants:
                 consec_series.append(altdict)
         return consec_series
 
-    def merge_ref_alt(self, consec_rows):
+    def get_haplotypes(self, consec_rows):
         """Create a list of all possible combinations of REF and ALT consecutive codons
         following certain conditions of similarity using Allele Frequency values
 
@@ -521,7 +521,7 @@ class IvarVariants:
         Returns:
             clean_rows_list (list(pd.DataFrame)): Filtered list with viable combinations
         """
-        # Compare variants AF with REF and group those with more similarity
+        # Create all posible combination between ref and alt (different haplotypes) for consecutive variants
         merged_ref_rows = self.get_ref_rowset(consec_rows.copy())
         merged_ref_rows["AF"] = merged_ref_rows["FILENAME"].str.split(":").str[8]
         alt_rows = merged_ref_rows[
@@ -538,46 +538,47 @@ class IvarVariants:
             x: {"AF": float(y), "set": "alt"}
             for x, y in alt_rows["AF"].to_dict().items()
         }
-        alt_combinations = list(
+        hap_combinations = list(
             product(*[[(k, alt_dict[k]), (k, ref_dict[k])] for k in alt_dict.keys()])
         )
-        combined_dictlist = [dict(comb) for comb in alt_combinations]
-        # Keep together only those codons that fulfill certain similarity rules
+        hap_comb_dict = [dict(comb) for comb in hap_combinations]
 
-        consec_series = self.merge_rule_check(combined_dictlist)
+        # Keep together only those haplotypes that fulfill certain similarity rules
+        valid_hap = self.merge_rule_check(hap_comb_dict)
+
+        if self.consensus_merge:
+            valid_hap_fil = []
+
+            # Process each dictionary in the list
+            for hap in valid_hap:
+                # Create a dictionary of items that meet the threshold
+                valid = all(value['AF'] > self.consensus_af for value in hap.values())
+                if valid:
+                    valid_hap_fil.append(hap)
+                else:
+                    # Create a list of dictionaries for items that do not meet the threshold
+                    separate_dicts = [{key: value} for key, value in hap.items() if value['AF'] <= self.consensus_af]
+
+                    # Extend filtered_list with separate_dicts
+                    for sep in separate_dicts:
+                        if sep not in valid_hap_fil:
+                            valid_hap_fil.append(sep)
+        else:
+            valid_hap_fil = valid_hap
 
         clean_rows_list = []
-        for rowdict in consec_series:
+        for hap in valid_hap_fil:
             consec_rowsdict = {}
-            for key, vals in rowdict.items():
+            for key, vals in hap.items():
                 if vals["set"] == "alt":
                     consec_rowsdict[key] = alt_rows.loc[int(key)]
                 else:
                     consec_rowsdict[key] = ref_rows.loc[int(key)]
             consec_df = pd.DataFrame.from_dict(consec_rowsdict, orient="index")
-            if self.consensus_merge is True:
-                if any(x >= self.consensus_af for x in consec_df["AF"].astype(float)):
-                    consensus_dfs = consec_df.groupby(
-                        consec_df["AF"].astype(float) >= self.consensus_af
-                    )
-                    for af_in_consensus, df in consensus_dfs:
-                        df = df.drop("AF", axis=1)
-                        if af_in_consensus is True:
-                            if not self.find_consecutive(df).empty:
-                                clean_rows_list.append(df)
-                            else:
-                                for _, row in df.groupby("POS"):
-                                    clean_rows_list.append(row)
-                        else:
-                            for _, row in df.groupby("POS"):
-                                clean_rows_list.append(row)
-                else:
-                    for _, row in consec_df.drop("AF", axis=1).groupby("POS"):
-                        clean_rows_list.append(row)
-            else:
-                clean_loc_df = consec_df.drop("AF", axis=1)
-                if not clean_loc_df.empty:
-                    clean_rows_list.append(clean_loc_df)
+
+            clean_loc_df = consec_df.drop("AF", axis=1)
+            if not clean_loc_df.empty:
+                clean_rows_list.append(clean_loc_df)
         return clean_rows_list
 
     def remove_edge_ref(self, clean_rows_list):
@@ -592,24 +593,6 @@ class IvarVariants:
         def indexes_are_consecutive(idx_list):
             """Returns True if ints in list are consecutive, or just 1 element"""
             return sorted(idx_list) == list(range(min(idx_list), max(idx_list) + 1))
-
-        def remove_subsets(cleaned_ref_rows_list):
-            """Remove those dataframes which are subsets of another one in the list"""
-
-            def is_subset(df1, df2):
-                """Returns True if df1 is a subset of df2"""
-                return len(df1.merge(df2)) == len(df1)
-
-            max_length = max(len(df) for df in cleaned_ref_rows_list)
-            largest_dfs = [df for df in cleaned_ref_rows_list if len(df) == max_length]
-            other_dfs = [df for df in cleaned_ref_rows_list if len(df) < max_length]
-            if not other_dfs:
-                return largest_dfs
-            final_ref_rows_list = largest_dfs
-            for smalldf in other_dfs:
-                if not any(is_subset(smalldf, bigdf) for bigdf in largest_dfs):
-                    final_ref_rows_list.append(smalldf)
-            return final_ref_rows_list
 
         cleaned_ref_rows_list = []
         for df in clean_rows_list:
@@ -626,9 +609,8 @@ class IvarVariants:
                 df = df.drop(idx_matches, axis=0)
                 if not df.empty:
                     cleaned_ref_rows_list.append(df)
-        final_ref_rows_list = remove_subsets(cleaned_ref_rows_list)
 
-        return final_ref_rows_list
+        return cleaned_ref_rows_list
 
     def process_vcf_df(self, vcf_df):
         """Merge rows with consecutive SNPs that passed all filters and without NAs
@@ -652,26 +634,26 @@ class IvarVariants:
 
         # Clean ivar tsv duplicates due to duplicated annotation
         vcf_df = vcf_df.drop_duplicates(subset=["REGION", "POS", "REF", "ALT"])
-        clean_vcf_df = vcf_df[vcf_df["INFO"] == "TYPE=SNP"]
-        clean_vcf_df = clean_vcf_df[clean_vcf_df["FILTER"] == "PASS"].dropna()
-        consecutive_df = self.find_consecutive(clean_vcf_df)
+        vcf_df_fil = vcf_df[vcf_df["INFO"] == "TYPE=SNP"]
+        vcf_df_fil = vcf_df_fil[vcf_df_fil["FILTER"] == "PASS"].dropna()
+        consecutive_df = self.find_consecutive(vcf_df_fil)
         if consecutive_df.empty:
             return vcf_df
-        splitted_groups = self.split_non_consecutive(consecutive_df)
-        same_codon_consecutive = self.get_same_codon(splitted_groups)
-        split_rows_dict = self.split_by_codon(same_codon_consecutive)
-        for _, row_set in sorted(split_rows_dict.items()):
+        consecutive_split = self.split_non_consecutive(consecutive_df)
+        codon_split = self.get_same_codon(consecutive_split)
+        codon_split_dict = self.split_by_codon(codon_split)
+        for _, row_set in sorted(codon_split_dict.items()):
             last_index = vcf_df.tail(1).index[0] + 1
             vcf_df = vcf_df.drop(row_set.Index)
             # Redundant "Index" column is generated by Itertuples in split_by_codon()
             row_set = row_set.drop(["Index"], axis=1)
             if self.find_duplicates(row_set):
-                rows_to_merge = self.handle_dup_rows(row_set.copy())
+                haps_merged = self.handle_dup_rows(row_set.copy())
             else:
-                clean_rows_list = self.merge_ref_alt(row_set.copy())
-                cleaned_ref_rows_list = self.remove_edge_ref(clean_rows_list)
-                rows_to_merge = self.create_merge_rowlist(cleaned_ref_rows_list.copy())
-            vcf_df = include_rows(vcf_df, last_index, rows_to_merge)
+                hap_rows = self.get_haplotypes(row_set.copy())
+                hap_rows_noref = self.remove_edge_ref(hap_rows)
+                haps_merged = self.merge_hap_vcf(hap_rows_noref.copy())
+            vcf_df = include_rows(vcf_df, last_index, haps_merged)
         vcf_df = vcf_df[vcf_df["REF"] != vcf_df["ALT"]]
         vcf_df = vcf_df.sort_index().reset_index(drop=True)
         processed_vcf_df = vcf_df.drop_duplicates().sort_values("POS")
@@ -752,7 +734,7 @@ class IvarVariants:
                 filepath = self.file_out
             else:
                 basename = os.path.splitext(os.path.basename(self.file_out))[0]
-                filename = str(basename) + "_merge_annot.vcf"
+                filename = str(basename) + "_all_hap.vcf"
                 filepath = os.path.join(os.path.dirname(self.file_out), filename)
             with open(filepath, "w") as file_out:
                 file_out.write(vcf_header + "\n")
@@ -781,6 +763,7 @@ def make_dir(path):
 
 def main(args=None):
     args = parse_args(args)
+
     ivar_to_vcf = IvarVariants(
         file_in=args.file_in,
         file_out=args.file_out,

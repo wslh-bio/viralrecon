@@ -722,6 +722,9 @@ class IvarVariants:
             self.consensus_merge = consensus
             if not self.ignore_merge:
                 processed_vcf = self.process_vcf_df(vcf_table)
+            else:
+                processed_vcf = vcf_table
+
             try:
                 processed_vcf = processed_vcf.drop(["REF_CODON", "ALT_CODON"], axis=1)
             except KeyError:

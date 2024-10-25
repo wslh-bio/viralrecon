@@ -327,13 +327,13 @@ According to [Cutadapt's documentation regarding adapter types](https://cutadapt
 
 - Regular 3’ adapter: `-a ADAPTER`
   - Set `--skip_noninternal_primers` to `true`
-  - Change `modules_illumina.config` > `CUTADAPT` > `ext.args` to use `-a` instead of `-g`
+  - Set `--threeprime_adapters` to `true`
 - Regular 5’ adapter: `-g ADAPTER`
   - Set `--skip_noninternal_primers` to `true`
 - Non-internal 3’ adapter: `-a ADAPTERX`:
   - Change `modules_illumina.config` > `PREPARE_PRIMER_FASTA` > `ext.args` to use `$` instead of `^` to add the X at the end of the sequence.
-  - Change `modules_illumina.config` > `CUTADAPT` > `ext.args` to use `-a` instead of `-g`
-- Non-internal 5’ adapter: `-g XADAPTER`: This is the option by default.
+  - Set `--threeprime_adapters` to `true`
+- **Non-internal 5’ adapter**: `-g XADAPTER`: **This is the option by default**.
 
 ### nf-core/configs
 

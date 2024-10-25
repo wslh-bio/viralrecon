@@ -28,7 +28,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #434](https://github.com/nf-core/viralrecon/pull/434)] - Add blast result filtering through `min_contig_length` and `min_perc_contig_aligned`.
 - [[PR #438](https://github.com/nf-core/viralrecon/pull/438)] - Update fastp container to 0.23.4
 - [[PR #439](https://github.com/nf-core/viralrecon/pull/439)] - Fix cardinality issue when using `--bowtie2_index`
-- [[PR #435](https://github.com/nf-core/viralrecon/pull/435)] - Changed cutadapt to use nf-core modules, added `skip_noninternal_primers` param to allow users to process primers inside the pipeline.
+- [[PR #435](https://github.com/nf-core/viralrecon/pull/435)] - Changed to a patched cutadapt from nf-core modules, added `skip_noninternal_primers` param to allow users to process primers inside the pipeline, and added `threeprime_adapters` to determine whether primers are 3' or 5' adapters.
 
 ### Parameters
 
@@ -44,6 +44,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 |               | `--min_contig_length`        |
 |               | `--min_perc_contig_aligned`  |
 |               | `--skip_noninternal_primers` |
+|               | `--threeprime_adapters`      |
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present.
 > **NB:** Parameter has been **added** if just the new parameter information is present.

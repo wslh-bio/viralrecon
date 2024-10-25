@@ -590,6 +590,12 @@
                     "fa_icon": "fas fa-fast-forward",
                     "description": "Set this parameter to false to add an X at the begining or end of the primer's fasta sequence to specify cutadapt that they are non-internal 5' or 3' adapters, respectively.",
                     "help_text": "See viralrecon's usage and cutadapt documentation: https://cutadapt.readthedocs.io/en/stable/guide.html#adapter-types"
+                },
+                "threeprime_adapters": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Set this parameter to true when the primer's for cutadapt are 3' adapters. Default value is false, as default primers are 5' adapters.",
+                    "help_text": "See viralrecon's usage and cutadapt documentation: https://cutadapt.readthedocs.io/en/stable/guide.html#adapter-types"
                 }
             },
             "fa_icon": "fas fa-random"

@@ -1,0 +1,39 @@
+Changes in module 'nf-core/cutadapt'
+'modules/nf-core/cutadapt/meta.yml' is unchanged
+Changes in 'cutadapt/main.nf':
+--- modules/nf-core/cutadapt/main.nf
++++ modules/nf-core/cutadapt/main.nf
+@@ -22,11 +22,26 @@
+     def args = task.ext.args ?: ''
+     def prefix = task.ext.prefix ?: "${meta.id}"
+     def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
++    def threeprime_adapters = params.threeprime_adapters ?: false
++
++    // Ajustar primers según las condiciones dadas
++    def primers
++    if (params.threeprime_adapters && meta.single_end) {
++        primers = "-a file:${meta.primers}"
++    } else if (params.threeprime_adapters && !meta.single_end) {
++        primers = "-a file:${meta.primers} -A file:${meta.primers}"
++    } else if (!params.threeprime_adapters && meta.single_end) {
++        primers = "-g file:${meta.primers}"
++    } else {
++        primers = "-g file:${meta.primers} -G file:${meta.primers}"
++    }
++    
+     """
+     cutadapt \\
+         -Z \\
+         --cores $task.cpus \\
+         $args \\
++        $primers \\
+         $trimmed \\
+         $reads \\
+         > ${prefix}.cutadapt.log
+
+'modules/nf-core/cutadapt/environment.yml' is unchanged
+'modules/nf-core/cutadapt/tests/main.nf.test' is unchanged
+'modules/nf-core/cutadapt/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/cutadapt/tests/nextflow.config' is unchanged
+'modules/nf-core/cutadapt/tests/tags.yml' is unchanged
+************************************************************

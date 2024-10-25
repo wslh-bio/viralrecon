@@ -9,6 +9,7 @@ process CUTADAPT {
 
     input:
     tuple val(meta), path(reads)
+    path adapters
 
     output:
     tuple val(meta), path('*.trim.fastq.gz'), emit: reads
@@ -22,18 +23,17 @@ process CUTADAPT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
-    def threeprime_adapters = params.threeprime_adapters ?: false
 
     // Ajustar primers según las condiciones dadas
     def primers
     if (params.threeprime_adapters && meta.single_end) {
-        primers = "-a file:${meta.primers}"
+        primers = "-a file:${adapters}"
     } else if (params.threeprime_adapters && !meta.single_end) {
-        primers = "-a file:${meta.primers} -A file:${meta.primers}"
+        primers = "-a file:${adapters} -A file:${adapters}"
     } else if (!params.threeprime_adapters && meta.single_end) {
-        primers = "-g file:${meta.primers}"
+        primers = "-g file:${adapters}"
     } else {
-        primers = "-g file:${meta.primers} -G file:${meta.primers}"
+        primers = "-g file:${adapters} -G file:${adapters}"
     }
     
     """

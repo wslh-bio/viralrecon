@@ -111,6 +111,7 @@ jobs:
           - "--skip_plasmidid false --skip_asciigenome"
           - "--additional_annotation ./GCA_009858895.3_ASM985889v3_genomic.gtf.gz"
           - "--bowtie2_index ./GCA_009858895.3_ASM985889v3_genomic.200409.bt2.index.tar.gz"
+          - "--skip_noninternal_primers --threeprime_adapters"
         isMaster:
           - ${{ github.base_ref == 'master' }}
         # Exclude conda and singularity on dev

@@ -29,22 +29,24 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #438](https://github.com/nf-core/viralrecon/pull/438)] - Update fastp container to 0.23.4
 - [[PR #439](https://github.com/nf-core/viralrecon/pull/439)] - Fix cardinality issue when using `--bowtie2_index`
 - [[PR #435](https://github.com/nf-core/viralrecon/pull/435)] - Changed to a patched cutadapt from nf-core modules, added `skip_noninternal_primers` param to allow users to process primers inside the pipeline, and added `threeprime_adapters` to determine whether primers are 3' or 5' adapters.
+- [[PR #446](https://github.com/nf-core/viralrecon/pull/446)] - Update nextclade & pangolin modules
 
 ### Parameters
 
-| Old parameter | New parameter                |
-| ------------- | ---------------------------- |
-|               | `--skip_freyja`              |
-|               | `--freyja_repeats`           |
-|               | `--freyja_db_name`           |
-|               | `--freyja_barcodes`          |
-|               | `--freyja_lineages`          |
-|               | `--skip_freyja_boot`         |
-|               | `--additional_annotation`    |
-|               | `--min_contig_length`        |
-|               | `--min_perc_contig_aligned`  |
-|               | `--skip_noninternal_primers` |
-|               | `--threeprime_adapters`      |
+| Old parameter                   | New parameter                |
+| ------------------------------- | ---------------------------- |
+|                                 | `--skip_freyja`              |
+|                                 | `--freyja_repeats`           |
+|                                 | `--freyja_db_name`           |
+|                                 | `--freyja_barcodes`          |
+|                                 | `--freyja_lineages`          |
+|                                 | `--skip_freyja_boot`         |
+|                                 | `--additional_annotation`    |
+|                                 | `--min_contig_length`        |
+|                                 | `--min_perc_contig_aligned`  |
+|                                 | `--skip_noninternal_primers` |
+|                                 | `--threeprime_adapters`      |
+| `--nextclade_dataset_reference` |                              |
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present.
 > **NB:** Parameter has been **added** if just the new parameter information is present.
@@ -54,12 +56,14 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 
 Note, since the pipeline is now using Nextflow DSL2, each process will be run with its own [Biocontainer](https://biocontainers.pro/#/registry). This means that on occasion it is entirely possible for the pipeline to be using different versions of the same tool. However, the overall software dependency changes compared to the last release have been listed below for reference.
 
-| Dependency | Old version | New version |
-| ---------- | ----------- | ----------- |
-| `cutadapt` |             | 4.6         |
-| `fastp`    | 0.23.2      | 0.23.4      |
-| `freyja`   |             | 1.5.0       |
-| `multiqc`  | 1.14        | 1.19        |
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| `cutadapt`  |             | 4.6         |
+| `fastp`     | 0.23.2      | 0.23.4      |
+| `freyja`    |             | 1.5.0       |
+| `multiqc`   | 1.14        | 1.19        |
+| `nextclade` | 2.12.0      | 3.8.2       |
+| `pangolin`  | 4.2         | 4.3         |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present.
 >

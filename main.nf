@@ -33,7 +33,6 @@ params.primer_bed    = getGenomeAttribute('primer_bed', primer_set, primer_set_v
 
 params.nextclade_dataset           = getGenomeAttribute('nextclade_dataset')
 params.nextclade_dataset_name      = getGenomeAttribute('nextclade_dataset_name')
-params.nextclade_dataset_reference = getGenomeAttribute('nextclade_dataset_reference')
 params.nextclade_dataset_tag       = getGenomeAttribute('nextclade_dataset_tag')
 
 
@@ -86,7 +85,6 @@ workflow NFCORE_VIRALRECON {
             params.bowtie2_index,
             params.nextclade_dataset,
             params.nextclade_dataset_name,
-            params.nextclade_dataset_reference,
             params.nextclade_dataset_tag
         )
 
@@ -102,7 +100,6 @@ workflow NFCORE_VIRALRECON {
             params.bowtie2_index,
             params.nextclade_dataset,
             params.nextclade_dataset_name,
-            params.nextclade_dataset_reference,
             params.nextclade_dataset_tag
         )
 

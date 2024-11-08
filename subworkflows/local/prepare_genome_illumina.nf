@@ -28,7 +28,6 @@ workflow PREPARE_GENOME {
     bowtie2_index
     nextclade_dataset
     nextclade_dataset_name
-    nextclade_dataset_reference
     nextclade_dataset_tag
 
 
@@ -192,7 +191,6 @@ workflow PREPARE_GENOME {
         } else if (nextclade_dataset_name) {
             NEXTCLADE_DATASETGET (
                 nextclade_dataset_name,
-                nextclade_dataset_reference,
                 nextclade_dataset_tag
             )
             ch_nextclade_db = NEXTCLADE_DATASETGET.out.dataset

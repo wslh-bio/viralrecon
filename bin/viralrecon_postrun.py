@@ -254,8 +254,8 @@ def wslh_qc_filter(viralrecon_report, wslh_output):
     
     df.loc[(mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_pass'
     df.loc[(~mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_fail'
-    df.loc[(mask_other & df['sample_id'].str.contains('VR')), 'WSLH_qc'] = 'pass'
-    df.loc[(~mask_other & df['sample_id'].str.contains('VR')), 'WSLH_qc'] = 'fail'
+    df.loc[(mask_other & df['sample_id'].str.contains('.*')), 'WSLH_qc'] = 'pass'
+    df.loc[(~mask_other & df['sample_id'].str.contains('.*')), 'WSLH_qc'] = 'fail'
 
     # Set 'unassigned_failed_qc' for rows with blanks in 'pangolin_lineage'
     #df.loc[df['pangolin_lineage'].isna() & df['sample_id'].str.contains('VR'), 'pangolin_lineage'] = 'unassigned_failed_qc'

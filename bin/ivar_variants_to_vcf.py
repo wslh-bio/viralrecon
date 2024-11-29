@@ -473,8 +473,16 @@ class IvarVariants:
                 distance = abs(altdict[key2]["AF"] - altdict[key1]["AF"])
                 distances.append(distance)
 
+            # First combination is always alt,alt,alt
             # If all af > consensus_af keep just this combination and return
             if all(af > self.consensus_af for af in af_list):
+                consec_series = [altdict]
+                return consec_series
+
+            # If all af between 04 and 0.6 keep just this combination and return.
+            # Note: All other combinations are going to be valid considering distance
+            # but we've empirically checked that only ALT combination is found in real bams.
+            if all(af > 0.4 or af < 0.6 for af in af_list):
                 consec_series = [altdict]
                 return consec_series
 

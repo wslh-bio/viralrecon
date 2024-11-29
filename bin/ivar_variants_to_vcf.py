@@ -590,10 +590,6 @@ class IvarVariants:
             cleaned_ref_rows_list (List(pd.DataFrame)): List of rows without edge refs
         """
 
-        def indexes_are_consecutive(idx_list):
-            """Returns True if ints in list are consecutive, or just 1 element"""
-            return sorted(idx_list) == list(range(min(idx_list), max(idx_list) + 1))
-
         cleaned_ref_rows_list = []
         for df in clean_rows_list:
             ref_col = df["REF"]
@@ -605,10 +601,10 @@ class IvarVariants:
             if len(df) == 3 and idx_matches == [1]:
                 cleaned_ref_rows_list.append(df)
                 continue
-            if indexes_are_consecutive(idx_matches):
-                df = df.drop(idx_matches, axis=0)
-                if not df.empty:
-                    cleaned_ref_rows_list.append(df)
+
+            df = df.drop(idx_matches, axis=0)
+            if not df.empty:
+                cleaned_ref_rows_list.append(df)
 
         return cleaned_ref_rows_list
 

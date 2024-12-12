@@ -64,6 +64,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `multiqc`   | 1.14        | 1.19        |
 | `nextclade` | 2.12.0      | 3.8.2       |
 | `pangolin`  | 4.2         | 4.3         |
+| `nf-schema` |             | 2.2.1       |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present.
 >

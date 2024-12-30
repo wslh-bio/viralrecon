@@ -48,10 +48,9 @@ if (params.platform == 'illumina') {
     include { NANOPORE } from './workflows/nanopore'
 }
 
+include { VIRALRECON  } from './workflows/viralrecon'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
-
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -103,7 +103,6 @@ workflow PREPARE_GENOME {
         } else if (params.nextclade_dataset_name) {
             NEXTCLADE_DATASETGET (
                 params.nextclade_dataset_name,
-                params.nextclade_dataset_reference,
                 params.nextclade_dataset_tag
             )
             ch_nextclade_db = NEXTCLADE_DATASETGET.out.dataset

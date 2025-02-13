@@ -251,11 +251,18 @@ def wslh_qc_filter(viralrecon_report, wslh_output):
         (df['num_Ns_per_100kb_consensus'] <= 10000) &
         (df['pangolin_scorpio_call'].notna())
     )
-    
-    df.loc[(mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_pass'
-    df.loc[(~mask_ntc & df['sample_id'].str.contains('VQ')), 'WSLH_qc'] = 'NTC_fail'
-    df.loc[(mask_other & df['sample_id'].str.contains('.*')), 'WSLH_qc'] = 'pass'
-    df.loc[(~mask_other & df['sample_id'].str.contains('.*')), 'WSLH_qc'] = 'fail'
+
+    df.loc[
+        (mask_other & df['sample_id'].str.contains('.*')) & 
+        (~df['WSLH_qc'].isin(['NTC_pass', 'NTC_fail'])), 
+        'WSLH_qc'
+    ] = 'pass'
+
+    df.loc[
+        (~mask_other & df['sample_id'].str.contains('.*')) & 
+        (~df['WSLH_qc'].isin(['NTC_pass', 'NTC_fail'])), 
+        'WSLH_qc'
+    ] = 'fail'
 
     # Set 'unassigned_failed_qc' for rows with blanks in 'pangolin_lineage'
     #df.loc[df['pangolin_lineage'].isna() & df['sample_id'].str.contains('VR'), 'pangolin_lineage'] = 'unassigned_failed_qc'

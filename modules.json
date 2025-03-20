@@ -18,7 +18,7 @@
                     "artic/minion": {
                         "branch": "master",
                         "git_sha": "b44f728e80a1420b9f130061d91f7ff86673735a",
-                        "installed_by": ["modules"]
+                        "patch": "modules/nf-core/artic/minion/artic-minion.diff"
                     },
                     "bandage/image": {
                         "branch": "master",

@@ -147,7 +147,7 @@
                     },
                     "ivar/consensus": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "fa30cb23a4ad91e509b0c91399ab3b0cc76e858f",
                         "installed_by": ["modules"]
                     },
                     "ivar/trim": {
@@ -157,7 +157,7 @@
                     },
                     "ivar/variants": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "fa30cb23a4ad91e509b0c91399ab3b0cc76e858f",
                         "installed_by": ["modules"]
                     },
                     "kraken2/kraken2": {

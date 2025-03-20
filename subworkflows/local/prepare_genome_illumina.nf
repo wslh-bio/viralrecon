@@ -209,10 +209,12 @@ workflow PREPARE_GENOME {
                     UNTAR_BLAST_DB (
                         [ [:], params.blast_db ]
                     )
-                    ch_blast_db = UNTAR_BLAST_DB.out.untar.map { it[1] }
+                    ch_blast_db = UNTAR_BLAST_DB.out.untar
                     ch_versions = ch_versions.mix(UNTAR_BLAST_DB.out.versions)
                 } else {
-                    ch_blast_db = Channel.value(file(params.blast_db))
+                    ch_blast_db = Channel.value(
+                        [[id:'custom_blastdb'], file(params.blast_db)]
+                    )
                 }
             } else {
                 BLAST_MAKEBLASTDB (

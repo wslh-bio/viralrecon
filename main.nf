@@ -35,7 +35,6 @@ params.nextclade_dataset           = getGenomeAttribute('nextclade_dataset_v3pl'
 params.nextclade_dataset_name      = getGenomeAttribute('nextclade_dataset_name')
 params.nextclade_dataset_tag       = getGenomeAttribute('nextclade_dataset_tag_v3pl')
 
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
@@ -50,8 +49,6 @@ if (params.platform == 'illumina') {
 
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
-
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

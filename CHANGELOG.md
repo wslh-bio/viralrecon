@@ -28,6 +28,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #434](https://github.com/nf-core/viralrecon/pull/434)] - Add blast result filtering through `min_contig_length` and `min_perc_contig_aligned`.
 - [[PR #438](https://github.com/nf-core/viralrecon/pull/438)] - Update fastp container to 0.23.4
 - [[PR #439](https://github.com/nf-core/viralrecon/pull/439)] - Fix cardinality issue when using `--bowtie2_index`
+- [[PR #465](https://github.com/nf-core/viralrecon/pull/465)] - Refactored old ivar_variants_to_vcf.py with new functionalities like a quality threshold, and merging based on quality and frequency distance.
 - [[PR #435](https://github.com/nf-core/viralrecon/pull/435)] - Changed to a patched cutadapt from nf-core modules, added `skip_noninternal_primers` param to allow users to process primers inside the pipeline, and added `threeprime_adapters` to determine whether primers are 3' or 5' adapters.
 - [[PR #446](https://github.com/nf-core/viralrecon/pull/446)] - Update nextclade & pangolin modules
 - [[PR #450](https://github.com/nf-core/viralrecon/pull/450)] - Patch nf schema - include integer & string as type for sample

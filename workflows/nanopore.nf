@@ -126,13 +126,12 @@ workflow NANOPORE {
     //
     // MODULE: PycoQC on sequencing summary file
     //
-    ch_pycoqc_multiqc = Channel.empty()
     if (params.sequencing_summary && !params.skip_pycoqc) {
         PYCOQC (
             Channel.of(ch_sequencing_summary).map { [ [:], it ] }
         )
-        ch_pycoqc_multiqc = PYCOQC.out.json
-        ch_versions       = ch_versions.mix(PYCOQC.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(PYCOQC.out.json.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(PYCOQC.out.versions)
     }
 
     //
@@ -172,8 +171,6 @@ workflow NANOPORE {
 
     barcode_dirs       = file("${params.fastq_dir}/barcode*", type: 'dir' , maxdepth: 1)
     single_barcode_dir = file("${params.fastq_dir}/*.fastq" , type: 'file', maxdepth: 1)
-    ch_custom_no_sample_name_multiqc = Channel.empty()
-    ch_custom_no_barcodes_multiqc    = Channel.empty()
     if (barcode_dirs) {
         Channel
             .fromPath( barcode_dirs )
@@ -210,7 +207,10 @@ workflow NANOPORE {
                         def header = ['Barcode', 'Read count']
                         WorkflowCommons.multiqcTsvFromList(tsv_data, header)
                 }
-                .set { ch_custom_no_sample_name_multiqc }
+                .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
+                .ifEmpty([]),
+                .mix { ch_multiqc_files }
+                .set { ch_multiqc_files }
 
             //
             // MODULE: Create custom content file for MultiQC to report samples that were in samplesheet but have no barcodes
@@ -224,7 +224,10 @@ workflow NANOPORE {
                         def header = ['Sample', 'Missing barcode']
                         WorkflowCommons.multiqcTsvFromList(tsv_data, header)
                 }
-                .set { ch_custom_no_barcodes_multiqc }
+                .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
+                .ifEmpty([]),
+                .mix { ch_multiqc_files }
+                .set { ch_multiqc_files }
 
             ch_fastq_dirs
                 .filter { (it[1] != null)  }
@@ -268,7 +271,10 @@ workflow NANOPORE {
                 def header = ['Sample', 'Barcode count']
                 WorkflowCommons.multiqcTsvFromList(tsv_data, header)
         }
-        .set { ch_custom_fail_barcodes_count_multiqc }
+        .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
+        .ifEmpty([]),
+        .mix { ch_multiqc_files }
+        .set { ch_multiqc_files }
 
     // Re-arrange channels to have meta map of information for sample
     ch_fastq_dirs
@@ -307,7 +313,10 @@ workflow NANOPORE {
                 def header = ['Sample', 'Read count']
                 WorkflowCommons.multiqcTsvFromList(tsv_data, header)
         }
-        .set { ch_custom_fail_guppyplex_count_multiqc }
+        .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
+        .ifEmpty([]),
+        .mix { ch_multiqc_files }
+        .set { ch_multiqc_files }
 
     //
     // MODULE: Nanoplot QC for FastQ files
@@ -333,7 +342,8 @@ workflow NANOPORE {
         ch_artic_scheme,
         params.primer_set_version
     )
-    ch_versions = ch_versions.mix(ARTIC_MINION.out.versions.first())
+    ch_multiqc_files = ch_multiqc_files.mix(ARTIC_MINION.out.json.collect{it[1]}.ifEmpty([]))
+    ch_versions      = ch_versions.mix(ARTIC_MINION.out.versions.first())
 
     //
     // MODULE: Remove duplicate variants
@@ -362,7 +372,8 @@ workflow NANOPORE {
         [ [:], [] ],
         [ [:], [] ]
     )
-    ch_versions = ch_versions.mix(BCFTOOLS_STATS.out.versions.first())
+    ch_multiqc_files = ch_multiqc_files.mix(BCFTOOLS_STATS.out.stats.collect{it[1]}.ifEmpty([]))
+    ch_versions      = ch_versions.mix(BCFTOOLS_STATS.out.versions.first())
 
     //
     // SUBWORKFLOW: Filter unmapped reads from BAM
@@ -371,13 +382,12 @@ workflow NANOPORE {
         ARTIC_MINION.out.bam.join(ARTIC_MINION.out.bai, by: [0]),
         [ [:], [] ]
     )
+    ch_multiqc_files = ch_multiqc_files.mix(FILTER_BAM_SAMTOOLS.out.flagstat.collect{it[1]}.ifEmpty([]))
     ch_versions = ch_versions.mix(FILTER_BAM_SAMTOOLS.out.versions)
 
     //
     // MODULE: Genome-wide and amplicon-specific coverage QC plots
     //
-    ch_mosdepth_multiqc         = Channel.empty()
-    ch_amplicon_heatmap_multiqc = Channel.empty()
     if (!params.skip_mosdepth) {
 
         MOSDEPTH_GENOME (
@@ -386,8 +396,8 @@ workflow NANOPORE {
                 .map { meta, bam, bai -> [ meta, bam, bai, [] ] },
             [ [:], [] ]
         )
-        ch_mosdepth_multiqc  = MOSDEPTH_GENOME.out.global_txt
-        ch_versions          = ch_versions.mix(MOSDEPTH_GENOME.out.versions.first())
+        ch_multiqc_files  = ch_multiqc_files.mix(MOSDEPTH_GENOME.out.global_txt.collect{it[1]}.ifEmpty([]))
+        ch_versions       = ch_versions.mix(MOSDEPTH_GENOME.out.versions.first())
 
         PLOT_MOSDEPTH_REGIONS_GENOME (
             MOSDEPTH_GENOME.out.regions_bed.collect { it[1] }
@@ -403,7 +413,7 @@ workflow NANOPORE {
         PLOT_MOSDEPTH_REGIONS_AMPLICON (
             MOSDEPTH_AMPLICON.out.regions_bed.collect { it[1] }
         )
-        ch_amplicon_heatmap_multiqc = PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv
+        ch_amplicon_heatmap_multiqc = ch_multiqc_files.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv.collect{it[1]}.ifEmpty([]))
         ch_versions                 = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.versions)
     }
 
@@ -415,14 +425,13 @@ workflow NANOPORE {
         PANGOLIN (
             ARTIC_MINION.out.fasta
         )
-        ch_pangolin_multiqc = PANGOLIN.out.report
+        ch_pangolin_multiqc = ch_multiqc_files.mix(PANGOLIN.out.report.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(PANGOLIN.out.versions.first())
     }
 
     //
     // MODULE: Clade assignment, mutation calling, and sequence quality checks with Nextclade
     //
-    ch_nextclade_multiqc = Channel.empty()
     if (!params.skip_nextclade) {
         NEXTCLADE_RUN (
             ARTIC_MINION.out.fasta,
@@ -447,7 +456,10 @@ workflow NANOPORE {
                     def header = ['Sample', 'clade']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
-            .set { ch_nextclade_multiqc }
+            .collectFile(name: 'nextclade_clade_mqc.tsv')
+            .ifEmpty([])
+            .mix { ch_multiqc_files }
+            .set { ch_multiqc_files }
     }
 
     //
@@ -465,7 +477,7 @@ workflow NANOPORE {
             params.freyja_lineages,
         )
         ch_versions       = ch_versions.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.versions)
-        ch_freyja_multiqc = BAM_VARIANT_DEMIX_BOOT_FREYJA.out.demix
+        ch_multiqc_files  = ch_multiqc_files.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.demix.collect{it[1]}.ifEmpty([]))
     }
 
     //
@@ -482,14 +494,13 @@ workflow NANOPORE {
             PREPARE_GENOME.out.fasta.collect().map { [ [:], it ] },
             ch_genome_gff ? PREPARE_GENOME.out.gff.map { [ [:], it ] } : [ [:], [] ],
         )
-        ch_quast_multiqc = QUAST.out.tsv
+        ch_multiqc_files  = ch_multiqc_files.mix( QUAST.out.tsv.collect{it[1]}.ifEmpty([]))
         ch_versions      = ch_versions.mix(QUAST.out.versions)
     }
 
     //
     // SUBWORKFLOW: Annotate variants with snpEff
     //
-    ch_snpeff_multiqc = Channel.empty()
     ch_snpsift_txt    = Channel.empty()
     if (ch_genome_gff && !params.skip_snpeff) {
         SNPEFF_SNPSIFT (
@@ -498,7 +509,7 @@ workflow NANOPORE {
             PREPARE_GENOME.out.snpeff_config.collect(),
             PREPARE_GENOME.out.fasta.collect()
         )
-        ch_snpeff_multiqc = SNPEFF_SNPSIFT.out.csv
+        ch_multiqc_files  = ch_multiqc_files.mix(SNPEFF_SNPSIFT.out.csv.collect{it[1]}.ifEmpty([]))
         ch_snpsift_txt    = SNPEFF_SNPSIFT.out.snpsift_txt
         ch_versions       = ch_versions.mix(SNPEFF_SNPSIFT.out.versions)
     }
@@ -601,22 +612,22 @@ workflow NANOPORE {
             ch_multiqc_config,
             ch_multiqc_custom_config,
             ch_multiqc_logo.toList(),
-            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
-            ch_custom_no_sample_name_multiqc.collectFile(name: 'fail_barcodes_no_sample_mqc.tsv').ifEmpty([]),
-            ch_custom_no_barcodes_multiqc.collectFile(name: 'fail_no_barcode_samples_mqc.tsv').ifEmpty([]),
-            ch_custom_fail_barcodes_count_multiqc.collectFile(name: 'fail_barcode_count_samples_mqc.tsv').ifEmpty([]),
-            ch_custom_fail_guppyplex_count_multiqc.collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv').ifEmpty([]),
-            ch_amplicon_heatmap_multiqc.ifEmpty([]),
-            ch_pycoqc_multiqc.collect{it[1]}.ifEmpty([]),
-            ARTIC_MINION.out.json.collect{it[1]}.ifEmpty([]),
-            FILTER_BAM_SAMTOOLS.out.flagstat.collect{it[1]}.ifEmpty([]),
-            BCFTOOLS_STATS.out.stats.collect{it[1]}.ifEmpty([]),
-            ch_mosdepth_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_snpeff_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([]),
-            ch_freyja_multiqc.collect{it[1]}.ifEmpty([]),
+            // ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
+            // ch_custom_no_sample_name_multiqc.collectFile(name: 'fail_barcodes_no_sample_mqc.tsv').ifEmpty([]),
+            // ch_custom_no_barcodes_multiqc.collectFile(name: 'fail_no_barcode_samples_mqc.tsv').ifEmpty([]),
+            // ch_custom_fail_barcodes_count_multiqc.collectFile(name: 'fail_barcode_count_samples_mqc.tsv').ifEmpty([]),
+            // ch_custom_fail_guppyplex_count_multiqc.collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv').ifEmpty([]),
+            // ch_amplicon_heatmap_multiqc.ifEmpty([]),
+            // ch_pycoqc_multiqc.collect{it[1]}.ifEmpty([]),
+            // ARTIC_MINION.out.json.collect{it[1]}.ifEmpty([]),
+            // FILTER_BAM_SAMTOOLS.out.flagstat.collect{it[1]}.ifEmpty([]),
+            // BCFTOOLS_STATS.out.stats.collect{it[1]}.ifEmpty([]),
+            // ch_mosdepth_multiqc.collect{it[1]}.ifEmpty([]),
+            // ch_quast_multiqc.collect{it[1]}.ifEmpty([]),
+            // ch_snpeff_multiqc.collect{it[1]}.ifEmpty([]),
+            // ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]),
+            // ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([]),
+            // ch_freyja_multiqc.collect{it[1]}.ifEmpty([]),
         )
 
         multiqc_report = MULTIQC.out.report.toList()

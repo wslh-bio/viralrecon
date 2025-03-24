@@ -1,0 +1,100 @@
+Changes in component 'nf-core/multiqc'
+'modules/nf-core/multiqc/environment.yml' is unchanged
+'modules/nf-core/multiqc/meta.yml' is unchanged
+Changes in 'multiqc/main.nf':
+--- modules/nf-core/multiqc/main.nf
++++ modules/nf-core/multiqc/main.nf
+@@ -13,6 +13,7 @@
+     path(multiqc_logo)
+     path(replace_names)
+     path(sample_names)
++    val platform
+ 
+     output:
+     path "*multiqc_report.html", emit: report
+@@ -25,6 +26,7 @@
+ 
+     script:
+     def args = task.ext.args ?: ''
++    def args2 = task.ext.args2 ?: ''
+     def prefix = task.ext.prefix ? "--filename ${task.ext.prefix}.html" : ''
+     def config = multiqc_config ? "--config $multiqc_config" : ''
+     def extra_config = extra_multiqc_config ? "--config $extra_multiqc_config" : ''
+@@ -32,6 +34,8 @@
+     def replace = replace_names ? "--replace-names ${replace_names}" : ''
+     def samples = sample_names ? "--sample-names ${sample_names}" : ''
+     """
++
++    ## Run MultiQC once to parse tool logs
+     multiqc \\
+         --force \\
+         $args \\
+@@ -42,6 +46,35 @@
+         $replace \\
+         $samples \\
+         .
++
++    ## Parse YAML files dumped by MultiQC to obtain metrics
++    multiqc_to_custom_csv.py --platform $platform
++
++    ## Manually remove files that we don't want in the report
++    if grep -q ">skip_assembly<" workflow_summary_mqc.yaml; then
++        rm -f *assembly_metrics_mqc.csv
++    fi
++
++    if grep -q ">skip_variants<" workflow_summary_mqc.yaml; then
++        rm -f *variants_metrics_mqc.csv
++    fi
++
++    if [ ! -f variants/report.tsv ]; then
++        touch variants/report.tsv
++    fi
++
++    ## Run MultiQC a second time
++        multiqc \\
++        --force \\
++        $args2 \\
++        $config \\
++        $prefix \\
++        $extra_config \\
++        $logo \\
++        $replace \\
++        $samples \\
++        .
++
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+Changes in 'multiqc/tests/main.nf.test':
+--- modules/nf-core/multiqc/tests/main.nf.test
++++ modules/nf-core/multiqc/tests/main.nf.test
+@@ -21,6 +21,7 @@
+                 input[3] = []
+                 input[4] = []
+                 input[5] = []
++                input[6] = []
+                 """
+             }
+         }
+@@ -47,6 +48,7 @@
+                 input[3] = []
+                 input[4] = []
+                 input[5] = []
++                input[6] = []
+                 """
+             }
+         }
+@@ -74,6 +76,7 @@
+                 input[3] = []
+                 input[4] = []
+                 input[5] = []
++                input[6] = []
+                 """
+             }
+         }
+
+'modules/nf-core/multiqc/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/multiqc/tests/nextflow.config' is unchanged
+'modules/nf-core/multiqc/tests/tags.yml' is unchanged
+************************************************************

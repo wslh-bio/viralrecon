@@ -12,21 +12,7 @@ process MULTIQC {
     path(extra_multiqc_config)
     path(multiqc_logo)
     path workflow_summary
-    path fail_barcodes_no_sample
-    path fail_no_barcode_samples
-    path fail_barcode_count_samples
-    path fail_guppyplex_count_samples
-    path 'amplicon_heatmap_mqc.tsv'
-    path ('pycoqc/*')
-    path ('artic_minion/*')
-    path ('samtools_stats/*')
-    path ('bcftools_stats/*')
-    path ('mosdepth/*')
-    path ('quast/*')
-    path ('snpeff/*')
-    path pangolin_lineage
-    path nextclade_clade
-    path ('freyja_demix/*')
+
 
     output:
     path "*multiqc_report.html", emit: report

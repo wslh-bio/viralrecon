@@ -65,7 +65,7 @@ ch_ivar_variants_header_mqc      = file("$projectDir/assets/headers/ivar_variant
 //
 // MODULE: Loaded from modules/local/
 //
-include { MULTIQC                                                 } from '../modules/local/multiqc_illumina'
+
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
 include { PREPARE_PRIMER_FASTA                                    } from '../modules/local/prepare_primer_fasta'
@@ -102,6 +102,7 @@ include { KRAKEN2_KRAKEN2               } from '../modules/nf-core/kraken2/krake
 include { PICARD_COLLECTMULTIPLEMETRICS } from '../modules/nf-core/picard/collectmultiplemetrics/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
+include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
 
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
@@ -168,13 +169,13 @@ workflow ILLUMINA {
         PREPARE_GENOME
             .out
             .primer_bed
-            .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { [ WorkflowCommons.getColFromFile(it, 0, true, '\t') ] }
             .set { ch_bed_contigs }
 
         PREPARE_GENOME
             .out
             .fai
-            .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { [ WorkflowCommons.getColFromFile(it, 0, true, '\t') ] }
             .concat(ch_bed_contigs)
             .collect()
             .map { fai, bed -> WorkflowCommons.checkContigsInBED(fai, bed, log) }
@@ -221,7 +222,7 @@ workflow ILLUMINA {
             .join(FASTQ_TRIM_FASTP_FASTQC.out.trim_json)
             .map {
                 meta, reads, json ->
-                    pass = WorkflowIllumina.getFastpReadsAfterFiltering(json) > 0
+                    def pass = WorkflowIllumina.getFastpReadsAfterFiltering(json) > 0
                     [ meta, reads, json, pass ]
             }
             .set { ch_pass_fail_reads }
@@ -235,7 +236,7 @@ workflow ILLUMINA {
                 meta, reads, json, pass ->
                 if (!pass) {
                     fail_mapped_reads[meta.id] = 0
-                    num_reads = WorkflowIllumina.getFastpReadsBeforeFiltering(json)
+                    def num_reads = WorkflowIllumina.getFastpReadsBeforeFiltering(json)
                     return [ "$meta.id\t$num_reads" ]
                 }
             }
@@ -479,7 +480,7 @@ workflow ILLUMINA {
             params.freyja_lineages,
         )
         ch_versions       = ch_versions.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.versions)
-        ch_multiqc_files  = ch_multiqc_files.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.multiqc_tsv.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files  = ch_multiqc_files.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.demix.collect{it[1]}.ifEmpty([]))
     }
 
     //
@@ -549,7 +550,7 @@ workflow ILLUMINA {
             ch_vcf,
             ch_tbi,
             ch_snpsift_txt,
-            ch_pangolin_multiqc
+            CONSENSUS_BCFTOOLS.out.pangolin_report
         )
         ch_versions = ch_versions.mix(VARIANTS_LONG_TABLE.out.versions)
     }
@@ -563,7 +564,7 @@ workflow ILLUMINA {
             ch_tbi,
             PREPARE_GENOME.out.fasta,
             ch_additional_gtf,
-            ch_pangolin_multiqc
+            CONSENSUS_BCFTOOLS.out.pangolin_report
 
         )
         ch_versions = ch_versions.mix(ADDITIONAL_ANNOTATION.out.versions)

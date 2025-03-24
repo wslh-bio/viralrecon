@@ -206,8 +206,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
                 .ifEmpty([])
-                .mix ( ch_multiqc_files )
-                .set { ch_multiqc_files }
+                .set { fail_no_sample_barcodes_mqc }
+
+            ch_multiqc_files = ch_multiqc_files.mix(fail_no_sample_barcodes_mqc)
 
             //
             // MODULE: Create custom content file for MultiQC to report samples that were in samplesheet but have no barcodes
@@ -223,8 +224,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
                 .ifEmpty([])
-                .mix ( ch_multiqc_files )
-                .set { ch_multiqc_files }
+                .set { no_barcode_samples_mqc }
+
+            ch_multiqc_files = ch_multiqc_files.mix(no_barcode_samples_mqc)
 
             ch_fastq_dirs
                 .filter { (it[1] != null)  }
@@ -270,8 +272,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
         .ifEmpty([])
-        .mix ( ch_multiqc_files )
-        .set { ch_multiqc_files }
+        .set { fail_barcode_count_samples_mqc }
+
+    ch_multiqc_files = ch_multiqc_files.mix(fail_barcode_count_samples_mqc)
 
     // Re-arrange channels to have meta map of information for sample
     ch_fastq_dirs
@@ -312,8 +315,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
         .ifEmpty([])
-        .mix ( ch_multiqc_files )
-        .set { ch_multiqc_files }
+        .set { fail_guppyplex_count_samples_mqc }
+
+    ch_multiqc_files = ch_multiqc_files.mix(fail_guppyplex_count_samples_mqc)
 
     //
     // MODULE: Nanoplot QC for FastQ files
@@ -455,8 +459,10 @@ workflow NANOPORE {
             }
             .collectFile(name: 'nextclade_clade_mqc.tsv')
             .ifEmpty([])
-            .mix ( ch_multiqc_files )
-            .set { ch_multiqc_files }
+            .set { nextclade_clade_mqc }
+
+        ch_multiqc_files = ch_multiqc_files.mix(nextclade_clade_mqc)
+
     }
 
     //
@@ -592,8 +598,8 @@ workflow NANOPORE {
         ch_methods_description                = Channel.value(
             methodsDescriptionText(ch_multiqc_custom_methods_description))
 
-        ch_multiqc_config                       = file("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
-        ch_multiqc_custom_config                = params.multiqc_config ? file(params.multiqc_config) : []
+        ch_multiqc_config                       = Channel.fromPath("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
+        ch_multiqc_custom_config                = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : []
 
         ch_multiqc_logo                       = params.multiqc_logo ?
             Channel.fromPath(params.multiqc_logo, checkIfExists: true) :

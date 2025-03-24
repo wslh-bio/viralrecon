@@ -59,7 +59,6 @@ ch_multiqc_custom_config = params.multiqc_config ? file(params.multiqc_config) :
 // MODULE: Loaded from modules/local/
 //
 include { ASCIIGENOME } from '../modules/local/asciigenome'
-include { MULTIQC     } from '../modules/local/multiqc_nanopore'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
 
@@ -94,6 +93,7 @@ include { PANGOLIN                      } from '../modules/nf-core/pangolin/main
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
+include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -609,25 +609,12 @@ workflow NANOPORE {
 
         MULTIQC (
             ch_multiqc_files.collect(),
-            ch_multiqc_config,
-            ch_multiqc_custom_config,
+            ch_multiqc_config.toList(),
+            ch_multiqc_custom_config.toList(),
             ch_multiqc_logo.toList(),
-            // ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
-            // ch_custom_no_sample_name_multiqc.collectFile(name: 'fail_barcodes_no_sample_mqc.tsv').ifEmpty([]),
-            // ch_custom_no_barcodes_multiqc.collectFile(name: 'fail_no_barcode_samples_mqc.tsv').ifEmpty([]),
-            // ch_custom_fail_barcodes_count_multiqc.collectFile(name: 'fail_barcode_count_samples_mqc.tsv').ifEmpty([]),
-            // ch_custom_fail_guppyplex_count_multiqc.collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv').ifEmpty([]),
-            // ch_amplicon_heatmap_multiqc.ifEmpty([]),
-            // ch_pycoqc_multiqc.collect{it[1]}.ifEmpty([]),
-            // ARTIC_MINION.out.json.collect{it[1]}.ifEmpty([]),
-            // FILTER_BAM_SAMTOOLS.out.flagstat.collect{it[1]}.ifEmpty([]),
-            // BCFTOOLS_STATS.out.stats.collect{it[1]}.ifEmpty([]),
-            // ch_mosdepth_multiqc.collect{it[1]}.ifEmpty([]),
-            // ch_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            // ch_snpeff_multiqc.collect{it[1]}.ifEmpty([]),
-            // ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]),
-            // ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([]),
-            // ch_freyja_multiqc.collect{it[1]}.ifEmpty([]),
+            [],
+            [],
+            "nanopore"
         )
 
         multiqc_report = MULTIQC.out.report.toList()

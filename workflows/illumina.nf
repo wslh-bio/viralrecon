@@ -209,12 +209,13 @@ workflow ILLUMINA {
         false
     )
     ch_variants_fastq = FASTQ_TRIM_FASTP_FASTQC.out.reads
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TRIM_FASTP_FASTQC.out.fastqc_raw_zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TRIM_FASTP_FASTQC.out.trim_json.collect{it[1]}.ifEmpty([]))
     ch_versions = ch_versions.mix(FASTQ_TRIM_FASTP_FASTQC.out.versions)
 
     //
     // Filter empty FastQ files after adapter trimming
     //
-    ch_fail_reads_multiqc = Channel.empty()
     if (!params.skip_fastp) {
         ch_variants_fastq
             .join(FASTQ_TRIM_FASTP_FASTQC.out.trim_json)
@@ -244,14 +245,16 @@ workflow ILLUMINA {
                     def header = ['Sample', 'Reads before trimming']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
-            .set { ch_fail_reads_multiqc }
+            .collectFile(name: 'fail_mapped_reads_mqc.tsv')
+            .ifEmpty([])
+            .mix( ch_multiqc_files )
+            .set{ ch_multiqc_files }
     }
 
     //
     // MODULE: Run Kraken2 for removal of host reads
     //
     ch_assembly_fastq  = ch_variants_fastq
-    ch_kraken2_multiqc = Channel.empty()
     if (!params.skip_kraken2) {
         KRAKEN2_KRAKEN2 (
             ch_variants_fastq,
@@ -259,8 +262,8 @@ workflow ILLUMINA {
             params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter,
             params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter
         )
-        ch_kraken2_multiqc = KRAKEN2_KRAKEN2.out.report
-        ch_versions        = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
+        ch_multiqc_files =  ch_multiqc_files.mix(KRAKEN2_KRAKEN2.out.report.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
 
         if (params.kraken2_variants_host_filter) {
             ch_variants_fastq = KRAKEN2_KRAKEN2.out.unclassified_reads_fastq
@@ -276,8 +279,6 @@ workflow ILLUMINA {
     //
     ch_bam                      = Channel.empty()
     ch_bai                      = Channel.empty()
-    ch_bowtie2_multiqc          = Channel.empty()
-    ch_bowtie2_flagstat_multiqc = Channel.empty()
     if (!params.skip_variants) {
         FASTQ_ALIGN_BOWTIE2 (
             ch_variants_fastq,
@@ -286,11 +287,11 @@ workflow ILLUMINA {
             false,
             PREPARE_GENOME.out.fasta.map { [ [:], it ] }
         )
-        ch_bam                      = FASTQ_ALIGN_BOWTIE2.out.bam
-        ch_bai                      = FASTQ_ALIGN_BOWTIE2.out.bai
-        ch_bowtie2_multiqc          = FASTQ_ALIGN_BOWTIE2.out.log_out
-        ch_bowtie2_flagstat_multiqc = FASTQ_ALIGN_BOWTIE2.out.flagstat
-        ch_versions                 = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
+        ch_bam           = FASTQ_ALIGN_BOWTIE2.out.bam
+        ch_bai           = FASTQ_ALIGN_BOWTIE2.out.bai
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_BOWTIE2.out.log_out.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_BOWTIE2.out.flagstat.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     }
 
     //
@@ -298,7 +299,7 @@ workflow ILLUMINA {
     //
     ch_fail_mapping_multiqc = Channel.empty()
     if (!params.skip_variants) {
-        ch_bowtie2_flagstat_multiqc
+        FASTQ_ALIGN_BOWTIE2.out.flagstat
             .map { meta, flagstat -> [ meta ] + WorkflowIllumina.getFlagstatMappedReads(flagstat, params) }
             .set { ch_mapped_reads }
 
@@ -331,39 +332,40 @@ workflow ILLUMINA {
                     def header = ['Sample', 'Mapped reads']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
-            .set { ch_fail_mapping_multiqc }
+            .collectFile(name: 'fail_mapped_samples_mqc.tsv')
+            .ifEmpty([])
+            .mix( ch_multiqc_files )
+            .set{ ch_multiqc_files }
     }
 
     //
     // SUBWORKFLOW: Trim primer sequences from reads with iVar
     //
-    ch_ivar_trim_flagstat_multiqc = Channel.empty()
     if (!params.skip_variants && !params.skip_ivar_trim && params.protocol == 'amplicon') {
         BAM_TRIM_PRIMERS_IVAR (
             ch_bam.join(ch_bai, by: [0]),
             PREPARE_GENOME.out.primer_bed,
             PREPARE_GENOME.out.fasta.map { [ [:], it ] }
         )
-        ch_bam                        = BAM_TRIM_PRIMERS_IVAR.out.bam
-        ch_bai                        = BAM_TRIM_PRIMERS_IVAR.out.bai
-        ch_ivar_trim_flagstat_multiqc = BAM_TRIM_PRIMERS_IVAR.out.flagstat
-        ch_versions                   = ch_versions.mix(BAM_TRIM_PRIMERS_IVAR.out.versions)
+        ch_bam           = BAM_TRIM_PRIMERS_IVAR.out.bam
+        ch_bai           = BAM_TRIM_PRIMERS_IVAR.out.bai
+        ch_multiqc_files = ch_multiqc_files.mix(BAM_TRIM_PRIMERS_IVAR.out.flagstat.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(BAM_TRIM_PRIMERS_IVAR.out.versions)
     }
 
     //
     // SUBWORKFLOW: Mark duplicate reads
     //
-    ch_markduplicates_flagstat_multiqc = Channel.empty()
     if (!params.skip_variants && !params.skip_markduplicates) {
         BAM_MARKDUPLICATES_PICARD (
             ch_bam,
             PREPARE_GENOME.out.fasta.map { [ [:], it ] },
             PREPARE_GENOME.out.fai
         )
-        ch_bam                             = BAM_MARKDUPLICATES_PICARD.out.bam
-        ch_bai                             = BAM_MARKDUPLICATES_PICARD.out.bai
-        ch_markduplicates_flagstat_multiqc = BAM_MARKDUPLICATES_PICARD.out.flagstat
-        ch_versions                        = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
+        ch_bam           = BAM_MARKDUPLICATES_PICARD.out.bam
+        ch_bai           = BAM_MARKDUPLICATES_PICARD.out.bai
+        ch_multiqc_files = ch_multiqc_files.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
     }
 
     //
@@ -381,8 +383,6 @@ workflow ILLUMINA {
     //
     // MODULE: Genome-wide and amplicon-specific coverage QC plots
     //
-    ch_mosdepth_multiqc         = Channel.empty()
-    ch_amplicon_heatmap_multiqc = Channel.empty()
     if (!params.skip_variants && !params.skip_mosdepth) {
         MOSDEPTH_GENOME (
             ch_bam
@@ -390,8 +390,8 @@ workflow ILLUMINA {
                 .map { meta, bam, bai -> [ meta, bam, bai, [] ] },
             [ [:], [] ],
         )
-        ch_mosdepth_multiqc = MOSDEPTH_GENOME.out.global_txt
-        ch_versions         = ch_versions.mix(MOSDEPTH_GENOME.out.versions.first())
+        ch_multiqc_files = ch_multiqc_files.mix(MOSDEPTH_GENOME.out.global_txt.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(MOSDEPTH_GENOME.out.versions.first())
 
         PLOT_MOSDEPTH_REGIONS_GENOME (
             MOSDEPTH_GENOME.out.regions_bed.collect { it[1] }
@@ -410,8 +410,8 @@ workflow ILLUMINA {
             PLOT_MOSDEPTH_REGIONS_AMPLICON (
                 MOSDEPTH_AMPLICON.out.regions_bed.collect { it[1] }
             )
-            ch_amplicon_heatmap_multiqc = PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv
-            ch_versions                 = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.versions)
+            ch_multiqc_files = ch_multiqc_files.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv.collect().ifEmpty([]))
+            ch_versions      = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.versions)
         }
     }
 
@@ -420,8 +420,6 @@ workflow ILLUMINA {
     //
     ch_vcf                    = Channel.empty()
     ch_tbi                    = Channel.empty()
-    ch_ivar_counts_multiqc    = Channel.empty()
-    ch_bcftools_stats_multiqc = Channel.empty()
     ch_snpsift_txt            = Channel.empty()
     ch_snpeff_multiqc         = Channel.empty()
     if (!params.skip_variants && variant_caller == 'ivar') {
@@ -436,13 +434,13 @@ workflow ILLUMINA {
             PREPARE_GENOME.out.snpeff_config,
             ch_ivar_variants_header_mqc
         )
-        ch_vcf                    = VARIANTS_IVAR.out.vcf
-        ch_tbi                    = VARIANTS_IVAR.out.tbi
-        ch_ivar_counts_multiqc    = VARIANTS_IVAR.out.multiqc_tsv
-        ch_bcftools_stats_multiqc = VARIANTS_IVAR.out.stats
-        ch_snpeff_multiqc         = VARIANTS_IVAR.out.snpeff_csv
-        ch_snpsift_txt            = VARIANTS_IVAR.out.snpsift_txt
-        ch_versions               = ch_versions.mix(VARIANTS_IVAR.out.versions)
+        ch_vcf           = VARIANTS_IVAR.out.vcf
+        ch_tbi           = VARIANTS_IVAR.out.tbi
+        ch_snpsift_txt   = VARIANTS_IVAR.out.snpsift_txt
+        ch_multiqc_files = ch_multiqc_files.mix(VARIANTS_IVAR.out.multiqc_tsv.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(VARIANTS_IVAR.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(VARIANTS_IVAR.out.snpeff_csv.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(VARIANTS_IVAR.out.versions)
     }
 
     //
@@ -481,14 +479,12 @@ workflow ILLUMINA {
             params.freyja_lineages,
         )
         ch_versions       = ch_versions.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.versions)
-        ch_freyja_multiqc = BAM_VARIANT_DEMIX_BOOT_FREYJA.out.demix
+        ch_multiqc_files  = ch_multiqc_files.mix(BAM_VARIANT_DEMIX_BOOT_FREYJA.out.multiqc_tsv.collect{it[1]}.ifEmpty([]))
     }
 
     //
     // SUBWORKFLOW: Call consensus with iVar and downstream QC
     //
-    ch_quast_multiqc    = Channel.empty()
-    ch_pangolin_multiqc = Channel.empty()
     ch_nextclade_report = Channel.empty()
     if (!params.skip_consensus && params.consensus_caller == 'ivar') {
         CONSENSUS_IVAR (
@@ -498,9 +494,9 @@ workflow ILLUMINA {
             PREPARE_GENOME.out.nextclade_db
         )
 
-        ch_quast_multiqc    = CONSENSUS_IVAR.out.quast_tsv
-        ch_pangolin_multiqc = CONSENSUS_IVAR.out.pangolin_report
         ch_nextclade_report = CONSENSUS_IVAR.out.nextclade_report
+        ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_IVAR.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_IVAR.out.pangolin_report.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(CONSENSUS_IVAR.out.versions)
     }
 
@@ -517,9 +513,9 @@ workflow ILLUMINA {
             PREPARE_GENOME.out.nextclade_db
         )
 
-        ch_quast_multiqc    = CONSENSUS_BCFTOOLS.out.quast_tsv
-        ch_pangolin_multiqc = CONSENSUS_BCFTOOLS.out.pangolin_report
         ch_nextclade_report = CONSENSUS_BCFTOOLS.out.nextclade_report
+        ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.pangolin_report.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(CONSENSUS_BCFTOOLS.out.versions)
     }
 
@@ -539,7 +535,10 @@ workflow ILLUMINA {
                     def header = ['Sample', 'clade']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
-            .set { ch_nextclade_multiqc }
+            .collectFile(name: 'nextclade_clade_mqc.tsv')
+            .ifEmpty([])
+            .mix(ch_multiqc_files)
+            .set{ch_multiqc_files}
     }
 
     //
@@ -573,7 +572,6 @@ workflow ILLUMINA {
     //
     // MODULE: Primer trimming with Cutadapt
     //
-    ch_cutadapt_multiqc = Channel.empty()
     if (params.protocol == 'amplicon' && !params.skip_assembly && !params.skip_cutadapt) {
         ch_primers =  PREPARE_GENOME.out.primer_fasta.collect { it[1] }
         if (!params.skip_noninternal_primers){
@@ -588,7 +586,7 @@ workflow ILLUMINA {
             ch_primers
         )
         ch_assembly_fastq   = CUTADAPT.out.reads
-        ch_cutadapt_multiqc = CUTADAPT.out.log
+        ch_multiqc_files    = ch_multiqc_files.mix(CUTADAPT.out.log.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(CUTADAPT.out.versions.first())
 
         if (!params.skip_fastqc) {
@@ -602,7 +600,6 @@ workflow ILLUMINA {
     //
     // SUBWORKFLOW: Run SPAdes assembly and downstream analysis
     //
-    ch_spades_quast_multiqc = Channel.empty()
     if (!params.skip_assembly && 'spades' in assemblers) {
         ASSEMBLY_SPADES (
             ch_assembly_fastq.map { meta, fastq -> [ meta, fastq, [], [] ] },
@@ -614,14 +611,13 @@ workflow ILLUMINA {
             ch_blast_outfmt6_header,
             ch_blast_filtered_outfmt6_header
         )
-        ch_spades_quast_multiqc = ASSEMBLY_SPADES.out.quast_tsv
-        ch_versions             = ch_versions.mix(ASSEMBLY_SPADES.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_SPADES.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(ASSEMBLY_SPADES.out.versions)
     }
 
     //
     // SUBWORKFLOW: Run Unicycler assembly and downstream analysis
     //
-    ch_unicycler_quast_multiqc = Channel.empty()
     if (!params.skip_assembly && 'unicycler' in assemblers) {
         ASSEMBLY_UNICYCLER (
             ch_assembly_fastq.map { meta, fastq -> [ meta, fastq, [] ] },
@@ -631,14 +627,13 @@ workflow ILLUMINA {
             ch_blast_outfmt6_header,
             ch_blast_filtered_outfmt6_header
         )
-        ch_unicycler_quast_multiqc = ASSEMBLY_UNICYCLER.out.quast_tsv
-        ch_versions                = ch_versions.mix(ASSEMBLY_UNICYCLER.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_UNICYCLER.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(ASSEMBLY_UNICYCLER.out.versions)
     }
 
     //
     // SUBWORKFLOW: Run minia assembly and downstream analysis
     //
-    ch_minia_quast_multiqc = Channel.empty()
     if (!params.skip_assembly && 'minia' in assemblers) {
         ASSEMBLY_MINIA (
             ch_assembly_fastq,
@@ -648,8 +643,8 @@ workflow ILLUMINA {
             ch_blast_outfmt6_header,
             ch_blast_filtered_outfmt6_header
         )
-        ch_minia_quast_multiqc = ASSEMBLY_MINIA.out.quast_tsv
-        ch_versions            = ch_versions.mix(ASSEMBLY_MINIA.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_MINIA.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(ASSEMBLY_MINIA.out.versions)
     }
 
     //
@@ -693,29 +688,9 @@ workflow ILLUMINA {
             ch_multiqc_config,
             ch_multiqc_custom_config,
             ch_multiqc_logo.toList(),
-            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
-            ch_fail_reads_multiqc.collectFile(name: 'fail_mapped_reads_mqc.tsv').ifEmpty([]),
-            ch_fail_mapping_multiqc.collectFile(name: 'fail_mapped_samples_mqc.tsv').ifEmpty([]),
-            ch_amplicon_heatmap_multiqc.ifEmpty([]),
-            FASTQ_TRIM_FASTP_FASTQC.out.fastqc_raw_zip.collect{it[1]}.ifEmpty([]),
-            FASTQ_TRIM_FASTP_FASTQC.out.trim_json.collect{it[1]}.ifEmpty([]),
-            ch_kraken2_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_bowtie2_flagstat_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_bowtie2_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_ivar_trim_flagstat_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_markduplicates_flagstat_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_mosdepth_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_ivar_counts_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_bcftools_stats_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_snpeff_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([]),
-            ch_cutadapt_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_spades_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_unicycler_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_minia_quast_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_freyja_multiqc.collect{it[1]}.ifEmpty([]),
+            [],
+            [],
+            "illumina"
         )
 
         multiqc_report = MULTIQC.out.report.toList()

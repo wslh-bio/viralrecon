@@ -248,8 +248,8 @@ workflow ILLUMINA {
             }
             .collectFile(name: 'fail_mapped_reads_mqc.tsv')
             .ifEmpty([])
-            .mix( ch_multiqc_files )
-            .set{ ch_multiqc_files }
+            .set { ch_fail_reads_multiqc }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fail_reads_multiqc)
     }
 
     //
@@ -335,8 +335,8 @@ workflow ILLUMINA {
             }
             .collectFile(name: 'fail_mapped_samples_mqc.tsv')
             .ifEmpty([])
-            .mix( ch_multiqc_files )
-            .set{ ch_multiqc_files }
+            .set { ch_fail_mapping_multiqc }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc)
     }
 
     //
@@ -541,8 +541,8 @@ workflow ILLUMINA {
             }
             .collectFile(name: 'nextclade_clade_mqc.tsv')
             .ifEmpty([])
-            .mix(ch_multiqc_files)
-            .set{ch_multiqc_files}
+            .set{ ch_nextclade_multiqc }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_nextclade_multiqc)
     }
 
     //

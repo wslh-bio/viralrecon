@@ -158,13 +158,13 @@ workflow NANOPORE {
     PREPARE_GENOME
         .out
         .primer_bed
-        .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+        .map { [ WorkflowCommons.getColFromFile(it,0, true, '\t') ] }
         .set { ch_bed_contigs }
 
     PREPARE_GENOME
         .out
         .fai
-        .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+        .map { [ WorkflowCommons.getColFromFile(it,0, true, '\t') ] }
         .concat(ch_bed_contigs)
         .collect()
         .map { fai, bed -> WorkflowCommons.checkContigsInBED(fai, bed, log) }
@@ -208,7 +208,7 @@ workflow NANOPORE {
                         WorkflowCommons.multiqcTsvFromList(tsv_data, header)
                 }
                 .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
-                .ifEmpty([]),
+                .ifEmpty([])
                 .mix { ch_multiqc_files }
                 .set { ch_multiqc_files }
 
@@ -225,7 +225,7 @@ workflow NANOPORE {
                         WorkflowCommons.multiqcTsvFromList(tsv_data, header)
                 }
                 .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
-                .ifEmpty([]),
+                .ifEmpty([])
                 .mix { ch_multiqc_files }
                 .set { ch_multiqc_files }
 
@@ -272,7 +272,7 @@ workflow NANOPORE {
                 WorkflowCommons.multiqcTsvFromList(tsv_data, header)
         }
         .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
-        .ifEmpty([]),
+        .ifEmpty([])
         .mix { ch_multiqc_files }
         .set { ch_multiqc_files }
 
@@ -314,7 +314,7 @@ workflow NANOPORE {
                 WorkflowCommons.multiqcTsvFromList(tsv_data, header)
         }
         .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
-        .ifEmpty([]),
+        .ifEmpty([])
         .mix { ch_multiqc_files }
         .set { ch_multiqc_files }
 

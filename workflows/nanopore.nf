@@ -46,9 +46,6 @@ if (params.artic_minion_caller == 'medaka') {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
-ch_multiqc_custom_config = params.multiqc_config ? file(params.multiqc_config) : []
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
@@ -209,7 +206,7 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
                 .ifEmpty([])
-                .mix { ch_multiqc_files }
+                .mix ( ch_multiqc_files )
                 .set { ch_multiqc_files }
 
             //
@@ -226,7 +223,7 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
                 .ifEmpty([])
-                .mix { ch_multiqc_files }
+                .mix ( ch_multiqc_files )
                 .set { ch_multiqc_files }
 
             ch_fastq_dirs
@@ -273,7 +270,7 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
         .ifEmpty([])
-        .mix { ch_multiqc_files }
+        .mix ( ch_multiqc_files )
         .set { ch_multiqc_files }
 
     // Re-arrange channels to have meta map of information for sample
@@ -315,7 +312,7 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
         .ifEmpty([])
-        .mix { ch_multiqc_files }
+        .mix ( ch_multiqc_files )
         .set { ch_multiqc_files }
 
     //
@@ -458,7 +455,7 @@ workflow NANOPORE {
             }
             .collectFile(name: 'nextclade_clade_mqc.tsv')
             .ifEmpty([])
-            .mix { ch_multiqc_files }
+            .mix ( ch_multiqc_files )
             .set { ch_multiqc_files }
     }
 
@@ -594,6 +591,9 @@ workflow NANOPORE {
             file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
         ch_methods_description                = Channel.value(
             methodsDescriptionText(ch_multiqc_custom_methods_description))
+
+        ch_multiqc_config                       = file("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
+        ch_multiqc_custom_config                = params.multiqc_config ? file(params.multiqc_config) : []
 
         ch_multiqc_logo                       = params.multiqc_logo ?
             Channel.fromPath(params.multiqc_logo, checkIfExists: true) :

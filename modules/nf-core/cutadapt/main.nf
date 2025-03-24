@@ -24,7 +24,7 @@ process CUTADAPT {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
 
-    // Ajustar primers según las condiciones dadas
+    // Adjust primers depending on conditions
     def primers
     if (params.threeprime_adapters && meta.single_end) {
         primers = "-a file:${adapters}"
@@ -35,7 +35,7 @@ process CUTADAPT {
     } else {
         primers = "-g file:${adapters} -G file:${adapters}"
     }
-    
+
     """
     cutadapt \\
         -Z \\

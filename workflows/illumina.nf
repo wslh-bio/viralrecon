@@ -504,6 +504,8 @@ workflow ILLUMINA {
     //
     // SUBWORKFLOW: Call consensus with BCFTools
     //
+    ch_pangolin_report  = Channel.empty()
+    ch_nextclade_report = Channel.empty()
     if (!params.skip_consensus && params.consensus_caller == 'bcftools' && variant_caller) {
         CONSENSUS_BCFTOOLS (
             ch_bam,
@@ -515,8 +517,9 @@ workflow ILLUMINA {
         )
 
         ch_nextclade_report = CONSENSUS_BCFTOOLS.out.nextclade_report
+        ch_pangolin_report  = CONSENSUS_BCFTOOLS.out.pangolin_report
+        ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_report.collect{it[1]}.ifEmpty([]))
         ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_tsv.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.pangolin_report.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(CONSENSUS_BCFTOOLS.out.versions)
     }
 
@@ -550,7 +553,7 @@ workflow ILLUMINA {
             ch_vcf,
             ch_tbi,
             ch_snpsift_txt,
-            CONSENSUS_BCFTOOLS.out.pangolin_report
+            ch_pangolin_report
         )
         ch_versions = ch_versions.mix(VARIANTS_LONG_TABLE.out.versions)
     }
@@ -564,7 +567,7 @@ workflow ILLUMINA {
             ch_tbi,
             PREPARE_GENOME.out.fasta,
             ch_additional_gtf,
-            CONSENSUS_BCFTOOLS.out.pangolin_report
+            ch_pangolin_report
 
         )
         ch_versions = ch_versions.mix(ADDITIONAL_ANNOTATION.out.versions)

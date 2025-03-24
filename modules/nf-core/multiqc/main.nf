@@ -59,8 +59,12 @@ process MULTIQC {
         rm -f *variants_metrics_mqc.csv
     fi
 
-    if [ ! -f variants/report.tsv ]; then
-        touch variants/report.tsv
+    if $platform == "illumina"; then
+        rm -f variants/report.tsv
+    fi
+
+    if $platform == "nanopore"; then
+        rm -rf quast
     fi
 
     ## Run MultiQC a second time

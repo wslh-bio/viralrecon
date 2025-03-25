@@ -5,10 +5,6 @@
 */
 
 include { paramsSummaryLog       } from 'plugin/nf-schema'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_viralrecon_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +86,6 @@ include { PANGOLIN                      } from '../modules/nf-core/pangolin/main
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
-include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -206,9 +201,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
                 .ifEmpty([])
-                .set { fail_no_sample_barcodes_mqc }
+                .set { ch_fail_barcodes_no_sample}
 
-            ch_multiqc_files = ch_multiqc_files.mix(fail_no_sample_barcodes_mqc)
+            ch_multiqc_files = ch_multiqc_files.mix ( ch_fail_barcodes_no_sample )
 
             //
             // MODULE: Create custom content file for MultiQC to report samples that were in samplesheet but have no barcodes
@@ -224,9 +219,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
                 .ifEmpty([])
-                .set { no_barcode_samples_mqc }
+                .set { ch_fail_no_barcode_samples }
 
-            ch_multiqc_files = ch_multiqc_files.mix(no_barcode_samples_mqc)
+            ch_multiqc_files = ch_multiqc_files.mix ( ch_fail_no_barcode_samples )
 
             ch_fastq_dirs
                 .filter { (it[1] != null)  }
@@ -272,9 +267,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
         .ifEmpty([])
-        .set { fail_barcode_count_samples_mqc }
+        .set { ch_fail_barcode_count }
 
-    ch_multiqc_files = ch_multiqc_files.mix(fail_barcode_count_samples_mqc)
+    ch_multiqc_files = ch_multiqc_files.mix(ch_fail_barcode_count)
 
     // Re-arrange channels to have meta map of information for sample
     ch_fastq_dirs
@@ -315,9 +310,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
         .ifEmpty([])
-        .set { fail_guppyplex_count_samples_mqc }
+        .set { ch_fail_guppyplex_count }
 
-    ch_multiqc_files = ch_multiqc_files.mix(fail_guppyplex_count_samples_mqc)
+    ch_multiqc_files = ch_multiqc_files.mix(ch_fail_guppyplex_count)
 
     //
     // MODULE: Nanoplot QC for FastQ files
@@ -459,10 +454,9 @@ workflow NANOPORE {
             }
             .collectFile(name: 'nextclade_clade_mqc.tsv')
             .ifEmpty([])
-            .set { nextclade_clade_mqc }
+            .set{ nextclade_clade_mqc }
 
         ch_multiqc_files = ch_multiqc_files.mix(nextclade_clade_mqc)
-
     }
 
     //
@@ -573,62 +567,9 @@ workflow NANOPORE {
         ch_versions = ch_versions.mix(ADDITIONAL_ANNOTATION.out.versions)
     }
 
-    //
-    // MODULE: Pipeline reporting
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_pipeline_software_mqc_versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
-
-
-    //
-    // MODULE: MultiQC
-    //
-    if (!params.skip_multiqc) {
-        summary_params                        = paramsSummaryMap(
-            workflow, parameters_schema: "nextflow_schema.json")
-        ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
-        ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
-            file(params.multiqc_methods_description, checkIfExists: true) :
-            file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-        ch_methods_description                = Channel.value(
-            methodsDescriptionText(ch_multiqc_custom_methods_description))
-
-        ch_multiqc_config                       = Channel.fromPath("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
-        ch_multiqc_custom_config                = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : []
-
-        ch_multiqc_logo                       = params.multiqc_logo ?
-            Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
-            Channel.empty()
-
-        ch_multiqc_files                      = ch_multiqc_files.mix(
-            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-        ch_multiqc_files                      = ch_multiqc_files.mix(ch_collated_versions)
-        ch_multiqc_files                      = ch_multiqc_files.mix(
-            ch_methods_description.collectFile(
-                name: 'methods_description_mqc.yaml',
-                sort: false))
-
-        MULTIQC (
-            ch_multiqc_files.collect(),
-            ch_multiqc_config.toList(),
-            ch_multiqc_custom_config.toList(),
-            ch_multiqc_logo.toList(),
-            [],
-            [],
-            "nanopore"
-        )
-
-        multiqc_report = MULTIQC.out.report.toList()
-    }
-
     emit:
-    multiqc_report                // channel: /path/to/multiqc_report.html
-    versions       = ch_versions  // channel: [ path(versions.yml) ]
+    multiqc_files  = ch_multiqc_files   // channel: [ path(multiqc_files) ]
+    versions       = ch_versions        // channel: [ path(versions.yml) ]
 
 }
 

@@ -29,7 +29,6 @@
             },
             "barcode": {
                 "type": "integer",
-                "pattern": "^\\d+$",
                 "errorMessage": "Barcode must be provided and must be an integer"
             }
         },

@@ -46,9 +46,13 @@ include { paramsSummaryMultiqc   } from './subworkflows/nf-core/utils_nfcore_pip
 include { softwareVersionsToYAML } from './subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 
+if ( params.platform == "illumina"){
+    include { ILLUMINA } from './workflows/illumina'
+}
+if ( params.platform == "nanopore"){
+    include { NANOPORE } from './workflows/nanopore'
+}
 
-include { ILLUMINA                } from './workflows/illumina'
-include { NANOPORE                } from './workflows/nanopore'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { MULTIQC                 } from './modules/nf-core/multiqc'

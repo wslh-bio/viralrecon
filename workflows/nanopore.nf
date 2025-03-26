@@ -289,8 +289,11 @@ workflow NANOPORE {
     //
     // MODULE: Run Kraken2 for removal of host reads
     //
-    ch_variants_fastq = ARTIC_GUPPYPLEX.out.fastq
-    ch_assembly_fastq  = ARTIC_GUPPYPLEX.out.fastq
+    ch_variants_fastq = ARTIC_GUPPYPLEX.out.fastq.map { meta, fastq ->
+                meta += [single_end: true]
+                return [meta, fastq]
+            }
+    ch_assembly_fastq  = ch_variants_fastq
     ch_kraken2_multiqc = Channel.empty()
     if (!params.skip_kraken2) {
         KRAKEN2_KRAKEN2 (

@@ -240,7 +240,7 @@ def snpsift_to_table(snpsift_file):
 
     ## Amino acid substitution
     aa = []
-    for index, item in table["HGVS_P"].iteritems():
+    for index, item in table["HGVS_P"].items():
         hgvs_p = three_letter_aa_to_one(str(item))
         aa.append(hgvs_p)
     table["HGVS_P_1LETTER"] = pd.Series(aa)

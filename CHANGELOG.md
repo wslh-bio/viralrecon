@@ -63,8 +63,8 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | Dependency       | Old version | New version |
 | ---------------- | ----------- | ----------- |
 | `biopython`      | 1.79        | 1.85        |
-| `biostrings`     | 2.58.0      | 2.74.0      |
-| `complexheatmap` | 2.6.2       | 2.22.0      |
+| `biostrings`     | 2.58.0      | 2.66.0      |
+| `complexheatmap` | 2.6.2       | 2.14        |
 | `cutadapt`       |             | 4.6         |
 | `fastp`          | 0.23.2      | 0.23.4      |
 | `freyja`         |             | 1.5.0       |
@@ -76,13 +76,13 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `pandas`         | 1.3.5       | 2.2.3       |
 | `python`         | 3.9.5       | 3.13.2      |
 | `regex`          | 2021.11.10  | 2024.11.6   |
-| `r-base`         | 4.0.3       | 4.4.3       |
+| `r-base`         | 4.0.3       | 4.2         |
 | `r-ggplot2`      | 3.3.3       | 3.5.1       |
 | `r-optparse`     | 1.6.6       | 1.7.5       |
 | `r-reshape2`     | 1.4.4       | 1.4.4       |
 | `r-scales`       | 1.1.1       | 1.3.0       |
 | `r-sys`          | 3.4         | 3.4.3       |
-| `r-tidyverse`    | 1.3.0       | 2.0.0       |
+| `r-tidyverse`    | 1.3.0       | 1.3.2       |
 | `r-viridis`      | 0.5.1       | 0.6.5       |
 | `scipy`          | 1.7.3       | 1.15.2      |
 | `sed`            | 4.7         | 4.8         |

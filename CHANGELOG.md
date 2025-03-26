@@ -12,6 +12,7 @@ Special thanks to the following for their code contributions to the release:
 - [Adam Talbot](https://github.com/adamrtalbot)
 - [Joon Klaps](https://github.com/Joon-Klaps)
 - [Sarai Varona](https://github.com/svarona)
+- [Jaime Ozáez](https://github.com/jaimeozaez)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 
@@ -33,6 +34,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #446](https://github.com/nf-core/viralrecon/pull/446)] - Update nextclade & pangolin modules
 - [[PR #450](https://github.com/nf-core/viralrecon/pull/450)] - Patch nf schema - include integer & string as type for sample
 - [[PR #452](https://github.com/nf-core/viralrecon/pull/452)] - Fix `ch_blast_db` to have correct cardinality for blast/blastn
+- [[PR #485](https://github.com/nf-core/viralrecon/pull/485)] - Added kraken2 to nanopore workflow
 
 ### Parameters
 

@@ -6,9 +6,9 @@ process MAKE_VARIANTS_LONG_TABLE {
         'quay.io/biocontainers/mulled-v2-77320db00eefbbf8c599692102c3d387a37ef02a:08144a66f00dc7684fad061f1466033c0176e7ad-0' }"
 
     input:
-    path ('bcftools_query/*')
-    path ('snpsift/*')
-    path ('pangolin/*')
+    path bcftools_query, stageAs: "bcftools_query/*"
+    path snpsift, stageAs: "snpsift/*"
+    path pangolin, stageAs: "pangolin/*"
 
     output:
     path "*.csv"       , emit: csv

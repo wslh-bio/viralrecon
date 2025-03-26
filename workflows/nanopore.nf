@@ -201,9 +201,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_barcodes_no_sample_mqc.tsv')
                 .ifEmpty([])
-                .set { ch_fail_barcodes_no_sample}
+                .set { ch_custom_no_sample_name_multiqc }
 
-            ch_multiqc_files = ch_multiqc_files.mix ( ch_fail_barcodes_no_sample )
+            ch_multiqc_files = ch_multiqc_files.mix ( ch_custom_no_sample_name_multiqc )
 
             //
             // MODULE: Create custom content file for MultiQC to report samples that were in samplesheet but have no barcodes
@@ -219,9 +219,9 @@ workflow NANOPORE {
                 }
                 .collectFile(name: 'fail_no_barcode_samples_mqc.tsv')
                 .ifEmpty([])
-                .set { ch_fail_no_barcode_samples }
+                .set { ch_custom_no_barcodes_multiqc }
 
-            ch_multiqc_files = ch_multiqc_files.mix ( ch_fail_no_barcode_samples )
+            ch_multiqc_files = ch_multiqc_files.mix ( ch_custom_no_barcodes_multiqc )
 
             ch_fastq_dirs
                 .filter { (it[1] != null)  }
@@ -267,9 +267,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_barcode_count_samples_mqc.tsv')
         .ifEmpty([])
-        .set { ch_fail_barcode_count }
+        .set { ch_custom_fail_barcodes_count_multiqc }
 
-    ch_multiqc_files = ch_multiqc_files.mix(ch_fail_barcode_count)
+    ch_multiqc_files = ch_multiqc_files.mix(ch_custom_fail_barcodes_count_multiqc)
 
     // Re-arrange channels to have meta map of information for sample
     ch_fastq_dirs
@@ -310,9 +310,9 @@ workflow NANOPORE {
         }
         .collectFile(name: 'fail_guppyplex_count_samples_mqc.tsv')
         .ifEmpty([])
-        .set { ch_fail_guppyplex_count }
+        .set { ch_custom_fail_guppyplex_count_multiqc }
 
-    ch_multiqc_files = ch_multiqc_files.mix(ch_fail_guppyplex_count)
+    ch_multiqc_files = ch_multiqc_files.mix(ch_custom_fail_guppyplex_count_multiqc)
 
     //
     // MODULE: Nanoplot QC for FastQ files
@@ -409,8 +409,8 @@ workflow NANOPORE {
         PLOT_MOSDEPTH_REGIONS_AMPLICON (
             MOSDEPTH_AMPLICON.out.regions_bed.collect { it[1] }
         )
-        ch_amplicon_heatmap_multiqc = ch_multiqc_files.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv.collect{it[1]}.ifEmpty([]))
-        ch_versions                 = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.heatmap_tsv.collect{it[1]}.ifEmpty([]))
+        ch_versions      = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_AMPLICON.out.versions)
     }
 
     //
@@ -421,7 +421,8 @@ workflow NANOPORE {
         PANGOLIN (
             ARTIC_MINION.out.fasta
         )
-        ch_pangolin_multiqc = ch_multiqc_files.mix(PANGOLIN.out.report.collect{it[1]}.ifEmpty([]))
+        ch_pangolin_multiqc = PANGOLIN.out.report
+        ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]))
         ch_versions         = ch_versions.mix(PANGOLIN.out.versions.first())
     }
 

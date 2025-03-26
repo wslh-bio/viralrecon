@@ -527,7 +527,7 @@ workflow ILLUMINA {
             }
             .collectFile(name: 'nextclade_clade_mqc.tsv')
             .ifEmpty([])
-            .set{ ch_nextclade_multiqc }
+            .set { ch_nextclade_multiqc }
         ch_multiqc_files = ch_multiqc_files.mix(ch_nextclade_multiqc)
     }
 

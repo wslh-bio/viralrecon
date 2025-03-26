@@ -24,7 +24,8 @@ def valid_params = [
 def checkPathParamList = [
     params.input, params.fastq_dir, params.fast5_dir,
     params.sequencing_summary, params.gff,
-    params.freyja_barcodes, params.freyja_lineages, params.additional_annotation
+    params.freyja_barcodes, params.freyja_lineages, params.additional_annotation,
+    params.kraken2_db
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -94,6 +95,7 @@ include { PANGOLIN                      } from '../modules/nf-core/pangolin/main
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
+include { KRAKEN2_KRAKEN2               } from '../modules/nf-core/kraken2/kraken2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,6 +285,31 @@ workflow NANOPORE {
         ch_fastq_dirs
     )
     ch_versions = ch_versions.mix(ARTIC_GUPPYPLEX.out.versions.first())
+
+    //
+    // MODULE: Run Kraken2 for removal of host reads
+    //
+    ch_variants_fastq = ARTIC_GUPPYPLEX.out.fastq
+    ch_assembly_fastq  = ARTIC_GUPPYPLEX.out.fastq
+    ch_kraken2_multiqc = Channel.empty()
+    if (!params.skip_kraken2) {
+        KRAKEN2_KRAKEN2 (
+            ch_variants_fastq,
+            PREPARE_GENOME.out.kraken2_db,
+            params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter,
+            params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter
+        )
+        ch_kraken2_multiqc = KRAKEN2_KRAKEN2.out.report
+        ch_versions        = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
+
+        if (params.kraken2_variants_host_filter) {
+            ch_variants_fastq = KRAKEN2_KRAKEN2.out.unclassified_reads_fastq
+        }
+
+        if (params.kraken2_assembly_host_filter) {
+            ch_assembly_fastq = KRAKEN2_KRAKEN2.out.unclassified_reads_fastq
+        }
+    }
 
     //
     // MODULE: Create custom content file for MultiQC to report samples with reads < params.min_guppyplex_reads

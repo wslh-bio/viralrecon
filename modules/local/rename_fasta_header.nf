@@ -1,10 +1,10 @@
 process RENAME_FASTA_HEADER {
     tag "$meta.id"
 
-    conda "conda-forge::sed=4.7"
+    conda "conda-forge::sed=4.8"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/ubuntu:20.04' :
-        'nf-core/ubuntu:20.04' }"
+        'https://depot.galaxyproject.org/singularity/ubuntu:24.04' :
+        'nf-core/ubuntu:24.04' }"
 
     input:
     tuple val(meta), path(fasta)

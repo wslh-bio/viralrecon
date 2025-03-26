@@ -33,6 +33,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #446](https://github.com/nf-core/viralrecon/pull/446)] - Update nextclade & pangolin modules
 - [[PR #450](https://github.com/nf-core/viralrecon/pull/450)] - Patch nf schema - include integer & string as type for sample
 - [[PR #452](https://github.com/nf-core/viralrecon/pull/452)] - Fix `ch_blast_db` to have correct cardinality for blast/blastn
+- [[PR #411](https://github.com/nf-core/viralrecon/issues/411)] - Standerdise the use of Multiqc across illumina & nanopore workflow
 
 ### Parameters
 

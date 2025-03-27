@@ -331,4 +331,4 @@ jobs:
 
       - name: "Run pipeline with test data ${{ matrix.NXF_VER }} | ${{ matrix.parameters }} | ${{ matrix.profile }}"
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_nanopore,${{ matrix.profile }} ${{ matrix.parameters }} --outdir ./results   -with-aws-cli '--no-sign-request'
+          nextflow run ${GITHUB_WORKSPACE} -profile test_nanopore,${{ matrix.profile }} ${{ matrix.parameters }} --outdir ./results    -c <(echo "aws.client.anonymous = true")

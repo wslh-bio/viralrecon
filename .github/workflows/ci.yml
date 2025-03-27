@@ -324,6 +324,10 @@ jobs:
         run: |
           wget https://github.com/nanoporetech/medaka/raw/master/medaka/data/r941_min_high_g360_model.hdf5
 
+      - name: Test igenomes fetch
+        run: |
+          mkdir test
+          aws s3 --no-sign-request --region eu-west-1 sync s3://ngi-igenomes/igenomes/Homo_sapiens/GATK/b37/ test/
       - name: "Run pipeline with test data ${{ matrix.NXF_VER }} | ${{ matrix.parameters }} | ${{ matrix.profile }}"
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test_nanopore,${{ matrix.profile }} ${{ matrix.parameters }} --outdir ./results

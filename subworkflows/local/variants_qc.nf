@@ -2,7 +2,6 @@
 // Variant calling QC
 //
 
-include { ASCIIGENOME    } from '../../modules/local/asciigenome'
 include { SNPEFF_SNPSIFT } from './snpeff_snpsift'
 
 workflow VARIANTS_QC {
@@ -48,34 +47,6 @@ workflow VARIANTS_QC {
         ch_versions     = ch_versions.mix(SNPEFF_SNPSIFT.out.versions)
     }
 
-    //
-    // Variant screenshots with ASCIIGenome
-    //
-    ch_asciigenome_pdf = Channel.empty()
-    if (!params.skip_asciigenome) {
-        bam
-            .join(vcf, by: [0])
-            .join(stats, by: [0])
-            .map { meta, bam, vcf, stats ->
-                if (WorkflowCommons.getNumVariantsFromBCFToolsStats(stats) > 0) {
-                    return [ meta, bam, vcf ]
-                }
-            }
-            .set { ch_asciigenome }
-
-        ASCIIGENOME (
-            ch_asciigenome,
-            fasta,
-            sizes,
-            gff,
-            bed,
-            params.asciigenome_window_size,
-            params.asciigenome_read_depth
-        )
-        ch_asciigenome_pdf = ASCIIGENOME.out.pdf
-        ch_versions        = ch_versions.mix(ASCIIGENOME.out.versions.first())
-    }
-
     emit:
     snpeff_vcf      = ch_snpeff_vcf      // channel: [ val(meta), [ vcf.gz ] ]
     snpeff_tbi      = ch_snpeff_tbi      // channel: [ val(meta), [ tbi ] ]
@@ -84,8 +55,6 @@ workflow VARIANTS_QC {
     snpeff_txt      = ch_snpeff_txt      // channel: [ val(meta), [ txt ] ]
     snpeff_html     = ch_snpeff_html     // channel: [ val(meta), [ html ] ]
     snpsift_txt     = ch_snpsift_txt     // channel: [ val(meta), [ txt ] ]
-
-    asciigenome_pdf = ch_asciigenome_pdf // channel: [ val(meta), [ pdf ] ]
 
     versions        = ch_versions        // channel: [ versions.yml ]
 }

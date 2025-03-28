@@ -34,6 +34,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #450](https://github.com/nf-core/viralrecon/pull/450)] - Patch nf schema - include integer & string as type for sample
 - [[PR #452](https://github.com/nf-core/viralrecon/pull/452)] - Fix `ch_blast_db` to have correct cardinality for blast/blastn
 - [[PR #486](https://github.com/nf-core/viralrecon/pull/486)] - Updated local modules version
+- [[PR #491](https://github.com/nf-core/viralrecon/pull/491)] - Remove asciiigenome
 
 ### Parameters
 
@@ -495,7 +496,6 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | Dependency                    | Old version | New version |
 | ----------------------------- | ----------- | ----------- |
 | `artic`                       |             | 1.2.1       |
-| `asciigenome`                 |             | 1.16.0      |
 | `bc`                          | 1.07.1      |             |
 | `bcftools`                    | 1.9         | 1.11        |
 | `bedtools`                    | 2.29.2      | 2.30.0      |

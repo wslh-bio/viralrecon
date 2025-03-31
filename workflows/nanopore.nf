@@ -58,7 +58,6 @@ ch_multiqc_custom_config = params.multiqc_config ? file(params.multiqc_config) :
 //
 // MODULE: Loaded from modules/local/
 //
-include { ASCIIGENOME } from '../modules/local/asciigenome'
 include { MULTIQC     } from '../modules/local/multiqc_nanopore'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
@@ -501,34 +500,6 @@ workflow NANOPORE {
         ch_snpeff_multiqc = SNPEFF_SNPSIFT.out.csv
         ch_snpsift_txt    = SNPEFF_SNPSIFT.out.snpsift_txt
         ch_versions       = ch_versions.mix(SNPEFF_SNPSIFT.out.versions)
-    }
-
-    //
-    // MODULE: Variant screenshots with ASCIIGenome
-    //
-    if (!params.skip_asciigenome) {
-        ARTIC_MINION
-            .out
-            .bam_primertrimmed
-            .join(VCFLIB_VCFUNIQ.out.vcf, by: [0])
-            .join(BCFTOOLS_STATS.out.stats, by: [0])
-            .map { meta, bam, vcf, stats ->
-                if (WorkflowCommons.getNumVariantsFromBCFToolsStats(stats) > 0) {
-                    return [ meta, bam, vcf ]
-                }
-            }
-            .set { ch_asciigenome }
-
-        ASCIIGENOME (
-            ch_asciigenome,
-            PREPARE_GENOME.out.fasta.collect(),
-            PREPARE_GENOME.out.chrom_sizes.collect(),
-            ch_genome_gff ? PREPARE_GENOME.out.gff : [],
-            PREPARE_GENOME.out.primer_bed.collect(),
-            params.asciigenome_window_size,
-            params.asciigenome_read_depth
-        )
-        ch_versions = ch_versions.mix(ASCIIGENOME.out.versions.first())
     }
 
     //

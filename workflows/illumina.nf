@@ -428,8 +428,8 @@ workflow ILLUMINA {
         VARIANTS_IVAR (
             ch_bam,
             PREPARE_GENOME.out.fasta,
-            (params.protocol == 'amplicon' || !params.skip_asciigenome || !params.skip_markduplicates) ? PREPARE_GENOME.out.fai : [],
-            (params.protocol == 'amplicon' || !params.skip_asciigenome || !params.skip_markduplicates) ? PREPARE_GENOME.out.chrom_sizes : [],
+            (params.protocol == 'amplicon' || !params.skip_markduplicates) ? PREPARE_GENOME.out.fai : [],
+            (params.protocol == 'amplicon' || !params.skip_markduplicates) ? PREPARE_GENOME.out.chrom_sizes : [],
             ch_genome_gff ? PREPARE_GENOME.out.gff : [],
             (params.protocol == 'amplicon' && ch_primer_bed) ? PREPARE_GENOME.out.primer_bed : [],
             PREPARE_GENOME.out.snpeff_db,
@@ -452,7 +452,7 @@ workflow ILLUMINA {
         VARIANTS_BCFTOOLS (
             ch_bam,
             PREPARE_GENOME.out.fasta,
-            (params.protocol == 'amplicon' || !params.skip_asciigenome || !params.skip_markduplicates) ? PREPARE_GENOME.out.chrom_sizes : [],
+            (params.protocol == 'amplicon' || !params.skip_markduplicates) ? PREPARE_GENOME.out.chrom_sizes : [],
             ch_genome_gff ? PREPARE_GENOME.out.gff : [],
             (params.protocol == 'amplicon' && ch_primer_bed) ? PREPARE_GENOME.out.primer_bed : [],
             PREPARE_GENOME.out.snpeff_db,

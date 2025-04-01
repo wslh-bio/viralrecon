@@ -102,7 +102,5 @@ workflow VARIANTS_IVAR {
     snpeff_html     = VARIANTS_QC.out.snpeff_html     // channel: [ val(meta), [ html ] ]
     snpsift_txt     = VARIANTS_QC.out.snpsift_txt     // channel: [ val(meta), [ txt ] ]
 
-    asciigenome_pdf = VARIANTS_QC.out.asciigenome_pdf // channel: [ val(meta), [ pdf ] ]
-
     versions        = ch_versions                     // channel: [ versions.yml ]
 }

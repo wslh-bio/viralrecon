@@ -24,7 +24,8 @@ def valid_params = [
 def checkPathParamList = [
     params.input, params.fastq_dir, params.fast5_dir,
     params.sequencing_summary, params.gff,
-    params.freyja_barcodes, params.freyja_lineages, params.additional_annotation
+    params.freyja_barcodes, params.freyja_lineages, params.additional_annotation,
+    params.kraken2_db
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -58,7 +59,6 @@ ch_multiqc_custom_config = params.multiqc_config ? file(params.multiqc_config) :
 //
 // MODULE: Loaded from modules/local/
 //
-include { ASCIIGENOME } from '../modules/local/asciigenome'
 include { MULTIQC     } from '../modules/local/multiqc_nanopore'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
@@ -94,6 +94,7 @@ include { PANGOLIN                      } from '../modules/nf-core/pangolin/main
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
+include { KRAKEN2_KRAKEN2               } from '../modules/nf-core/kraken2/kraken2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,6 +284,34 @@ workflow NANOPORE {
         ch_fastq_dirs
     )
     ch_versions = ch_versions.mix(ARTIC_GUPPYPLEX.out.versions.first())
+
+    //
+    // MODULE: Run Kraken2 for removal of host reads
+    //
+    ch_variants_fastq = ARTIC_GUPPYPLEX.out.fastq.map { meta, fastq ->
+                meta += [single_end: true]
+                return [meta, fastq]
+            }
+    ch_assembly_fastq  = ch_variants_fastq
+    ch_kraken2_multiqc = Channel.empty()
+    if (!params.skip_kraken2) {
+        KRAKEN2_KRAKEN2 (
+            ch_variants_fastq,
+            PREPARE_GENOME.out.kraken2_db,
+            params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter,
+            params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter
+        )
+        ch_kraken2_multiqc = KRAKEN2_KRAKEN2.out.report
+        ch_versions        = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
+
+        if (params.kraken2_variants_host_filter) {
+            ch_variants_fastq = KRAKEN2_KRAKEN2.out.unclassified_reads_fastq
+        }
+
+        if (params.kraken2_assembly_host_filter) {
+            ch_assembly_fastq = KRAKEN2_KRAKEN2.out.unclassified_reads_fastq
+        }
+    }
 
     //
     // MODULE: Create custom content file for MultiQC to report samples with reads < params.min_guppyplex_reads
@@ -501,34 +530,6 @@ workflow NANOPORE {
         ch_snpeff_multiqc = SNPEFF_SNPSIFT.out.csv
         ch_snpsift_txt    = SNPEFF_SNPSIFT.out.snpsift_txt
         ch_versions       = ch_versions.mix(SNPEFF_SNPSIFT.out.versions)
-    }
-
-    //
-    // MODULE: Variant screenshots with ASCIIGenome
-    //
-    if (!params.skip_asciigenome) {
-        ARTIC_MINION
-            .out
-            .bam_primertrimmed
-            .join(VCFLIB_VCFUNIQ.out.vcf, by: [0])
-            .join(BCFTOOLS_STATS.out.stats, by: [0])
-            .map { meta, bam, vcf, stats ->
-                if (WorkflowCommons.getNumVariantsFromBCFToolsStats(stats) > 0) {
-                    return [ meta, bam, vcf ]
-                }
-            }
-            .set { ch_asciigenome }
-
-        ASCIIGENOME (
-            ch_asciigenome,
-            PREPARE_GENOME.out.fasta.collect(),
-            PREPARE_GENOME.out.chrom_sizes.collect(),
-            ch_genome_gff ? PREPARE_GENOME.out.gff : [],
-            PREPARE_GENOME.out.primer_bed.collect(),
-            params.asciigenome_window_size,
-            params.asciigenome_read_depth
-        )
-        ch_versions = ch_versions.mix(ASCIIGENOME.out.versions.first())
     }
 
     //

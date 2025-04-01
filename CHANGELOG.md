@@ -12,6 +12,7 @@ Special thanks to the following for their code contributions to the release:
 - [Adam Talbot](https://github.com/adamrtalbot)
 - [Joon Klaps](https://github.com/Joon-Klaps)
 - [Sarai Varona](https://github.com/svarona)
+- [Jaime Ozáez](https://github.com/jaimeozaez)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 
@@ -33,6 +34,9 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #446](https://github.com/nf-core/viralrecon/pull/446)] - Update nextclade & pangolin modules
 - [[PR #450](https://github.com/nf-core/viralrecon/pull/450)] - Patch nf schema - include integer & string as type for sample
 - [[PR #452](https://github.com/nf-core/viralrecon/pull/452)] - Fix `ch_blast_db` to have correct cardinality for blast/blastn
+- [[PR #485](https://github.com/nf-core/viralrecon/pull/485)] - Added kraken2 to nanopore workflow
+- [[PR #486](https://github.com/nf-core/viralrecon/pull/486)] - Updated local modules version
+- [[PR #491](https://github.com/nf-core/viralrecon/pull/491)] - Remove asciiigenome
 
 ### Parameters
 
@@ -59,15 +63,33 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 
 Note, since the pipeline is now using Nextflow DSL2, each process will be run with its own [Biocontainer](https://biocontainers.pro/#/registry). This means that on occasion it is entirely possible for the pipeline to be using different versions of the same tool. However, the overall software dependency changes compared to the last release have been listed below for reference.
 
-| Dependency  | Old version | New version |
-| ----------- | ----------- | ----------- |
-| `cutadapt`  |             | 4.6         |
-| `fastp`     | 0.23.2      | 0.23.4      |
-| `freyja`    |             | 1.5.0       |
-| `multiqc`   | 1.14        | 1.19        |
-| `nextclade` | 2.12.0      | 3.8.2       |
-| `pangolin`  | 4.2         | 4.3         |
-| `nf-schema` |             | 2.2.1       |
+| Dependency       | Old version | New version |
+| ---------------- | ----------- | ----------- |
+| `biopython`      | 1.79        | 1.85        |
+| `biostrings`     | 2.58.0      | 2.66.0      |
+| `complexheatmap` | 2.6.2       | 2.14        |
+| `cutadapt`       |             | 4.6         |
+| `fastp`          | 0.23.2      | 0.23.4      |
+| `freyja`         |             | 1.5.0       |
+| `matplotlib`     | 3.5.1       | 3.10.1      |
+| `multiqc`        | 1.14        | 1.19        |
+| `nf-schema`      |             | 2.2.1       |
+| `nextclade`      | 2.12.0      | 3.8.2       |
+| `pangolin`       | 4.2         | 4.3         |
+| `pandas`         | 1.3.5       | 2.2.3       |
+| `python`         | 3.9.5       | 3.13.2      |
+| `regex`          | 2021.11.10  | 2024.11.6   |
+| `r-base`         | 4.0.3       | 4.2         |
+| `r-ggplot2`      | 3.3.3       | 3.5.1       |
+| `r-optparse`     | 1.6.6       | 1.7.5       |
+| `r-reshape2`     | 1.4.4       | 1.4.4       |
+| `r-scales`       | 1.1.1       | 1.3.0       |
+| `r-sys`          | 3.4         | 3.4.3       |
+| `r-tidyverse`    | 1.3.0       | 1.3.2       |
+| `r-viridis`      | 0.5.1       | 0.6.5       |
+| `scipy`          | 1.7.3       | 1.15.2      |
+| `sed`            | 4.7         | 4.8         |
+| `Ubuntu`         | 20.04       | 24.04       |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present.
 >
@@ -476,7 +498,6 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | Dependency                    | Old version | New version |
 | ----------------------------- | ----------- | ----------- |
 | `artic`                       |             | 1.2.1       |
-| `asciigenome`                 |             | 1.16.0      |
 | `bc`                          | 1.07.1      |             |
 | `bcftools`                    | 1.9         | 1.11        |
 | `bedtools`                    | 2.29.2      | 2.30.0      |

@@ -23,7 +23,6 @@ The directories listed below will be created in the results directory after the 
     - [Nanopore: Pangolin](#nanopore-pangolin)
     - [Nanopore: Nextclade](#nanopore-nextclade)
     - [Nanopore: Freyja](#nanopore-freyja)
-    - [Nanopore: ASCIIGenome](#nanopore-asciigenome)
     - [Nanopore: Variants long table](#nanopore-variants-long-table)
   - [Nanopore: Workflow reporting](#nanopore-workflow-reporting)
     - [Nanopore: MultiQC](#nanopore-multiqc)
@@ -271,22 +270,6 @@ Phylogenetic Assignment of Named Global Outbreak LINeages ([Pangolin](https://gi
 
 <p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
 
-### Nanopore: ASCIIGenome
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `<CALLER>/asciigenome/<SAMPLE>/`
-  - `*.pdf`: Individual variant screenshots with annotation tracks in PDF format.
-
-**NB:** The value of `<CALLER>` in the output directory name above is determined by the `--artic_minion_caller` parameter (Default: 'nanopolish').
-
-</details>
-
-As described in the documentation, [ASCIIGenome](https://asciigenome.readthedocs.io/en/latest/) is a command-line genome browser that can be run from a terminal window and is solely based on ASCII characters. The closest program to ASCIIGenome is probably [samtools tview](http://www.htslib.org/doc/samtools-tview.html) but ASCIIGenome offers much more flexibility, similar to popular GUI viewers like the [IGV](https://software.broadinstitute.org/software/igv/) browser. We are using the batch processing mode of ASCIIGenome in this pipeline to generate individual screenshots for all of the variant sites reported for each sample in the VCF files. This is incredibly useful to be able to quickly QC the variants called by the pipeline without having to tediously load all of the relevant tracks into a conventional genome browser. Where possible, the BAM read alignments, VCF variant file, primer BED file and GFF annotation track will be represented in the screenshot for contextual purposes. The screenshot below shows a SNP called relative to the MN908947.3 SARS-CoV-2 reference genome that overlaps the ORF7a protein and the nCoV-2019_91_LEFT primer from the ARIC v3 protocol.
-
-<p align="center"><img src="images/asciigenome_screenshot.png" alt="ASCIIGenome screenshot"></p>
-
 ### Nanopore: Variants long table
 
 <details markdown="1">
@@ -375,7 +358,6 @@ An example MultiQC report generated from a full-sized dataset can be viewed on t
     - [BCFTools call](#bcftools-call)
     - [SnpEff and SnpSift](#snpeff-and-snpsift)
     - [Freyja](#freyja)
-    - [ASCIIGenome](#asciigenome)
     - [iVar consensus](#ivar-consensus)
     - [BCFTools and BEDTools](#bcftools-and-bedtools)
     - [QUAST](#quast)
@@ -674,22 +656,6 @@ iVar outputs a tsv format which is not compatible with downstream analysis such 
 [Freyja](https://github.com/andersen-lab/Freyja) is a tool to recover relative lineage abundances from mixed SARS-CoV-2 samples from a sequencing dataset (BAM aligned to the Hu-1 reference). The method uses lineage-determining mutational "barcodes" derived from the [UShER](https://usher-wiki.readthedocs.io/en/latest/#) global phylogenetic tree as a basis set to solve the constrained (unit sum, non-negative) de-mixing problem.
 
 <p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
-
-### ASCIIGenome
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `variants/<CALLER>/asciigenome/<SAMPLE>/`
-  - `*.pdf`: Individual variant screenshots with annotation tracks in PDF format.
-
-**NB:** The value of `<CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
-
-</details>
-
-As described in the documentation, [ASCIIGenome](https://asciigenome.readthedocs.io/en/latest/) is a command-line genome browser that can be run from a terminal window and is solely based on ASCII characters. The closest program to ASCIIGenome is probably [samtools tview](http://www.htslib.org/doc/samtools-tview.html) but ASCIIGenome offers much more flexibility, similar to popular GUI viewers like the [IGV](https://software.broadinstitute.org/software/igv/) browser. We are using the batch processing mode of ASCIIGenome in this pipeline to generate individual screenshots for all of the variant sites reported for each sample in the VCF files. This is incredibly useful to be able to quickly QC the variants called by the pipeline without having to tediously load all of the relevant tracks into a conventional genome browser. Where possible, the BAM read alignments, VCF variant file, primer BED file and GFF annotation track will be represented in the screenshot for contextual purposes. The screenshot below shows a SNP called relative to the MN908947.3 SARS-CoV-2 reference genome that overlaps the ORF7a protein and the nCoV-2019_91_LEFT primer from the ARIC v3 protocol.
-
-<p align="center"><img src="images/asciigenome_screenshot.png" alt="ASCIIGenome screenshot"></p>
 
 ### iVar consensus
 

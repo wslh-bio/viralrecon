@@ -114,7 +114,7 @@ jobs:
           - "--skip_assembly"
           - "--spades_mode corona"
           - "--spades_mode metaviral"
-          - "--skip_plasmidid false --skip_asciigenome"
+          - "--skip_plasmidid false"
           - "--additional_annotation ./GCA_009858895.3_ASM985889v3_genomic.gtf.gz"
           - "--bowtie2_index ./GCA_009858895.3_ASM985889v3_genomic.200409.bt2.index.tar.gz"
           - "--skip_noninternal_primers --threeprime_adapters"

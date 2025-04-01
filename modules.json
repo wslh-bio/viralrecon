@@ -7,7 +7,7 @@
                 "nf-core": {
                     "abacas": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "c7d85aba7775fdf4ff6fa4427039b5d0e832169d",
                         "installed_by": ["modules"]
                     },
                     "artic/guppyplex": {
@@ -18,6 +18,7 @@
                     "artic/minion": {
                         "branch": "master",
                         "git_sha": "b44f728e80a1420b9f130061d91f7ff86673735a",
+                        "installed_by": ["modules"],
                         "patch": "modules/nf-core/artic/minion/artic-minion.diff"
                     },
                     "bandage/image": {
@@ -92,7 +93,7 @@
                     },
                     "bowtie2/build": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "40e1c43e98c97f69f2a7d74f517d0d213859dbf8",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
@@ -108,6 +109,7 @@
                     "cutadapt": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["modules"],
                         "patch": "modules/nf-core/cutadapt/cutadapt.diff"
                     },
                     "fastp": {
@@ -152,7 +154,7 @@
                     },
                     "ivar/trim": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "fa30cb23a4ad91e509b0c91399ab3b0cc76e858f",
                         "installed_by": ["modules"]
                     },
                     "ivar/variants": {
@@ -257,17 +259,17 @@
                     },
                     "tabix/bgzip": {
                         "branch": "master",
-                        "git_sha": "69fdb99a8affa55adfda16966aa4568e103dc1b6",
+                        "git_sha": "7b972bdde6fa2154a95cf08a8ba1821f228f20d3",
                         "installed_by": ["modules"]
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "7b972bdde6fa2154a95cf08a8ba1821f228f20d3",
                         "installed_by": ["modules"]
                     },
                     "unicycler": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "03357154cd1310519ecc00592b87d77b7437be75",
                         "installed_by": ["modules"]
                     },
                     "untar": {
@@ -277,7 +279,7 @@
                     },
                     "vcflib/vcfuniq": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "8c5e55f8b5be0adb8deca61b1ff036478cf44d93",
                         "installed_by": ["modules"]
                     }
                 }

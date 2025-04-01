@@ -6,9 +6,11 @@ include { GUNZIP as GUNZIP_FASTA      } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_GFF        } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_PRIMER_BED } from '../../modules/nf-core/gunzip/main'
 include { UNTAR                       } from '../../modules/nf-core/untar/main'
+include { UNTAR as UNTAR_KRAKEN2_DB     } from '../../modules/nf-core/untar/main'
 include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/custom/getchromsizes/main'
 include { NEXTCLADE_DATASETGET        } from '../../modules/nf-core/nextclade/datasetget/main'
 include { COLLAPSE_PRIMERS            } from '../../modules/local/collapse_primers'
+include { KRAKEN2_BUILD                 } from '../../modules/local/kraken2_build'
 include { SNPEFF_BUILD                } from '../../modules/local/snpeff_build'
 
 workflow PREPARE_GENOME {
@@ -64,6 +66,30 @@ workflow PREPARE_GENOME {
     ch_fai         = CUSTOM_GETCHROMSIZES.out.fai.map { it[1] }
     ch_chrom_sizes = CUSTOM_GETCHROMSIZES.out.sizes.map { it[1] }
     ch_versions    = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
+
+    //
+    // Prepare reference files required for variant calling
+    //
+    ch_kraken2_db = Channel.empty()
+    if (!params.skip_kraken2) {
+        if (params.kraken2_db) {
+            if (params.kraken2_db.endsWith('.tar.gz')) {
+                UNTAR_KRAKEN2_DB (
+                    [ [:], params.kraken2_db ]
+                )
+                ch_kraken2_db = UNTAR_KRAKEN2_DB.out.untar.map { it[1] }
+                ch_versions   = ch_versions.mix(UNTAR_KRAKEN2_DB.out.versions)
+            } else {
+                ch_kraken2_db = Channel.value(file(params.kraken2_db))
+            }
+        } else {
+            KRAKEN2_BUILD (
+                params.kraken2_db_name
+            )
+            ch_kraken2_db = KRAKEN2_BUILD.out.db.first()
+            ch_versions   = ch_versions.mix(KRAKEN2_BUILD.out.versions)
+        }
+    }
 
     //
     // Uncompress primer BED file
@@ -143,6 +169,7 @@ workflow PREPARE_GENOME {
     primer_bed           = ch_primer_bed           // path: primer.bed
     primer_collapsed_bed = ch_primer_collapsed_bed // path: primer.collapsed.bed
     nextclade_db         = ch_nextclade_db         // path: nextclade_db
+    kraken2_db           = ch_kraken2_db           // path: kraken2_db/
     snpeff_db            = ch_snpeff_db            // path: snpeff_db
     snpeff_config        = ch_snpeff_config        // path: snpeff.config
 

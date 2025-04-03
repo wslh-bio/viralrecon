@@ -7,17 +7,17 @@
                 "nf-core": {
                     "abacas": {
                         "branch": "master",
-                        "git_sha": "c7d85aba7775fdf4ff6fa4427039b5d0e832169d",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "artic/guppyplex": {
                         "branch": "master",
-                        "git_sha": "546a295c13279c0e7db6240f4cf13cd1e2e30cb4",
+                        "git_sha": "bf8db25540ea7d29e63a80ec732130dc4750a5a5",
                         "installed_by": ["modules"]
                     },
                     "artic/minion": {
                         "branch": "master",
-                        "git_sha": "b44f728e80a1420b9f130061d91f7ff86673735a",
+                        "git_sha": "bf8db25540ea7d29e63a80ec732130dc4750a5a5",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/artic/minion/artic-minion.diff"
                     },
@@ -63,7 +63,7 @@
                     },
                     "bedtools/getfasta": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "bedtools/maskfasta": {
@@ -73,7 +73,7 @@
                     },
                     "bedtools/merge": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "blast/blastn": {
@@ -93,17 +93,17 @@
                     },
                     "bowtie2/build": {
                         "branch": "master",
-                        "git_sha": "40e1c43e98c97f69f2a7d74f517d0d213859dbf8",
+                        "git_sha": "8357bae9e01116d22101b4ed24eb56e1d2811195",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
                         "branch": "master",
-                        "git_sha": "c03f4019225fce21c11f194ff32eca396963f305",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "custom/getchromsizes": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "cutadapt": {
@@ -119,7 +119,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "b1966f36ec9de31927b2603d8f499960b2a4c294",
                         "installed_by": ["modules"]
                     },
                     "freyja/boot": {
@@ -144,7 +144,7 @@
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "ivar/consensus": {
@@ -174,12 +174,12 @@
                     },
                     "mosdepth": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "nanoplot": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "457e8b54d1d2d3ec9208c55b66cdd573c976372f",
                         "installed_by": ["modules"]
                     },
                     "nextclade/datasetget": {
@@ -214,7 +214,7 @@
                     },
                     "pycoqc": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "quast": {
@@ -249,7 +249,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "e9bca09da225e5132d45a32bf830a434843bb5be",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "spades": {
@@ -264,17 +264,17 @@
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "7b972bdde6fa2154a95cf08a8ba1821f228f20d3",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "unicycler": {
                         "branch": "master",
-                        "git_sha": "03357154cd1310519ecc00592b87d77b7437be75",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "vcflib/vcfuniq": {

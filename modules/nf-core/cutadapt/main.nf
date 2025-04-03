@@ -7,8 +7,9 @@ process CUTADAPT {
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/17/1758869538eb8e658077cc14cd7a4e76fd9b6d73d3a68f85a70bf292e39e27c5/data' :
         'community.wave.seqera.io/library/cutadapt:5.0--991bbd2e184b7014' }"
 
-    input:
+input:
     tuple val(meta), path(reads)
+    path adapters
 
     output:
     tuple val(meta), path('*.trim.fastq.gz'), emit: reads
@@ -22,11 +23,25 @@ process CUTADAPT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
+
+    // Adjust primers depending on conditions
+    def primers
+    if (params.threeprime_adapters && meta.single_end) {
+        primers = "-a file:${adapters}"
+    } else if (params.threeprime_adapters && !meta.single_end) {
+        primers = "-a file:${adapters} -A file:${adapters}"
+    } else if (!params.threeprime_adapters && meta.single_end) {
+        primers = "-g file:${adapters}"
+    } else {
+        primers = "-g file:${adapters} -G file:${adapters}"
+    }
+
     """
     cutadapt \\
         -Z \\
         --cores $task.cpus \\
         $args \\
+        $primers \\
         $trimmed \\
         $reads \\
         > ${prefix}.cutadapt.log

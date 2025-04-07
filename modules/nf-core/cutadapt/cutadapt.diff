@@ -1,11 +1,13 @@
 Changes in component 'nf-core/cutadapt'
-'modules/nf-core/cutadapt/meta.yml' is unchanged
 Changes in 'cutadapt/main.nf':
 --- modules/nf-core/cutadapt/main.nf
 +++ modules/nf-core/cutadapt/main.nf
-@@ -9,6 +9,7 @@
+@@ -7,8 +7,9 @@
+         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/17/1758869538eb8e658077cc14cd7a4e76fd9b6d73d3a68f85a70bf292e39e27c5/data' :
+         'community.wave.seqera.io/library/cutadapt:5.0--991bbd2e184b7014' }"
  
-     input:
+-    input:
++input:
      tuple val(meta), path(reads)
 +    path adapters
  
@@ -38,9 +40,9 @@ Changes in 'cutadapt/main.nf':
          $reads \\
          > ${prefix}.cutadapt.log
 
+'modules/nf-core/cutadapt/meta.yml' is unchanged
 'modules/nf-core/cutadapt/environment.yml' is unchanged
-'modules/nf-core/cutadapt/tests/main.nf.test' is unchanged
-'modules/nf-core/cutadapt/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/cutadapt/tests/nextflow.config' is unchanged
-'modules/nf-core/cutadapt/tests/tags.yml' is unchanged
+'modules/nf-core/cutadapt/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/cutadapt/tests/main.nf.test' is unchanged
 ************************************************************

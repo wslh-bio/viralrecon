@@ -13,6 +13,7 @@ Special thanks to the following for their code contributions to the release:
 - [Joon Klaps](https://github.com/Joon-Klaps)
 - [Sarai Varona](https://github.com/svarona)
 - [Jaime Ozáez](https://github.com/jaimeozaez)
+- [Sara Monzon](https://github.com/saramonzon)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 
@@ -37,6 +38,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #485](https://github.com/nf-core/viralrecon/pull/485)] - Added kraken2 to nanopore workflow
 - [[PR #486](https://github.com/nf-core/viralrecon/pull/486)] - Updated local modules version
 - [[PR #491](https://github.com/nf-core/viralrecon/pull/491)] - Remove asciiigenome
+- [[PR #491](https://github.com/nf-core/viralrecon/pull/494] - Partial update of nf-core modules
 
 ### Parameters
 
@@ -54,6 +56,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 |                                 | `--skip_noninternal_primers` |
 |                                 | `--threeprime_adapters`      |
 | `--nextclade_dataset_reference` |                              |
+| `--skip_asciigenome`            |                              |
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present.
 > **NB:** Parameter has been **added** if just the new parameter information is present.

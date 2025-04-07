@@ -66,33 +66,48 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 
 Note, since the pipeline is now using Nextflow DSL2, each process will be run with its own [Biocontainer](https://biocontainers.pro/#/registry). This means that on occasion it is entirely possible for the pipeline to be using different versions of the same tool. However, the overall software dependency changes compared to the last release have been listed below for reference.
 
-| Dependency       | Old version | New version |
-| ---------------- | ----------- | ----------- |
-| `biopython`      | 1.79        | 1.85        |
-| `biostrings`     | 2.58.0      | 2.66.0      |
-| `complexheatmap` | 2.6.2       | 2.14        |
-| `cutadapt`       |             | 4.6         |
-| `fastp`          | 0.23.2      | 0.23.4      |
-| `freyja`         |             | 1.5.0       |
-| `matplotlib`     | 3.5.1       | 3.10.1      |
-| `multiqc`        | 1.14        | 1.19        |
-| `nf-schema`      |             | 2.2.1       |
-| `nextclade`      | 2.12.0      | 3.8.2       |
-| `pangolin`       | 4.2         | 4.3         |
-| `pandas`         | 1.3.5       | 2.2.3       |
-| `python`         | 3.9.5       | 3.13.2      |
-| `regex`          | 2021.11.10  | 2024.11.6   |
-| `r-base`         | 4.0.3       | 4.2         |
-| `r-ggplot2`      | 3.3.3       | 3.5.1       |
-| `r-optparse`     | 1.6.6       | 1.7.5       |
-| `r-reshape2`     | 1.4.4       | 1.4.4       |
-| `r-scales`       | 1.1.1       | 1.3.0       |
-| `r-sys`          | 3.4         | 3.4.3       |
-| `r-tidyverse`    | 1.3.0       | 1.3.2       |
-| `r-viridis`      | 0.5.1       | 0.6.5       |
-| `scipy`          | 1.7.3       | 1.15.2      |
-| `sed`            | 4.7         | 4.8         |
-| `Ubuntu`         | 20.04       | 24.04       |
+| Dependency      | Old version | New version |
+| --------------- | ----------- | ----------- |
+| `bandage`       | 0.8.1       | 0.9.0       |
+| `bcftools`      | 1.20        | 1.21        |
+| `biopython`     | 1.79        | 1.85        |
+| `biostrings`    | 2.58.0      | 2.66.0      |
+| `blast`         | 2.15.0      | 2.16.0      |
+| `bowtie2`       | 2.5.2       | 2.5.4       |
+| `cutadapt`      |             | 5.0         |
+| `fastp`         | 0.23.2      | 0.24.0      |
+| `freyja`        |             | 1.5.3       |
+| `htslib`        | 1.20        | 1.21        |
+| `ivar`          | 1.4.3       | 1.4.4       |
+| `kraken2`       | 2.1.3       | 2.1.3       |
+| `matplotlib`    | 3.5.1       | 3.10.1      |
+| `multiqc`       | 1.14        | 1.19        |
+| `nanoplot`      | 1.41.6      | 1.44.1      |
+| `nf-schema`     |             | 2.2.1       |
+| `nextclade`     | 2.12.0      | 3.11.0      |
+| `pangolin`      | 4.2         | 4.3         |
+| `pangolin-data` | 1.30        | 1.30        |
+| `pandas`        | 1.3.5       | 2.2.3       |
+| `python`        | 3.9.5       | 3.13.2      |
+| `quast`         | 5.2.0       | 5.3.0       |
+| `regex`         | 2021.11.10  | 2024.11.6   |
+| `r-base`        | 4.0.3       | 4.2         |
+| `r-ggplot2`     | 3.3.3       | 3.5.1       |
+| `r-optparse`    | 1.6.6       | 1.7.5       |
+| `r-reshape2`    | 1.4.4       | 1.4.4       |
+| `r-scales`      | 1.1.1       | 1.3.0       |
+| `r-sys`         | 3.4         | 3.4.3       |
+| `r-tidyverse`   | 1.3.0       | 1.3.2       |
+| `r-viridis`     | 0.5.1       | 0.6.5       |
+| `samtools`      | 1.18        | 1.21        |
+| `scipy`         | 1.7.3       | 1.15.2      |
+| `sed`           | 4.7         | 4.8         |
+| `snakemake`     | 7.30.1      | 8.30.0      |
+| `spades`        | 4.0.0       | 4.1.0       |
+| `tabix`         | 1.20        | 1.21        |
+| `Ubuntu`        | 20.04       | 24.04       |
+| `unicycler`     | 0.5.0       | 0.5.1       |
+| `vcflib`        | 1.0.3       | 1.0.12      |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present.
 >

@@ -1,0 +1,13 @@
+{
+  "myRequiredParameter1": {
+     "description": "this parameter is required"
+  },
+  "myRequiredParameter2": {
+     "description": "this parameter is also required",
+     "optional": false
+  },
+  "myOptionalParameter": {
+     "description": "this parameter is optional",
+     "optional": true
+  }
+}

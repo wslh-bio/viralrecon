@@ -1,13 +1,8 @@
 {
-  "myRequiredParameter1": {
-     "description": "this parameter is required"
-  },
-  "myRequiredParameter2": {
-     "description": "this parameter is also required",
-     "optional": false
-  },
-  "myOptionalParameter": {
-     "description": "this parameter is optional",
-     "optional": true
-  }
+    "input": {
+        "description": "Path to csv samplesheet of samples."
+    },
+    "outdir": {
+        "description": "The output directory where the results will be saved"
+    }
 }

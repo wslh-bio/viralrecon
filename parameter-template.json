@@ -1,0 +1,38 @@
+{
+    "input": {
+        "description": "Path to csv samplesheet of samples.",
+        "optional":false
+    },
+    "outdir": {
+        "description": "The output directory where the results will be saved",
+        "optional":false
+    },
+    "platform" : {
+        "description" : "Illumina or nanopore",
+        "optional":false
+    },
+    "protocol" : {
+        "description" : "Amplicon or metagenomic",
+        "optional":false
+    },
+    "primer_set" : {
+        "description" : "Primer set suchas artic",
+        "optional":false
+    },
+    "primer_set_version" : {
+        "description" : "Primer set version such as 5.3.2",
+        "optional":false
+    },
+    "genome" : {
+        "description" : "Reference genome",
+        "optional":false
+    },
+    "primer_set" : {
+        "description" : "Primer set suchas artic",
+        "optional":false
+    },
+    "primer_set_version" : {
+        "description" : "Primer set version such as 5.3.2",
+        "optional":false
+    }
+}

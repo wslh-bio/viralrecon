@@ -203,12 +203,28 @@ def main(args=None):
                     ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-median_coverage"],
                 ),
                 (
+                    "Coverage mean",
+                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-mean_coverage"],
+                ),
+                (
                     "% Coverage > 1x",
                     ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-1_x_pc"],
                 ),
                 (
                     "% Coverage > 10x",
                     ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-10_x_pc"],
+                ),
+                (
+                    "% Coverage > 50x",
+                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-50_x_pc"],
+                ),
+                (
+                    "% Coverage > 100x",
+                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-100_x_pc"],
+                ),
+                (
+                    "% Coverage > 500x",
+                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-500_x_pc"],
                 ),
             ],
         ),
@@ -287,8 +303,15 @@ def main(args=None):
                     "Coverage median",
                     ["mosdepth_mqc-generalstats-mosdepth-median_coverage"],
                 ),
+                (
+                    "Coverage mean",
+                    ["mosdepth_mqc-generalstats-mosdepth-mean_coverage"],
+                ),
                 ("% Coverage > 1x", ["mosdepth_mqc-generalstats-mosdepth-1_x_pc"]),
                 ("% Coverage > 10x", ["mosdepth_mqc-generalstats-mosdepth-10_x_pc"]),
+                ("% Coverage > 50x", ["mosdepth_mqc-generalstats-mosdepth-50_x_pc"]),
+                ("% Coverage > 100x", ["mosdepth_mqc-generalstats-mosdepth-100_x_pc"]),
+                ("% Coverage > 500x", ["mosdepth_mqc-generalstats-mosdepth-500_x_pc"]),
             ],
         ),
         (

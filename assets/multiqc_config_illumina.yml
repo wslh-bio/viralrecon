@@ -180,11 +180,23 @@ custom_data:
       "Coverage median":
         description: "Median coverage calculated by mosdepth"
         format: "{:,.2f}"
+      "Coverage mean":
+        description: "Mean coverage calculated by mosdepth"
+        format: "{:,.2f}"
       "% Coverage > 1x":
         description: "Coverage > 1x calculated by mosdepth"
         format: "{:,.2f}"
       "% Coverage > 10x":
         description: "Coverage > 10x calculated by mosdepth"
+        format: "{:,.2f}"
+      "% Coverage > 50x":
+        description: "Coverage > 50x calculated by mosdepth"
+        format: "{:,.2f}"
+      "% Coverage > 100x":
+        description: "Coverage > 100x calculated by mosdepth"
+        format: "{:,.2f}"
+      "% Coverage > 500x":
+        description: "Coverage > 500x calculated by mosdepth"
         format: "{:,.2f}"
       "# SNPs":
         description: "Total number of SNPs"

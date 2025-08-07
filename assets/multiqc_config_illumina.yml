@@ -180,9 +180,6 @@ custom_data:
       "Coverage median":
         description: "Median coverage calculated by mosdepth"
         format: "{:,.2f}"
-      "Coverage mean":
-        description: "Mean coverage calculated by mosdepth"
-        format: "{:,.2f}"
       "% Coverage > 1x":
         description: "Coverage > 1x calculated by mosdepth"
         format: "{:,.2f}"
@@ -191,12 +188,6 @@ custom_data:
         format: "{:,.2f}"
       "% Coverage > 50x":
         description: "Coverage > 50x calculated by mosdepth"
-        format: "{:,.2f}"
-      "% Coverage > 100x":
-        description: "Coverage > 100x calculated by mosdepth"
-        format: "{:,.2f}"
-      "% Coverage > 500x":
-        description: "Coverage > 500x calculated by mosdepth"
         format: "{:,.2f}"
       "# SNPs":
         description: "Total number of SNPs"
@@ -214,6 +205,11 @@ custom_data:
         description: "Pangolin lineage inferred from the consensus sequence"
       "Nextclade clade":
         description: "Nextclade clade inferred from the consensus sequence"
+      "Nextclade G clade":
+        description: "Nextclade G clade inferred from the consensus sequence"
+      "Nextclade QC overall score":
+        description: "Nextclade quality control inferred from the consensus sequence"
+
     pconfig:
       id: "summary_variants_metrics_plot"
       table_title: "Variant calling metrics"

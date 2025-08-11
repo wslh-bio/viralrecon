@@ -210,6 +210,10 @@ def main(args=None):
                     "% Coverage > 10x",
                     ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-10_x_pc"],
                 ),
+                (
+                    "% Coverage > 50x",
+                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-50_x_pc"],
+                ),
             ],
         ),
         (
@@ -231,7 +235,10 @@ def main(args=None):
             "multiqc_pangolin.yaml",
             [("Pangolin lineage", ["lineage"])],
         ),
-        ("multiqc_nextclade_clade-plot.yaml", [("Nextclade clade", ["clade"])]),
+        (
+            "multiqc_nextclade_clade-plot.yaml",
+              [("Nextclade clade", ["clade"])]
+        ),
     ]
 
     illumina_assembly_files = [
@@ -289,6 +296,7 @@ def main(args=None):
                 ),
                 ("% Coverage > 1x", ["mosdepth_mqc-generalstats-mosdepth-1_x_pc"]),
                 ("% Coverage > 10x", ["mosdepth_mqc-generalstats-mosdepth-10_x_pc"]),
+                ("% Coverage > 50x", ["mosdepth_mqc-generalstats-mosdepth-50_x_pc"]),
             ],
         ),
         (

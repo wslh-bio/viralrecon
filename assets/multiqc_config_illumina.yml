@@ -205,10 +205,6 @@ custom_data:
         description: "Pangolin lineage inferred from the consensus sequence"
       "Nextclade clade":
         description: "Nextclade clade inferred from the consensus sequence"
-      "Nextclade G clade":
-        description: "Nextclade G clade inferred from the consensus sequence"
-      "Nextclade QC overall score":
-        description: "Nextclade quality control inferred from the consensus sequence"
 
     pconfig:
       id: "summary_variants_metrics_plot"

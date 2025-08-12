@@ -186,6 +186,9 @@ custom_data:
       "% Coverage > 10x":
         description: "Coverage > 10x calculated by mosdepth"
         format: "{:,.2f}"
+      "% Coverage > 50x":
+        description: "Coverage > 50x calculated by mosdepth"
+        format: "{:,.2f}"
       "# SNPs":
         description: "Total number of SNPs"
         format: "{:,.0f}"
@@ -202,6 +205,7 @@ custom_data:
         description: "Pangolin lineage inferred from the consensus sequence"
       "Nextclade clade":
         description: "Nextclade clade inferred from the consensus sequence"
+
     pconfig:
       id: "summary_variants_metrics_plot"
       table_title: "Variant calling metrics"

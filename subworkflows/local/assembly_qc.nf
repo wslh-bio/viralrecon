@@ -71,7 +71,7 @@ workflow ASSEMBLY_QC {
     if (!params.skip_abacas) {
         ABACAS (
             scaffolds,
-            fasta
+            fasta.map { [ [:], it ] }
         )
         ch_abacas_results = ABACAS.out.results
         ch_versions       = ch_versions.mix(ABACAS.out.versions.first())

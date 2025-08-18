@@ -86,7 +86,7 @@ workflow PIPELINE_INITIALISATION {
                     return [ meta, fastqs.flatten() ]
             }
             .set { ch_samplesheet }
-    } else {
+    } else if (params.platform == 'nanopore') {
         ch_samplesheet = Channel.empty()
         if (input){
             Channel

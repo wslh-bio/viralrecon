@@ -90,7 +90,7 @@ include { VCFLIB_VCFUNIQ                } from '../modules/nf-core/vcflib/vcfuni
 include { TABIX_TABIX                   } from '../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_STATS                } from '../modules/nf-core/bcftools/stats/main'
 include { QUAST                         } from '../modules/nf-core/quast/main'
-include { PANGOLIN                      } from '../modules/nf-core/pangolin/main'
+include { PANGOLIN_RUN                  } from '../modules/nf-core/pangolin/run/main'
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/mosdepth/main'
@@ -439,13 +439,19 @@ workflow NANOPORE {
     //
     // MODULE: Lineage analysis with Pangolin
     //
+    pango_database = Channel.empty()
+    if (params.pango_database) {
+        pango_database = ch_annot = Channel.value(path(params.pango_database, type: 'dir'))
+    }
+
     ch_pangolin_multiqc = Channel.empty()
     if (!params.skip_pangolin) {
-        PANGOLIN (
-            ARTIC_MINION.out.fasta
+        PANGOLIN_RUN (
+            ARTIC_MINION.out.fasta,
+            pango_database
         )
-        ch_pangolin_multiqc = PANGOLIN.out.report
-        ch_versions         = ch_versions.mix(PANGOLIN.out.versions.first())
+        ch_pangolin_multiqc = PANGOLIN_RUN.out.report
+        ch_versions         = ch_versions.mix(PANGOLIN_RUN.out.versions.first())
     }
 
     //

@@ -1,0 +1,28 @@
+{
+    "-profile test_full": {
+        "content": [
+            1,
+            null,
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "variants",
+                "variants/freyja",
+                "variants/freyja/freyja_db",
+                "variants/freyja/freyja_db/curated_lineages.json",
+                "variants/freyja/freyja_db/lineages.yml",
+                "variants/freyja/freyja_db/usher_barcodes.feather"
+            ],
+            [
+                "curated_lineages.json:md5,d18466684621cd69fbc1d0ca06b30763",
+                "lineages.yml:md5,ef3929bb283684bb6ffb9e163929c523",
+                "usher_barcodes.feather:md5,a3e97c01a31a54310a21ceb205af802a"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-08-19T17:42:13.237024553"
+    }
+}

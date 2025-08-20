@@ -620,7 +620,7 @@
                 "multiqc/summary_assembly_metrics_mqc.csv",
                 "multiqc/summary_variants_metrics_mqc.csv",
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_viralrecon_software_mqc_versions.yml",
                 "variants",
                 "variants/bcftools",
                 "variants/bcftools/SRR11140744.vcf.gz",

@@ -808,7 +808,7 @@
                 "nanopolish/snpeff/bcftools_stats/SAMPLE_09.snpeff.bcftools_stats.txt",
                 "nanopolish/variants_long_table.csv",
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_viralrecon_software_mqc_versions.yml",
                 "pycoqc",
                 "pycoqc/pycoqc.html",
                 "pycoqc/pycoqc.json",

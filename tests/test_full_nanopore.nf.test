@@ -2,7 +2,7 @@ nextflow_pipeline {
 
     name "Test pipeline"
     script "../main.nf"
-    tag "pipeline"
+    tag "pipeline_full"
     profile "test_full_nanopore"
 
     test("-profile test_full_nanopore") {

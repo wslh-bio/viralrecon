@@ -41,8 +41,8 @@
                 },
                 "BOWTIE2_ALIGN": {
                     "bowtie2": "2.5.4",
-                    "pigz": 2.8,
-                    "samtools": 1.21
+                    "samtools": 1.21,
+                    "pigz": 2.8
                 },
                 "BOWTIE2_BUILD": {
                     "bowtie2": "2.5.4"
@@ -91,8 +91,8 @@
                     "pigz": 2.8
                 },
                 "MAKE_BED_MASK": {
-                    "python": "3.9.5",
-                    "samtools": 1.14
+                    "samtools": 1.14,
+                    "python": "3.9.5"
                 },
                 "MAKE_VARIANTS_LONG_TABLE": {
                     "python": "3.13.2"
@@ -1217,15 +1217,13 @@
                 "SRR11140748.sorted.bam.stats:md5,eb8c3ca1040ee207695b4d6e9d8f7623",
                 "SRR11140750.sorted.bam.flagstat:md5,b3dd1cba348c0f22fe71245d6289df63",
                 "SRR11140750.sorted.bam.idxstats:md5,afb83ab4932278c2b98bea310f53ce17",
-                "SRR11140750.sorted.bam.stats:md5,666e82819c268e34f60740d52719f884",
-                "curated_lineages.json:md5,0fec3b971ad5cecbf4d2c158f6b8cb17",
-                "lineages.yml:md5,f99130b9acd08ab08580dffe020ead13"
+                "SRR11140750.sorted.bam.stats:md5,666e82819c268e34f60740d52719f884"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-21T13:32:11.985630659"
+        "timestamp": "2025-08-27T13:22:09.695693004"
     }
 }

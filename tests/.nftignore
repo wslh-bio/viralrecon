@@ -27,7 +27,7 @@ fastp/*.fastp.html
 **/freyja/variants/*.variants.tsv
 **/freyja/bootstrap/**
 **/freyja/demix/**
-**/freyja/freyja_db/usher_barcodes.feather
+**/freyja/freyja_db/**
 **/freyja/variants/*.depth.tsv
 assembly/**/abacas/*.abacas.*.delta
 assembly/**/bandage/*.{png,svg}

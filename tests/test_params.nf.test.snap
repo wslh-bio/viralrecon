@@ -2245,11 +2245,11 @@
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.10"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
+                },
+                "PLOT_BASE_DENSITY": {
+                    "r-base": "4.2.0"
                 },
                 "PLOT_MOSDEPTH_REGIONS_AMPLICON": {
                     "r-base": "4.2.0"
@@ -8617,11 +8617,11 @@
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.10"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
+                },
+                "PLOT_BASE_DENSITY": {
+                    "r-base": "4.2.0"
                 },
                 "PLOT_MOSDEPTH_REGIONS_AMPLICON": {
                     "r-base": "4.2.0"
@@ -9679,11 +9679,11 @@
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.10"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
+                },
+                "PLOT_BASE_DENSITY": {
+                    "r-base": "4.2.0"
                 },
                 "PLOT_MOSDEPTH_REGIONS_AMPLICON": {
                     "r-base": "4.2.0"
@@ -17101,11 +17101,11 @@
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.10"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
+                },
+                "PLOT_BASE_DENSITY": {
+                    "r-base": "4.2.0"
                 },
                 "PLOT_MOSDEPTH_REGIONS_AMPLICON": {
                     "r-base": "4.2.0"

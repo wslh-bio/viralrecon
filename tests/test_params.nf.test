@@ -18,13 +18,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -46,13 +50,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -74,13 +82,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -102,13 +114,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -130,13 +146,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -158,13 +178,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -186,13 +210,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -214,13 +242,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -242,13 +274,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -270,13 +306,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -298,13 +338,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -326,13 +370,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -354,13 +402,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -382,13 +434,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['**/snpeff/*.snpeff.{vcf.gz,vcf.gx.tbi}','variants/**/*.{vcf.gz,vcf.gz.tbi}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -410,13 +466,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['**/snpeff/*.snpeff.{vcf.gz,vcf.gx.tbi}','variants/**/*.{vcf.gz,vcf.gz.tbi}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -438,13 +498,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -466,13 +530,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -494,13 +562,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}' ])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -522,13 +594,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -550,13 +626,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -578,13 +658,17 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'nanoplot/*/NanoPlot*.log'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore', ignore: ['kraken2/*.kraken2.classifiedreads.txt', 'kraken2/*.unclassified.fastq.gz', 'nanopolish/*.{vcf,vcf.gz,vcf.gz.tbi,csv}', 'nanopolish/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}'])
+            def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
+            softwareYaml.remove('NEXTCLADE_RUN')
+            softwareYaml.remove('PLOT_BASE_DENSITY')
+
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml"),
+                    softwareYaml,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents

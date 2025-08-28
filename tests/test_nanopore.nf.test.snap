@@ -970,8 +970,7 @@
                 "SAMPLE_08.mapped.sorted.bam.stats:md5,134d271b1cb2f1ab493199c5207c686d",
                 "SAMPLE_09.mapped.sorted.bam.flagstat:md5,747467968f020d74d4d126ba5ff6468e",
                 "SAMPLE_09.mapped.sorted.bam.idxstats:md5,1297500e3064a15d55ccf1f1d74aeab4",
-                "SAMPLE_09.mapped.sorted.bam.stats:md5,27de71718c973281a688549defa6634d",
-                "pycoqc.json:md5,e8cf70acd6718d4b667b15b22df64cb0"
+                "SAMPLE_09.mapped.sorted.bam.stats:md5,27de71718c973281a688549defa6634d"
             ]
         ],
         "meta": {

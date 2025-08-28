@@ -124,7 +124,7 @@
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
                 },
-                "PLOT_BASE_DENSITY"{
+                "PLOT_BASE_DENSITY": {
                     "r-base": "4.2.0"
                 },
                 "PLOT_MOSDEPTH_REGIONS_AMPLICON": {

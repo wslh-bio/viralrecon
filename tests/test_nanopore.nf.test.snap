@@ -49,9 +49,6 @@
                 "NANOPLOT": {
                     "nanoplot": "1.44.1"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PLOT_MOSDEPTH_REGIONS_GENOME": {
                     "r-base": "4.2.0"
                 },

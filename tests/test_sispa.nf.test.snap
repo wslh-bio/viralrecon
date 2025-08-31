@@ -103,9 +103,6 @@
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.10"
                 },
-                "NEXTCLADE_RUN": {
-                    "nextclade": "3.11.0"
-                },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
                 },

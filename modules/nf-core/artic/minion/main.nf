@@ -29,7 +29,7 @@ process ARTIC_MINION {
     tuple val(meta), path("${prefix}.consensus.fasta")                , emit: fasta
     tuple val(meta), path("${prefix}.pass.vcf.gz")                    , emit: vcf
     tuple val(meta), path("${prefix}.pass.vcf.gz.tbi")                , emit: tbi
-    tuple val(meta), path("*.json"), optional:true                    , emit: json
+    tuple val(meta), path("*.json")                                   , emit: json, optional:true
     path  "versions.yml"                                              , emit: versions
 
     when:
@@ -49,20 +49,20 @@ process ARTIC_MINION {
     }
     def hd5_plugin_path = task.ext.hd5_plugin_path ? "export HDF5_PLUGIN_PATH=" + task.ext.hd5_plugin_path : "export HDF5_PLUGIN_PATH=/usr/local/lib/python3.6/site-packages/ont_fast5_api/vbz_plugin"
     """
-    $hd5_plugin_path
+    ${hd5_plugin_path}
 
     artic \\
         minion \\
-        $args \\
-        --threads $task.cpus \\
-        --read-file $fastq \\
+        ${args} \\
+        --threads ${task.cpus} \\
+        --read-file ${fastq} \\
         --scheme-directory ./primer-schemes \\
-        --scheme-version $version \\
-        $model \\
-        $fast5 \\
-        $summary \\
-        $scheme \\
-        $prefix
+        --scheme-version ${version} \\
+        ${model} \\
+        ${fast5} \\
+        ${summary} \\
+        ${scheme} \\
+        ${prefix}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

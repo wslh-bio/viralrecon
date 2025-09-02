@@ -17,6 +17,18 @@
 
 def primer_set         = ''
 def primer_set_version = 0
+
+// Make sure platform is defined
+if( !params.platform ) {
+    error "Parameter --platform is required (illumina / nanopore). Please specify."
+}
+
+// Check that platform value is valid
+def valid_platforms = ["illumina","nanopore"]
+if( !(params.platform in valid_platforms) ) {
+    error "Invalid value for --platform: '${params.platform}'. Allowed values: ${valid_platforms.join(', ')}"
+}
+
 if (params.platform == 'illumina' && params.protocol == 'amplicon') {
     primer_set         = params.primer_set
     primer_set_version = params.primer_set_version

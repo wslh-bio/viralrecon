@@ -3,7 +3,7 @@
 //
 
 include { QUAST             } from '../../modules/nf-core/quast/main'
-include { PANGOLIN          } from '../../modules/nf-core/pangolin/main'
+include { PANGOLIN_RUN      } from '../../modules/nf-core/pangolin/run/main'
 include { NEXTCLADE_RUN     } from '../../modules/nf-core/nextclade/run/main'
 include { PLOT_BASE_DENSITY } from '../../modules/local/plot_base_density'
 
@@ -42,13 +42,19 @@ workflow CONSENSUS_QC {
     //
     // Lineage analysis with Pangolin
     //
+    pango_database = Channel.empty()
+    if (params.pango_database) {
+        pango_database = ch_annot = Channel.value(path(params.pango_database, type: 'dir'))
+    }
+
     ch_pangolin_report = Channel.empty()
     if (!params.skip_pangolin) {
-        PANGOLIN (
-            consensus
+        PANGOLIN_RUN (
+            consensus,
+            pango_database
         )
-        ch_pangolin_report = PANGOLIN.out.report
-        ch_versions        = ch_versions.mix(PANGOLIN.out.versions.first())
+        ch_pangolin_report = PANGOLIN_RUN.out.report
+        ch_versions        = ch_versions.mix(PANGOLIN_RUN.out.versions.first())
     }
 
     //

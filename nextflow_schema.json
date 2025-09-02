@@ -440,6 +440,12 @@
                     "fa_icon": "fas fa-save",
                     "description": "Save mpileup files generated when calling variants with iVar variants or iVar consensus."
                 },
+                "pango_database": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Path to pangolin datadir."
+                },
                 "skip_ivar_trim": {
                     "type": "boolean",
                     "fa_icon": "fas fa-fast-forward",

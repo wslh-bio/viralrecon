@@ -26,16 +26,18 @@ def valid_params = [
     artic_minion_aligner : ['minimap2', 'bwa']
 ]
 
+def checkPathParamList = []
+
 // Check input path parameters to see if they exist
 if (params.platform == 'illumina') {
-    def checkPathParamList = [
+    checkPathParamList = [
         params.input, params.fasta, params.gff, params.bowtie2_index,
         params.kraken2_db, params.primer_bed, params.primer_fasta,
         params.blast_db, params.spades_hmm, params.multiqc_config,
         params.freyja_barcodes, params.freyja_lineages, params.additional_annotation
     ]
 } else if (params.platform == 'nanopore') {
-    def checkPathParamList = [
+    checkPathParamList = [
         params.input, params.fastq_dir, params.fast5_dir,
         params.sequencing_summary, params.gff,
         params.freyja_barcodes, params.freyja_lineages, params.additional_annotation,

@@ -56,13 +56,29 @@ def assemblers = params.assemblers ? params.assemblers.split(',').collect{ it.tr
 def variant_caller = params.variant_caller
 if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' : 'bcftools' }
 
+if (params.fast5_dir)               { ch_fast5_dir          = file(params.fast5_dir)               } else { ch_fast5_dir          = [] }
+if (params.sequencing_summary)      { ch_sequencing_summary = file(params.sequencing_summary)      } else { ch_sequencing_summary = [] }
+if (params.additional_annotation)   { ch_additional_gtf     = file(params.additional_annotation)   } else { additional_annotation = [] }
+
+// Need to stage medaka model properly depending on whether it is a string or a file
+ch_medaka_model = Channel.empty()
+if (params.artic_minion_caller == 'medaka') {
+    if (file(params.artic_minion_medaka_model).exists()) {
+        ch_medaka_model = Channel.fromPath(params.artic_minion_medaka_model)
+    }
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+if (params.platform == 'illumina') {
+    ch_multiqc_config        = file("$projectDir/assets/multiqc_config_illumina.yml", checkIfExists: true)
+} else if (params.platform == 'nanopore') {
+    ch_multiqc_config        = file("$projectDir/assets/multiqc_config_nanopore.yml", checkIfExists: true)
+}
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config_illumina.yml", checkIfExists: true)
 ch_multiqc_custom_config = params.multiqc_config ? file(params.multiqc_config) : []
 
 // Header files
@@ -79,7 +95,12 @@ ch_ivar_variants_header_mqc      = file("$projectDir/assets/headers/ivar_variant
 //
 // MODULE: Loaded from modules/local/
 //
-include { MULTIQC                                                 } from '../modules/local/multiqc_illumina'
+if (params.platform == 'illumina') {
+    include { MULTIQC                                             } from '../modules/local/multiqc_illumina'
+} else if (params.platform == 'nanopore') {
+    include { MULTIQC                                             } from '../modules/local/multiqc_nanopore'
+}
+
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
 include { PREPARE_PRIMER_FASTA                                    } from '../modules/local/prepare_primer_fasta'
@@ -87,7 +108,12 @@ include { PREPARE_PRIMER_FASTA                                    } from '../mod
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { PREPARE_GENOME          } from '../subworkflows/local/prepare_genome_illumina'
+if (params.platform == 'illumina') {
+    include { PREPARE_GENOME          } from '../subworkflows/local/prepare_genome_illumina'
+} else if (params.platform == 'nanopore') {
+    include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome_nanopore'
+}
+
 include { VARIANTS_IVAR           } from '../subworkflows/local/variants_ivar'
 include { VARIANTS_BCFTOOLS       } from '../subworkflows/local/variants_bcftools'
 include { CONSENSUS_IVAR          } from '../subworkflows/local/consensus_ivar'
@@ -144,8 +170,10 @@ include { BAM_VARIANT_DEMIX_BOOT_FREYJA } from '../subworkflows/nf-core/bam_vari
 */
 
 // Info required for completion email and summary
-def pass_mapped_reads = [:]
-def fail_mapped_reads = [:]
+def pass_mapped_reads  = [:]
+def fail_mapped_reads  = [:]
+def pass_barcode_reads = [:]
+def fail_barcode_reads = [:]
 
 workflow VIRALRECON {
 
@@ -158,6 +186,7 @@ workflow VIRALRECON {
     ch_nextclade_dataset
     ch_nextclade_dataset_name
     ch_nextclade_dataset_tag
+    ch_artic_scheme
 
     main:
     ch_versions      = Channel.empty()
@@ -178,11 +207,11 @@ workflow VIRALRECON {
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    //
-    // ILLUMINA WORKFLOW
-    //
-
     if (params.platform == 'illumina') {
+        //
+        // ILLUMINA WORKFLOW
+        //
+
         // Check genome fasta only contains a single contig
         PREPARE_GENOME
             .out
@@ -757,6 +786,18 @@ workflow VIRALRECON {
         //
         // NANOPORE WORKFLOW
         //
+
+        //
+        // MODULE: PycoQC on sequencing summary file
+        //
+        ch_pycoqc_multiqc = Channel.empty()
+        if (params.sequencing_summary && !params.skip_pycoqc) {
+            PYCOQC (
+                Channel.of(ch_sequencing_summary).map { [ [:], it ] }
+            )
+            ch_pycoqc_multiqc = PYCOQC.out.json
+            ch_versions       = ch_versions.mix(PYCOQC.out.versions)
+        }
 
         // Check primer BED file only contains suffixes provided --primer_left_suffix / --primer_right_suffix
         PREPARE_GENOME

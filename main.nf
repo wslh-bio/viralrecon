@@ -38,6 +38,8 @@ if (params.platform == 'illumina' && params.protocol == 'amplicon') {
     params.artic_scheme = getGenomeAttribute('scheme', primer_set, primer_set_version)
 }
 
+def artic_scheme = params.platform == 'nanopore' ? params.artic_scheme : null
+
 params.fasta         = getGenomeAttribute('fasta')
 params.gff           = getGenomeAttribute('gff')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
@@ -86,7 +88,8 @@ workflow NFCORE_VIRALRECON {
             params.bowtie2_index,
             params.nextclade_dataset,
             params.nextclade_dataset_name,
-            params.nextclade_dataset_tag
+            params.nextclade_dataset_tag,
+            artic_scheme
         )
 
         multiqc_report = VIRALRECON.out.multiqc_report

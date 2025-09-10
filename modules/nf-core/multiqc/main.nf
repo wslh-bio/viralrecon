@@ -3,8 +3,8 @@ process MULTIQC {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/multiqc:1.30--pyhdfd78af_1' :
-        'biocontainers/multiqc:1.30--pyhdfd78af_1' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/ef/eff0eafe78d5f3b65a6639265a16b89fdca88d06d18894f90fcdb50142004329/data' :
+        'community.wave.seqera.io/library/multiqc:1.31--1efbafd542a23882' }"
 
     input:
     path  multiqc_files, stageAs: "?/*"
@@ -13,7 +13,6 @@ process MULTIQC {
     path(multiqc_logo)
     path(replace_names)
     path(sample_names)
-    val platform
 
     output:
     path "*multiqc_report.html", emit: report
@@ -33,8 +32,8 @@ process MULTIQC {
     def logo = multiqc_logo ? "--cl-config 'custom_logo: \"${multiqc_logo}\"'" : ''
     def replace = replace_names ? "--replace-names ${replace_names}" : ''
     def samples = sample_names ? "--sample-names ${sample_names}" : ''
+    def platform = params.platform
     """
-
     ## Run MultiQC once to parse tool logs
     multiqc \\
         --force \\
@@ -78,7 +77,6 @@ process MULTIQC {
         $replace \\
         $samples \\
         .
-
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

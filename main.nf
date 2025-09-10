@@ -58,7 +58,6 @@ params.nextclade_dataset_tag       = getGenomeAttribute('nextclade_dataset_tag_v
 include { VIRALRECON              } from './workflows/viralrecon'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
-include { MULTIQC                 } from './modules/nf-core/multiqc'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,9 +78,7 @@ workflow NFCORE_VIRALRECON {
     //
     // WORKFLOW: Run pipeline
     //
-    ch_multiqc_files   = Channel.empty()
-    ch_versions        = Channel.empty()
-    ch_multiqc_config = Channel.empty()
+    multiqc_report   = Channel.empty()
 
         VIRALRECON (
             samplesheet,

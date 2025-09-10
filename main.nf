@@ -38,6 +38,8 @@ if (params.platform == 'illumina' && params.protocol == 'amplicon') {
     params.artic_scheme = getGenomeAttribute('scheme', primer_set, primer_set_version)
 }
 
+def artic_scheme = params.platform == 'nanopore' ? params.artic_scheme : null
+
 params.fasta         = getGenomeAttribute('fasta')
 params.gff           = getGenomeAttribute('gff')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
@@ -53,12 +55,7 @@ params.nextclade_dataset_tag       = getGenomeAttribute('nextclade_dataset_tag_v
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-if (params.platform == 'illumina') {
-    include { ILLUMINA } from './workflows/illumina'
-} else if (params.platform == 'nanopore') {
-    include { NANOPORE } from './workflows/nanopore'
-}
-
+include { VIRALRECON              } from './workflows/viralrecon'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_viralrecon_pipeline'
 
@@ -67,8 +64,6 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_vira
     NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-
 
 //
 // WORKFLOW: Run main nf-core/viralrecon analysis pipeline depending on type of input
@@ -85,8 +80,7 @@ workflow NFCORE_VIRALRECON {
     //
     multiqc_report   = Channel.empty()
 
-    if (params.platform == 'illumina') {
-        ILLUMINA (
+        VIRALRECON (
             samplesheet,
             params.fasta,
             params.gff,
@@ -94,26 +88,11 @@ workflow NFCORE_VIRALRECON {
             params.bowtie2_index,
             params.nextclade_dataset,
             params.nextclade_dataset_name,
-            params.nextclade_dataset_tag
+            params.nextclade_dataset_tag,
+            artic_scheme
         )
 
-        multiqc_report = ILLUMINA.out.multiqc_report
-
-    } else if (params.platform == 'nanopore') {
-        NANOPORE (
-            samplesheet,
-            params.fasta,
-            params.gff,
-            params.primer_bed,
-            params.artic_scheme,
-            params.bowtie2_index,
-            params.nextclade_dataset,
-            params.nextclade_dataset_name,
-            params.nextclade_dataset_tag
-        )
-
-        multiqc_report = NANOPORE.out.multiqc_report
-    }
+        multiqc_report = VIRALRECON.out.multiqc_report
 
     emit:
     multiqc_report // channel: /path/to/multiqc_report.html

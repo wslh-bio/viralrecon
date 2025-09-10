@@ -6,9 +6,9 @@ process MAKE_VARIANTS_LONG_TABLE {
         'community.wave.seqera.io/library/matplotlib_pandas_python_r-sys_pruned:23244d66110fcdf2' }"
 
     input:
-    path ('bcftools_query/*')
-    path ('snpsift/*')
-    path ('pangolin/*')
+    path bcftools_query, stageAs: "bcftools_query/*"
+    path snpsift, stageAs: "snpsift/*"
+    path pangolin, stageAs: "pangolin/*"
 
     output:
     path "*.csv"       , emit: csv

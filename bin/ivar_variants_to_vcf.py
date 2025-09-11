@@ -92,10 +92,9 @@ class IvarVariants:
     ):
         self.file_in = file_in
         self.file_out = file_out
-        if os.path.exists(self.file_out):
-            self.filename = str(os.path.splitext(self.file_in)[0])
-        else:
-            self.filename = str(self.file_in)
+        
+        self.filename = os.path.splitext(os.path.basename(self.file_in))[0]
+
         self.pass_only = pass_only
         try:
             self.freq_threshold = float(freq_threshold)
@@ -137,6 +136,9 @@ class IvarVariants:
             exit("Input file not provided. Aborting...")
         if self.raw_ivar_df.empty:
             exit("Input tsv was empty")
+            
+        # Initialize variant counts dictionary
+        self.var_count_dict = {"SNP": 0, "INS": 0, "DEL": 0}
 
     def strand_bias_filter(self, row):
         """Calculate strand-bias fisher test.
@@ -717,6 +719,45 @@ class IvarVariants:
         header = header_source + header_info + header_filter + header_format
         return header
 
+    def count_variants(self, vcf_table):
+        """Count variants by type for MultiQC output
+        
+        Args:
+            vcf_table: DataFrame with processed variants
+        """
+        # Reset counts
+        self.var_count_dict = {"SNP": 0, "INS": 0, "DEL": 0}
+        
+        # Count variants by type from INFO column
+        if not vcf_table.empty:
+            snp_count = (vcf_table["INFO"] == "TYPE=SNP").sum()
+            ins_count = (vcf_table["INFO"] == "TYPE=INS").sum()
+            del_count = (vcf_table["INFO"] == "TYPE=DEL").sum()
+            
+            self.var_count_dict["SNP"] = snp_count
+            self.var_count_dict["INS"] = ins_count
+            self.var_count_dict["DEL"] = del_count
+
+    def print_multiqc_output(self):
+        """Print variant counts in MultiQC format"""
+        var_count_list = [(k, str(v)) for k, v in sorted(self.var_count_dict.items())]
+        
+        # Format output table
+        row = self.create_f_string(30, "<")  # Arbitrarily long value for sample names
+        row += self.create_f_string(10) * len(var_count_list)  # Spacing of 10
+        
+        headers = ["sample"]
+        headers.extend([x[0] for x in var_count_list])
+        data = [self.filename]
+        data.extend([x[1] for x in var_count_list])
+        
+        print(row.format(*headers))
+        print(row.format(*data))
+
+    def create_f_string(self, str_size, placement="^"):
+        """Helper function to create formatted string"""
+        return "{: " + placement + str(str_size) + "}"
+
     def write_vcf(self):
         """Process ivar.tsv, merge the vcf header and table and write them into a file"""
         vcf_header = "\n".join(self.get_vcf_header())
@@ -728,6 +769,9 @@ class IvarVariants:
                 processed_vcf = self.process_vcf_df(vcf_table)
             else:
                 processed_vcf = vcf_table
+
+            # Count variants before dropping columns
+            self.count_variants(processed_vcf)
 
             try:
                 processed_vcf = processed_vcf.drop(["REF_CODON", "ALT_CODON"], axis=1)
@@ -749,6 +793,9 @@ class IvarVariants:
 
         export_vcf(vcf_table, consensus=True)
         export_vcf(vcf_table, consensus=False)
+        
+        # Print MultiQC output
+        self.print_multiqc_output()
         return
 
 

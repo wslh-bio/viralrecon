@@ -1,9 +1,33 @@
 Changes in component 'nf-core/multiqc'
-'modules/nf-core/multiqc/meta.yml' is unchanged
+Changes in 'multiqc/meta.yml':
+--- modules/nf-core/multiqc/meta.yml
++++ modules/nf-core/multiqc/meta.yml
+@@ -73,6 +73,12 @@
+         description: Plots created by MultiQC
+         pattern: "*_data"
+         ontologies: []
++  csv_reports:
++    - "*.csv":
++        type: file
++        description: Summary CSV files created by MultiQC
++        pattern: "*.csv"
++        ontologies: []
+   versions:
+     - versions.yml:
+         type: file
+
 Changes in 'multiqc/main.nf':
 --- modules/nf-core/multiqc/main.nf
 +++ modules/nf-core/multiqc/main.nf
-@@ -25,16 +25,51 @@
+@@ -18,6 +18,7 @@
+     path "*multiqc_report.html", emit: report
+     path "*_data"              , emit: data
+     path "*_plots"             , optional:true, emit: plots
++    path "*.csv"               , optional:true, emit: csv_reports
+     path "versions.yml"        , emit: versions
+ 
+     when:
+@@ -25,16 +26,51 @@
  
      script:
      def args = task.ext.args ?: ''

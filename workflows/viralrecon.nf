@@ -534,6 +534,8 @@ workflow VIRALRECON {
         // SUBWORKFLOW: Call consensus with iVar and downstream QC
         //
         ch_nextclade_report = Channel.empty()
+        ch_pangolin_report  = Channel.empty()
+
         if (!params.skip_consensus && params.consensus_caller == 'ivar') {
             CONSENSUS_IVAR (
                 ch_bam,
@@ -541,18 +543,16 @@ workflow VIRALRECON {
                 ch_genome_gff ? PREPARE_GENOME.out.gff.map { [ [:], it ] } : [ [:], [] ],
                 PREPARE_GENOME.out.nextclade_db
             )
-            ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_report.collect{it[1]}.ifEmpty([]))
-            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_tsv.collect{it[1]}.ifEmpty([]))
             ch_nextclade_report = CONSENSUS_IVAR.out.nextclade_report
-            ch_pangolin_report  = CONSENSUS_BCFTOOLS.out.pangolin_report
+            ch_pangolin_report  = CONSENSUS_IVAR.out.pangolin_report
+            ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_report.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_IVAR.out.quast_results.collect{it[1]}.ifEmpty([]))
             ch_versions         = ch_versions.mix(CONSENSUS_IVAR.out.versions)
         }
 
         //
         // SUBWORKFLOW: Call consensus with BCFTools
         //
-        ch_pangolin_report  = Channel.empty()
-        ch_nextclade_report = Channel.empty()
         if (!params.skip_consensus && params.consensus_caller == 'bcftools' && variant_caller) {
             CONSENSUS_BCFTOOLS (
                 ch_bam,
@@ -563,9 +563,10 @@ workflow VIRALRECON {
                 PREPARE_GENOME.out.nextclade_db
             )
 
-            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_results.collect{it[1]}.ifEmpty([]))
-            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.pangolin_report.collect{it[1]}.ifEmpty([]))
             ch_nextclade_report = CONSENSUS_BCFTOOLS.out.nextclade_report
+            ch_pangolin_report  = CONSENSUS_BCFTOOLS.out.pangolin_report
+            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_results.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_report.collect{it[1]}.ifEmpty([]))
             ch_versions         = ch_versions.mix(CONSENSUS_BCFTOOLS.out.versions)
         }
 

@@ -139,6 +139,7 @@ include { VCFLIB_VCFUNIQ                } from '../modules/nf-core/vcflib/vcfuni
 include { TABIX_TABIX                   } from '../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_STATS                } from '../modules/nf-core/bcftools/stats/main'
 include { QUAST                         } from '../modules/nf-core/quast/main'
+include { PANGOLIN_UPDATEDATA           } from '../modules/nf-core/pangolin/updatedata/main'
 include { PANGOLIN_RUN                  } from '../modules/nf-core/pangolin/run/main'
 include { NEXTCLADE_RUN                 } from '../modules/nf-core/nextclade/run/main'
 include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
@@ -1016,10 +1017,15 @@ workflow VIRALRECON {
         // MODULE: Lineage analysis with Pangolin
         //
         pango_database = Channel.empty()
-        if (params.pango_database) {
-            pango_database = ch_annot = Channel.value(path(params.pango_database, type: 'dir'))
-        }
+        ch_pangolin_report = Channel.empty()
 
+        if (!params.pango_database) {
+            PANGOLIN_UPDATEDATA('pangolin_db')
+            pango_database = PANGOLIN_UPDATEDATA.out.db
+            ch_versions   = ch_versions.mix(PANGOLIN_UPDATEDATA.out.versions.first())
+        } else{
+            pango_database = Channel.value(path(params.pango_database, type: 'dir'))
+        }
         ch_pangolin_multiqc = Channel.empty()
         if (!params.skip_pangolin) {
             PANGOLIN_RUN (

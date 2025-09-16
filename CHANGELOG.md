@@ -38,8 +38,8 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #485](https://github.com/nf-core/viralrecon/pull/485)] - Added kraken2 to nanopore workflow
 - [[PR #486](https://github.com/nf-core/viralrecon/pull/486)] - Updated local modules version
 - [[PR #491](https://github.com/nf-core/viralrecon/pull/491)] - Remove asciiigenome
-- [[PR #491](https://github.com/nf-core/viralrecon/pull/494] - Partial update of nf-core modules
-- [[PR #411](https://github.com/nf-core/viralrecon/issues/411)] - Standerdise the use of Multiqc across illumina & nanopore workflow
+- [[PR #491](https://github.com/nf-core/viralrecon/pull/494)] - Partial update of nf-core modules
+- [[PR #411](https://github.com/nf-core/viralrecon/issues/411)] - Standerdised the use of Multiqc across illumina & nanopore workflow and added pangolin updatedata
 
 ### Parameters
 

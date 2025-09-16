@@ -562,7 +562,7 @@ workflow VIRALRECON {
                 PREPARE_GENOME.out.nextclade_db
             )
 
-            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.quast_results.collect{it[1]}.ifEmpty([]))
             ch_multiqc_files    = ch_multiqc_files.mix(CONSENSUS_BCFTOOLS.out.pangolin_report.collect{it[1]}.ifEmpty([]))
             ch_nextclade_report = CONSENSUS_BCFTOOLS.out.nextclade_report
             ch_versions         = ch_versions.mix(CONSENSUS_BCFTOOLS.out.versions)
@@ -660,7 +660,7 @@ workflow VIRALRECON {
                 ch_blast_outfmt6_header,
                 ch_blast_filtered_outfmt6_header
             )
-            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_SPADES.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_SPADES.out.quast_results.collect{it[1]}.ifEmpty([]))
             ch_versions      = ch_versions.mix(ASSEMBLY_SPADES.out.versions)
         }
 
@@ -676,7 +676,7 @@ workflow VIRALRECON {
                 ch_blast_outfmt6_header,
                 ch_blast_filtered_outfmt6_header
             )
-            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_UNICYCLER.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_UNICYCLER.out.quast_results.collect{it[1]}.ifEmpty([]))
             ch_versions      = ch_versions.mix(ASSEMBLY_UNICYCLER.out.versions)
         }
 
@@ -692,7 +692,7 @@ workflow VIRALRECON {
                 ch_blast_outfmt6_header,
                 ch_blast_filtered_outfmt6_header
             )
-            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_MINIA.out.quast_tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files = ch_multiqc_files.mix(ASSEMBLY_MINIA.out.quast_results.collect{it[1]}.ifEmpty([]))
             ch_versions      = ch_versions.mix(ASSEMBLY_MINIA.out.versions)
         }
 

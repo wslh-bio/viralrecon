@@ -59,11 +59,11 @@ process MULTIQC {
         rm -f *variants_metrics_mqc.csv
     fi
 
-    if $platform == "illumina"; then
+    if [ "$platform" = "illumina" ]; then
         rm -f variants/report.tsv
     fi
 
-    if $platform == "nanopore"; then
+    if [ "$platform" = "nanopore" ]; then
         rm -rf quast
     fi
 

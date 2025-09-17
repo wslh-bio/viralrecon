@@ -1025,7 +1025,7 @@ workflow VIRALRECON {
             pango_database = PANGOLIN_UPDATEDATA.out.db
             ch_versions   = ch_versions.mix(PANGOLIN_UPDATEDATA.out.versions.first())
         } else{
-            pango_database = Channel.value(path(params.pango_database, type: 'dir'))
+            pango_database = Channel.value(file(params.pango_database, type: 'dir'))
         }
         ch_pangolin_multiqc = Channel.empty()
         if (!params.skip_pangolin) {

@@ -25,6 +25,12 @@ input:
           List of input FastQ files of size 1 and 2 for single-end and paired-end data,
           respectively.
         ontologies: []
+  - adapters:
+      type: file
+      description: |
+        Adapters to be remove in fasta format.
+      ontologies: []
+
 output:
   reads:
     - - meta:

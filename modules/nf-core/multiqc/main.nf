@@ -51,11 +51,11 @@ process MULTIQC {
     multiqc_to_custom_csv.py --platform $platform
 
     ## Manually remove files that we don't want in the report
-    if grep -q ">skip_assembly<" workflow_summary_mqc.yaml; then
+    if grep -q ">skip_assembly<" multiqc_report.html; then
         rm -f *assembly_metrics_mqc.csv
     fi
 
-    if grep -q ">skip_variants<" workflow_summary_mqc.yaml; then
+    if grep -q ">skip_variants<" multiqc_report.html; then
         rm -f *variants_metrics_mqc.csv
     fi
 

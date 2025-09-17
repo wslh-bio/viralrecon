@@ -1,21 +1,5 @@
 Changes in component 'nf-core/multiqc'
-Changes in 'multiqc/meta.yml':
---- modules/nf-core/multiqc/meta.yml
-+++ modules/nf-core/multiqc/meta.yml
-@@ -73,6 +73,12 @@
-         description: Plots created by MultiQC
-         pattern: "*_data"
-         ontologies: []
-+  csv_reports:
-+    - "*.csv":
-+        type: file
-+        description: Summary CSV files created by MultiQC
-+        pattern: "*.csv"
-+        ontologies: []
-   versions:
-     - versions.yml:
-         type: file
-
+'modules/nf-core/multiqc/environment.yml' is unchanged
 Changes in 'multiqc/main.nf':
 --- modules/nf-core/multiqc/main.nf
 +++ modules/nf-core/multiqc/main.nf
@@ -56,11 +40,11 @@ Changes in 'multiqc/main.nf':
 +    multiqc_to_custom_csv.py --platform $platform
 +
 +    ## Manually remove files that we don't want in the report
-+    if grep -q ">skip_assembly<" workflow_summary_mqc.yaml; then
++    if grep -q ">skip_assembly<" multiqc_report.html; then
 +        rm -f *assembly_metrics_mqc.csv
 +    fi
 +
-+    if grep -q ">skip_variants<" workflow_summary_mqc.yaml; then
++    if grep -q ">skip_variants<" multiqc_report.html; then
 +        rm -f *variants_metrics_mqc.csv
 +    fi
 +
@@ -80,8 +64,24 @@ Changes in 'multiqc/main.nf':
          $prefix \\
          $extra_config \\
 
-'modules/nf-core/multiqc/environment.yml' is unchanged
+Changes in 'multiqc/meta.yml':
+--- modules/nf-core/multiqc/meta.yml
++++ modules/nf-core/multiqc/meta.yml
+@@ -73,6 +73,12 @@
+         description: Plots created by MultiQC
+         pattern: "*_data"
+         ontologies: []
++  csv_reports:
++    - "*.csv":
++        type: file
++        description: Summary CSV files created by MultiQC
++        pattern: "*.csv"
++        ontologies: []
+   versions:
+     - versions.yml:
+         type: file
+
 'modules/nf-core/multiqc/tests/main.nf.test' is unchanged
-'modules/nf-core/multiqc/tests/nextflow.config' is unchanged
 'modules/nf-core/multiqc/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/multiqc/tests/nextflow.config' is unchanged
 ************************************************************

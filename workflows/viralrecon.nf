@@ -1033,9 +1033,9 @@ workflow VIRALRECON {
                 ARTIC_MINION.out.fasta,
                 pango_database
             )
-            ch_pangolin_multiqc = PANGOLIN.out.report
+            ch_pangolin_multiqc = PANGOLIN_RUN.out.report
             ch_multiqc_files    = ch_multiqc_files.mix(ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]))
-            ch_versions         = ch_versions.mix(PANGOLIN.out.versions.first())
+            ch_versions         = ch_versions.mix(PANGOLIN_RUN.out.versions.first())
         }
 
         //

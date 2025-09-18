@@ -9,6 +9,8 @@
 **/multiqc_data/pycoqc.yaml
 **/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 **/multiqc_report.html
+**/multiqc_data/llms-full.txt
+**/multiqc_data/multiqc.parquet
 fastqc/{raw,trim}/*_fastqc.{html,zip}
 pipeline_info/*.{html,json,txt,yml}
 fastp/log/*.fastp.log
@@ -44,4 +46,4 @@ nanopolish/*.{bam,bam.bai}
 nanopolish/bcftools_stats/*.bcftools_stats.txt
 pycoqc/pycoqc.html
 pycoqc/pycoqc.json
-pangolin/pangolin_db/**
+**/pangolin_db/**

@@ -910,10 +910,6 @@
                 "Freyja_plot.yaml:md5,98816a06395f996e365a1fbaf713a408",
                 "bcftools-stats-subtypes.yaml:md5,67faa114ec35de05986bcefca61f7e71",
                 "bcftools_stats_indel-lengths.yaml:md5,21579f6cb03aed1fab08c05fb049c09d",
-                "bcftools_stats_vqc_Count_Indels.yaml:md5,69195d02600aea9ee53fca81813d0f08",
-                "bcftools_stats_vqc_Count_SNP.yaml:md5,4ad95ac90a74cc9bf79a8a87d55b21e5",
-                "bcftools_stats_vqc_Count_Transitions.yaml:md5,8bb3193e9d7a1057b83d4079d2f2ad79",
-                "bcftools_stats_vqc_Count_Transversions.yaml:md5,1c406b5671de746fe0bfaa26db2c67d1",
                 "mosdepth-coverage-per-contig-single.yaml:md5,557063a34db897b3be4a25c3cb7614c1",
                 "mosdepth-cumcoverage-dist-id.yaml:md5,119d386570c9390b9408e1ce172d3b73",
                 "mosdepth_cov_dist.yaml:md5,6bedc8e9aad3de4381a030c241ce8d62",
@@ -938,7 +934,6 @@
                 "samtools-flagstat-pct-table.yaml:md5,8ca8a49a8e0ccedc47a60e5d995930ed",
                 "samtools-flagstat-table.yaml:md5,6952d64c89e8c76ea1a970ee07fb91c5",
                 "snpeff_effects.yaml:md5,cdbace7c6a2df8110eeb7be620c4ea3b",
-                "snpeff_qualities.yaml:md5,52a49dc9da320a9dfb40eae29c3df10d",
                 "snpeff_variant_effects_class.yaml:md5,a390051d50c365385f73c5fd4fd0f308",
                 "snpeff_variant_effects_impact.yaml:md5,3a5795514362040257b3cbf2f4ca09b4",
                 "snpeff_variant_effects_region.yaml:md5,09af51089da122ec327d69815764d33c",
@@ -1066,6 +1061,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-18T13:02:13.441701473"
+        "timestamp": "2025-09-18T14:57:59.565851139"
     }
 }

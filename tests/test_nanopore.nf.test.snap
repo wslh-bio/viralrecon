@@ -907,7 +907,6 @@
                 "SAMPLE_08.kraken2.report.txt:md5,1f7148d88723e60ddec21d17f966b904",
                 "SAMPLE_09.classified.fastq.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE_09.kraken2.report.txt:md5,5d7c578112c660554dec778e47f22f7d",
-                "Freyja_plot.yaml:md5,98816a06395f996e365a1fbaf713a408",
                 "bcftools-stats-subtypes.yaml:md5,67faa114ec35de05986bcefca61f7e71",
                 "bcftools_stats_indel-lengths.yaml:md5,21579f6cb03aed1fab08c05fb049c09d",
                 "mosdepth-coverage-per-contig-single.yaml:md5,557063a34db897b3be4a25c3cb7614c1",
@@ -931,7 +930,6 @@
                 "pycoqc_read_qual_plot_All_Reads.yaml:md5,d92652d2904064e6835488fe87bc0922",
                 "pycoqc_read_qual_plot_Passing_Reads.yaml:md5,eae65614a7ec2df719b2f4d51574829f",
                 "pycoqc_stats_table.yaml:md5,7e91d1025c519911af28386064444b9a",
-                "samtools-flagstat-pct-table.yaml:md5,8ca8a49a8e0ccedc47a60e5d995930ed",
                 "samtools-flagstat-table.yaml:md5,6952d64c89e8c76ea1a970ee07fb91c5",
                 "snpeff_effects.yaml:md5,cdbace7c6a2df8110eeb7be620c4ea3b",
                 "snpeff_variant_effects_class.yaml:md5,a390051d50c365385f73c5fd4fd0f308",
@@ -1061,6 +1059,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-18T14:57:59.565851139"
+        "timestamp": "2025-09-22T16:45:25.109680064"
     }
 }

@@ -1243,7 +1243,6 @@
                 "SRR11140746.kraken2.report.txt:md5,f0f4463333187c4d5d14b16f1cafc999",
                 "SRR11140748.kraken2.report.txt:md5,dcb606266fa1e1b47b4ef5d275159490",
                 "SRR11140750.kraken2.report.txt:md5,980edcdd341cbd5ae3bcaff214d8eb5d",
-                "Freyja_plot.yaml:md5,8d093329b81795f63f4c8efe35f86acd",
                 "bcftools-stats-subtypes.yaml:md5,759a5282c411d9d5203874115a2d9564",
                 "bcftools_stats_indel-lengths.yaml:md5,4f8acba6dd1ed7373c750bfb41b5aee6",
                 "bcftools_stats_variant_depths.yaml:md5,da27ddd99fe05fd9aea6c0e20db3dbd5",
@@ -1302,16 +1301,12 @@
                 "multiqc_quast_quast_spades.yaml:md5,b576c73d248f89766f36106c9b1bded7",
                 "multiqc_quast_quast_unicycler.yaml:md5,c9288076a90ea35156f1012c5e7e37ed",
                 "multiqc_quast_quast_variants.yaml:md5,7b6469c29501678f461dd328a1770625",
-                "multiqc_samtools_flagstat_samtools_bowtie2.yaml:md5,5e9192b9983dd3597cf489adce7486d3",
-                "multiqc_samtools_flagstat_samtools_ivar.yaml:md5,5e9192b9983dd3597cf489adce7486d3",
-                "multiqc_samtools_flagstat_samtools_markduplicates.yaml:md5,5e9192b9983dd3597cf489adce7486d3",
                 "multiqc_snpeff.yaml:md5,9fc21a22464521276884e66aea8d23ea",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,be7b912a28bc329150016c9d03345cf9",
                 "multiqc_summary_variants_metrics_plot.yaml:md5,4dfe4a5f9546a920124c1daa4dddc362",
                 "pangolin_run_table.yaml:md5,7d6fca730af3d6699eed5b9b1a917282",
                 "quast_num_contigs.yaml:md5,d086b70781f7fcd6f66c559e9ef85762",
                 "quast_table.yaml:md5,4b5f514f8ce41c26a7a7fd30d7f310ce",
-                "samtools-flagstat-pct-table.yaml:md5,b576bbcd279eed3dad99693a0ab43c10",
                 "samtools-flagstat-table.yaml:md5,a0a2dce7b51e1fd5d49f65fb4c3394c3",
                 "snpeff_effects.yaml:md5,b4d81ab8982624a4d6332f31cf3616b0",
                 "snpeff_qualities.yaml:md5,d149f7e5e5f94911dfff1462a17de92c",
@@ -1377,6 +1372,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-18T13:04:47.532943019"
+        "timestamp": "2025-09-22T16:47:59.552589228"
     }
 }

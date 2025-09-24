@@ -1312,7 +1312,6 @@
                 "snpeff_variant_effects_impact.yaml:md5,4c96d74dadbf2ea2184ff80224a39541",
                 "snpeff_variant_effects_region.yaml:md5,5889ff4523eeba199a1523b2d7eb4957",
                 "summary_assembly_metrics_mqc.csv:md5,d89b1134488033651844d4163cef4520",
-                "summary_variants_metrics_mqc.csv:md5,04ea14292d6bf917b2ee1028ef2c95ac",
                 "SRR11140744.bcftools_stats.txt:md5,57cd0ce55446a3e0ff2bcf4f015bd066",
                 "SRR11140746.bcftools_stats.txt:md5,31e2c524c26db8082089eedd14718a5c",
                 "SRR11140748.bcftools_stats.txt:md5,3df9b3ab542bd9fdb1ceb3556d8379c3",

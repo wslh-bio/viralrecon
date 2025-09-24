@@ -934,7 +934,6 @@
                 "snpeff_variant_effects_class.yaml:md5,a390051d50c365385f73c5fd4fd0f308",
                 "snpeff_variant_effects_impact.yaml:md5,3a5795514362040257b3cbf2f4ca09b4",
                 "snpeff_variant_effects_region.yaml:md5,09af51089da122ec327d69815764d33c",
-                "summary_variants_metrics_mqc.csv:md5,eb762a9956150578e5a6e2237565426b",
                 "LengthvsQualityScatterPlot_dot.png:md5,f529214772f4d4f554157b0362c87790",
                 "LengthvsQualityScatterPlot_kde.png:md5,eaee7c9ef97656d67a8443d78c0df806",
                 "NanoStats.txt:md5,b676164487423d40aef4b24e921792a8",

@@ -15,6 +15,7 @@
 **/multiqc_data/multiqc_samtools_flagstat_samtools_*.yaml
 **/multiqc_data/multiqc_summary_variants_metrics_plot.yaml
 **/multiqc_data/samtools-flagstat*table.yaml
+multiqc/summary_variants_metrics_mqc.csv
 fastqc/{raw,trim}/*_fastqc.{html,zip}
 pipeline_info/*.{html,json,txt,yml}
 fastp/log/*.fastp.log

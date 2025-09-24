@@ -92,7 +92,7 @@ class IvarVariants:
     ):
         self.file_in = file_in
         self.file_out = file_out
-        
+
         self.filename = os.path.splitext(os.path.basename(self.file_in))[0]
 
         self.pass_only = pass_only
@@ -136,7 +136,7 @@ class IvarVariants:
             exit("Input file not provided. Aborting...")
         if self.raw_ivar_df.empty:
             exit("Input tsv was empty")
-            
+
         # Initialize variant counts dictionary
         self.var_count_dict = {"SNP": 0, "INS": 0, "DEL": 0}
 
@@ -721,19 +721,19 @@ class IvarVariants:
 
     def count_variants(self, vcf_table):
         """Count variants by type for MultiQC output
-        
+
         Args:
             vcf_table: DataFrame with processed variants
         """
         # Reset counts
         self.var_count_dict = {"SNP": 0, "INS": 0, "DEL": 0}
-        
+
         # Count variants by type from INFO column
         if not vcf_table.empty:
             snp_count = (vcf_table["INFO"] == "TYPE=SNP").sum()
             ins_count = (vcf_table["INFO"] == "TYPE=INS").sum()
             del_count = (vcf_table["INFO"] == "TYPE=DEL").sum()
-            
+
             self.var_count_dict["SNP"] = snp_count
             self.var_count_dict["INS"] = ins_count
             self.var_count_dict["DEL"] = del_count
@@ -741,16 +741,16 @@ class IvarVariants:
     def print_multiqc_output(self):
         """Print variant counts in MultiQC format"""
         var_count_list = [(k, str(v)) for k, v in sorted(self.var_count_dict.items())]
-        
+
         # Format output table
         row = self.create_f_string(30, "<")  # Arbitrarily long value for sample names
         row += self.create_f_string(10) * len(var_count_list)  # Spacing of 10
-        
+
         headers = ["sample"]
         headers.extend([x[0] for x in var_count_list])
         data = [self.filename]
         data.extend([x[1] for x in var_count_list])
-        
+
         print(row.format(*headers))
         print(row.format(*data))
 
@@ -793,7 +793,7 @@ class IvarVariants:
 
         export_vcf(vcf_table, consensus=True)
         export_vcf(vcf_table, consensus=False)
-        
+
         # Print MultiQC output
         self.print_multiqc_output()
         return

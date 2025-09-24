@@ -67,7 +67,7 @@ module_order:
       anchor: "quast_variants"
       info: "This section of the report shows QUAST QC results for the consensus sequence."
       path_filters:
-          - "./*/quast.consensus/report.tsv"
+        - "./*/quast.consensus/report.tsv"
   - cutadapt:
       name: "ASSEMBLY: Cutadapt (primer trimming)"
       info: "This section of the report shows Cutadapt results for reads after primer sequence trimming."
@@ -88,7 +88,7 @@ module_order:
       anchor: "quast_minia"
       info: "This section of the report shows QUAST results from minia de novo assembly."
       path_filters:
-          - "./*/quast.minia/report.tsv"
+        - "./*/quast.minia/report.tsv"
 
 report_section_order:
   fail_mapped_reads:

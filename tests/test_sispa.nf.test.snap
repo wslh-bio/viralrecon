@@ -1303,11 +1303,9 @@
                 "multiqc_quast_quast_variants.yaml:md5,7b6469c29501678f461dd328a1770625",
                 "multiqc_snpeff.yaml:md5,9fc21a22464521276884e66aea8d23ea",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,be7b912a28bc329150016c9d03345cf9",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,4dfe4a5f9546a920124c1daa4dddc362",
                 "pangolin_run_table.yaml:md5,7d6fca730af3d6699eed5b9b1a917282",
                 "quast_num_contigs.yaml:md5,d086b70781f7fcd6f66c559e9ef85762",
                 "quast_table.yaml:md5,4b5f514f8ce41c26a7a7fd30d7f310ce",
-                "samtools-flagstat-table.yaml:md5,a0a2dce7b51e1fd5d49f65fb4c3394c3",
                 "snpeff_effects.yaml:md5,b4d81ab8982624a4d6332f31cf3616b0",
                 "snpeff_qualities.yaml:md5,d149f7e5e5f94911dfff1462a17de92c",
                 "snpeff_variant_effects_class.yaml:md5,62eaf9b9f12a1f620b869451e90b7888",
@@ -1372,6 +1370,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T16:47:59.552589228"
+        "timestamp": "2025-09-23T14:04:40.421249674"
     }
 }

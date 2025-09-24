@@ -1098,17 +1098,15 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,eafd4452c4e2c41bda97aade999b3f7d",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,c9b8495fbed85da77f159c0a0b3e7bc7",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
                 "snpeff_variant_effects_region.yaml:md5,212498fd3cc6647f127fa65d7afcf754",
                 "summary_assembly_metrics_mqc.csv:md5,331af780dc9cc5380b823067b7411112",
-                "summary_variants_metrics_mqc.csv:md5,1943cea8eff1dd40de4f63e136c4478d",
+                "summary_variants_metrics_mqc.csv:md5,69e6fc5fbb4c6723f1dab9041110cdcb",
                 "SAMPLE1_PE.bowtie2.log:md5,20e68f8b6b41da0dffeccbb49e867be2",
                 "SAMPLE1_PE.ivar_trim.ivar.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE2_PE.bowtie2.log:md5,2cc188d8003e49d74567b2f04c2f34b2",
@@ -1199,7 +1197,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T16:55:08.207609109"
+        "timestamp": "2025-09-23T14:11:35.709204941"
     },
     "-profile test_nanopore --min_guppyplex_reads 10000": {
         "content": [
@@ -2300,11 +2298,9 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,5ef74a93b1e30eacc5c3cb2a909832d9",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,2164c30631db60c29a5f08195a444dec",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
@@ -2401,7 +2397,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T18:11:18.877761298"
+        "timestamp": "2025-09-23T15:28:57.95076918"
     },
     "-profile test_nanopore --artic_minion_caller medaka --sequencing_summary false --fast5_dir false": {
         "content": [
@@ -3502,17 +3498,15 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,aaaf298bf2118e3d579746e2be896f17",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,3437289dc06a47ac05e6410c9bfeb85d",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
                 "snpeff_variant_effects_region.yaml:md5,212498fd3cc6647f127fa65d7afcf754",
                 "summary_assembly_metrics_mqc.csv:md5,331af780dc9cc5380b823067b7411112",
-                "summary_variants_metrics_mqc.csv:md5,006859a39903a7b3f8890914ec9c3afe",
+                "summary_variants_metrics_mqc.csv:md5,1943cea8eff1dd40de4f63e136c4478d",
                 "SAMPLE1_PE.bowtie2.log:md5,20e68f8b6b41da0dffeccbb49e867be2",
                 "SAMPLE1_PE.ivar_trim.ivar.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE2_PE.bowtie2.log:md5,2cc188d8003e49d74567b2f04c2f34b2",
@@ -3603,7 +3597,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T18:30:14.67161482"
+        "timestamp": "2025-09-23T22:58:37.486573717"
     },
     "-profile test_nanopore --additional_annotation https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.gtf.gz": {
         "content": [
@@ -4704,17 +4698,15 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,119f07de27e580f7a8f6513b55dabce7",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,b7948af7c0cf352228fe94fcb2691df0",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
                 "snpeff_variant_effects_region.yaml:md5,212498fd3cc6647f127fa65d7afcf754",
                 "summary_assembly_metrics_mqc.csv:md5,331af780dc9cc5380b823067b7411112",
-                "summary_variants_metrics_mqc.csv:md5,67cc85f159919acbda223d55ab08064b",
+                "summary_variants_metrics_mqc.csv:md5,ace3dc63a0cd1bfaa9392fdb786e791a",
                 "SAMPLE1_PE.bowtie2.log:md5,20e68f8b6b41da0dffeccbb49e867be2",
                 "SAMPLE1_PE.ivar_trim.ivar.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE2_PE.bowtie2.log:md5,2cc188d8003e49d74567b2f04c2f34b2",
@@ -4805,7 +4797,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T17:14:37.818907286"
+        "timestamp": "2025-09-23T21:35:30.902474284"
     },
     "-profile test_nanopore --input false": {
         "content": [
@@ -5906,17 +5898,15 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,7ce64fa60babdcd5930058d6a98cd975",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,59eed57794c0ec1d16d329fb635a0a8b",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
                 "snpeff_variant_effects_region.yaml:md5,212498fd3cc6647f127fa65d7afcf754",
                 "summary_assembly_metrics_mqc.csv:md5,331af780dc9cc5380b823067b7411112",
-                "summary_variants_metrics_mqc.csv:md5,ace3dc63a0cd1bfaa9392fdb786e791a",
+                "summary_variants_metrics_mqc.csv:md5,eae8bdbb506e08a2000d066acbc27773",
                 "SAMPLE1_PE.bowtie2.log:md5,20e68f8b6b41da0dffeccbb49e867be2",
                 "SAMPLE1_PE.ivar_trim.ivar.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE2_PE.bowtie2.log:md5,2cc188d8003e49d74567b2f04c2f34b2",
@@ -6007,7 +5997,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T17:33:30.176040176"
+        "timestamp": "2025-09-23T21:56:52.706918533"
     },
     "-profile test_nanopore --min_barcode_reads 10000": {
         "content": [
@@ -7108,17 +7098,15 @@
                 "multiqc_quast_quast_variants.yaml:md5,1465f3600b1643497310946af66d0618",
                 "multiqc_snpeff.yaml:md5,42d92c43058c25ce03620a2add521006",
                 "multiqc_summary_assembly_metrics_plot.yaml:md5,f06a09866446f68f8ee3438d9c61183f",
-                "multiqc_summary_variants_metrics_plot.yaml:md5,f6a51e1723cafec62862bbc12bb7a0c6",
                 "pangolin_run_table.yaml:md5,b7446933afc651c064e398289ac1adf4",
                 "quast_num_contigs.yaml:md5,81d6fa53cf6578bf60e22d8902a78abc",
                 "quast_table.yaml:md5,4149cd2d0b25f93b3ff3f5c819f2f8cb",
-                "samtools-flagstat-table.yaml:md5,26200c41af3fc4f070417a0be3a097ca",
                 "snpeff_effects.yaml:md5,43533ac29b261ab7132c69c7034648ad",
                 "snpeff_variant_effects_class.yaml:md5,5f31369f0e087d4fe7eddc14d908f11f",
                 "snpeff_variant_effects_impact.yaml:md5,ab3b8b418a47185b61d19a06f2a8e846",
                 "snpeff_variant_effects_region.yaml:md5,212498fd3cc6647f127fa65d7afcf754",
                 "summary_assembly_metrics_mqc.csv:md5,331af780dc9cc5380b823067b7411112",
-                "summary_variants_metrics_mqc.csv:md5,eae8bdbb506e08a2000d066acbc27773",
+                "summary_variants_metrics_mqc.csv:md5,1943cea8eff1dd40de4f63e136c4478d",
                 "SAMPLE1_PE.bowtie2.log:md5,20e68f8b6b41da0dffeccbb49e867be2",
                 "SAMPLE1_PE.ivar_trim.ivar.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SAMPLE2_PE.bowtie2.log:md5,2cc188d8003e49d74567b2f04c2f34b2",
@@ -7209,6 +7197,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-22T17:52:37.281418347"
+        "timestamp": "2025-09-23T22:17:15.721074731"
     }
 }

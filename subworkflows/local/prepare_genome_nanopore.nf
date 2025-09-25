@@ -10,8 +10,8 @@ include { UNTAR as UNTAR_KRAKEN2_DB     } from '../../modules/nf-core/untar/main
 include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/custom/getchromsizes/main'
 include { NEXTCLADE_DATASETGET        } from '../../modules/nf-core/nextclade/datasetget/main'
 include { COLLAPSE_PRIMERS            } from '../../modules/local/collapse_primers'
-include { KRAKEN2_BUILD                 } from '../../modules/local/kraken2_build'
-include { SNPEFF_BUILD                } from '../../modules/local/snpeff_build'
+include { KRAKEN2_BUILD                 } from '../../modules/local/kraken2/build'
+include { SNPEFF_BUILD                } from '../../modules/local/snpeff/build'
 
 workflow PREPARE_GENOME {
 

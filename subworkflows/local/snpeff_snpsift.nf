@@ -2,8 +2,8 @@
 // Run snpEff, bgzip, tabix, stats and SnpSift commands
 //
 
-include { SNPEFF_ANN            } from '../../modules/local/snpeff_ann'
-include { SNPSIFT_EXTRACTFIELDS } from '../../modules/local/snpsift_extractfields'
+include { SNPEFF_ANN            } from '../../modules/local/snpeff/ann'
+include { SNPSIFT_EXTRACTFIELDS } from '../../modules/local/snpsift/extractfields'
 
 include { VCF_BGZIP_TABIX_STATS } from './vcf_bgzip_tabix_stats'
 

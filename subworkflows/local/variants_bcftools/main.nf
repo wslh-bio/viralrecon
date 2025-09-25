@@ -2,10 +2,10 @@
 // Variant calling with BCFTools, downstream processing and QC
 //
 
-include { BCFTOOLS_MPILEUP } from '../../modules/nf-core/bcftools/mpileup/main'
-include { BCFTOOLS_NORM    } from '../../modules/nf-core/bcftools/norm/main'
-include { VCF_TABIX_STATS  } from './vcf_tabix_stats'
-include { VARIANTS_QC      } from './variants_qc'
+include { BCFTOOLS_MPILEUP } from '../../../modules/nf-core/bcftools/mpileup/main'
+include { BCFTOOLS_NORM    } from '../../../modules/nf-core/bcftools/norm/main'
+include { VCF_TABIX_STATS  } from '../vcf_tabix_stats'
+include { VARIANTS_QC      } from '../variants_qc'
 
 workflow VARIANTS_BCFTOOLS {
     take:

@@ -1,19 +1,17 @@
 //
-// Assembly and downstream processing for SPAdes scaffolds
+// Assembly and downstream processing for Unicycler scaffolds
 //
 
-include { SPADES                     } from '../../modules/nf-core/spades/main'
-include { BANDAGE_IMAGE              } from '../../modules/nf-core/bandage/image/main'
-include { GUNZIP as GUNZIP_SCAFFOLDS } from '../../modules/nf-core/gunzip/main'
-include { GUNZIP as GUNZIP_GFA       } from '../../modules/nf-core/gunzip/main'
+include { UNICYCLER                  } from '../../../modules/nf-core/unicycler/main'
+include { BANDAGE_IMAGE              } from '../../../modules/nf-core/bandage/image/main'
+include { GUNZIP as GUNZIP_SCAFFOLDS } from '../../../modules/nf-core/gunzip/main'
+include { GUNZIP as GUNZIP_GFA       } from '../../../modules/nf-core/gunzip/main'
 
-include { ASSEMBLY_QC   } from './assembly_qc'
+include { ASSEMBLY_QC   } from '../assembly_qc'
 
-workflow ASSEMBLY_SPADES {
+workflow ASSEMBLY_UNICYCLER {
     take:
     reads                 // channel: [ val(meta), [ reads ] ]
-    mode                  // string : spades assembly mode e.g. 'rnaviral'
-    hmm                   // channel: /path/to/spades.hmm
     fasta                 // channel: /path/to/genome.fasta
     gff                   // channel: /path/to/genome.gff
     blast_db              // channel: /path/to/blast_db/
@@ -25,30 +23,18 @@ workflow ASSEMBLY_SPADES {
     ch_versions = Channel.empty()
 
     //
-    // Filter for paired-end samples if running metaSPAdes / metaviralSPAdes / metaplasmidSPAdes
+    // Assemble reads with Unicycler
     //
-    ch_reads = reads
-    if (mode.contains('meta') || mode.contains('bio')) {
+    UNICYCLER (
         reads
-            .filter { meta, illumina, pacbio, nanopore -> !meta.single_end }
-            .set { ch_reads }
-    }
-
-    //
-    // Assemble reads with SPAdes
-    //
-    SPADES (
-        ch_reads,
-        [],
-        hmm
     )
-    ch_versions = ch_versions.mix(SPADES.out.versions.first())
+    ch_versions = ch_versions.mix(UNICYCLER.out.versions.first())
 
     //
     // Unzip scaffolds file
     //
     GUNZIP_SCAFFOLDS (
-        SPADES.out.scaffolds
+        UNICYCLER.out.scaffolds
     )
     ch_versions = ch_versions.mix(GUNZIP_SCAFFOLDS.out.versions.first())
 
@@ -56,7 +42,7 @@ workflow ASSEMBLY_SPADES {
     // Unzip gfa file
     //
     GUNZIP_GFA (
-        SPADES.out.gfa
+        UNICYCLER.out.gfa
     )
 
     //
@@ -102,12 +88,9 @@ workflow ASSEMBLY_SPADES {
     ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
 
     emit:
-    scaffolds          = SPADES.out.scaffolds               // channel: [ val(meta), [ scaffolds ] ]
-    contigs            = SPADES.out.contigs                 // channel: [ val(meta), [ contigs ] ]
-    transcripts        = SPADES.out.transcripts             // channel: [ val(meta), [ transcripts ] ]
-    gene_clusters      = SPADES.out.gene_clusters           // channel: [ val(meta), [ gene_clusters ] ]
-    gfa                = SPADES.out.gfa                     // channel: [ val(meta), [ gfa ] ]
-    log_out            = SPADES.out.log                     // channel: [ val(meta), [ log ] ]
+    scaffolds          = UNICYCLER.out.scaffolds            // channel: [ val(meta), [ scaffolds ] ]
+    gfa                = UNICYCLER.out.gfa                  // channel: [ val(meta), [ gfa ] ]
+    log_out            = UNICYCLER.out.log                  // channel: [ val(meta), [ log ] ]
 
     bandage_png        = ch_bandage_png                     // channel: [ val(meta), [ png ] ]
     bandage_svg        = ch_bandage_svg                     // channel: [ val(meta), [ svg ] ]

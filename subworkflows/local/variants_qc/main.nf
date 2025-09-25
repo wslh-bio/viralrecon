@@ -2,7 +2,7 @@
 // Variant calling QC
 //
 
-include { SNPEFF_SNPSIFT } from './snpeff_snpsift'
+include { SNPEFF_SNPSIFT } from '../snpeff_snpsift'
 
 workflow VARIANTS_QC {
     take:

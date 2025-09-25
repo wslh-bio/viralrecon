@@ -1,16 +1,4 @@
 Changes in component 'nf-core/artic/minion'
-Changes in 'artic/minion/environment.yml':
---- modules/nf-core/artic/minion/environment.yml
-+++ modules/nf-core/artic/minion/environment.yml
-@@ -4,5 +4,5 @@
-   - conda-forge
-   - bioconda
- dependencies:
--  - bioconda::artic=1.6.2
-+  - bioconda::artic=1.2.3
-   - bioconda::htslib=1.17 # can't be updated due to dependency issues
-
-'modules/nf-core/artic/minion/meta.yml' is unchanged
 Changes in 'artic/minion/main.nf':
 --- modules/nf-core/artic/minion/main.nf
 +++ modules/nf-core/artic/minion/main.nf
@@ -76,6 +64,108 @@ Changes in 'artic/minion/main.nf':
  
      cat <<-END_VERSIONS > versions.yml
 
-'modules/nf-core/artic/minion/tests/main.nf.test.snap' is unchanged
+Changes in 'artic/minion/meta.yml':
+--- modules/nf-core/artic/minion/meta.yml
++++ modules/nf-core/artic/minion/meta.yml
+@@ -7,8 +7,8 @@
+   - demultiplexed reads
+ tools:
+   - artic:
+-      description: ARTIC pipeline - a bioinformatics pipeline for working with virus
+-        sequencing data sequenced with nanopore
++      description: ARTIC pipeline - a bioinformatics pipeline for working with
++        virus sequencing data sequenced with nanopore
+       homepage: https://artic.readthedocs.io/en/latest/
+       documentation: https://artic.readthedocs.io/en/latest/
+       tool_dev_url: https://github.com/artic-network/fieldbioinformatics
+@@ -25,36 +25,35 @@
+         description: FastQ file containing reads
+         pattern: "*.{fastq.gz}"
+         ontologies: []
+-  - - meta2:
+-        type: map
+-        description: |
+-          Groovy Map containing model information
+-          e.g. [ id:'test', single_end:false ]
+-    - model_dir:
+-        type: directory
+-        description: Path containing clair3 models, defaults to models packaged with
+-          conda installation
+-        pattern: "*"
+-    - model:
+-        type: string
+-        description: |
+-          The model to use for clair3, if not provided the pipeline will try to figure
+-          it out the appropriate model from the read fastq
+-  - - meta3:
+-        type: map
+-        description: |
+-          Groovy Map containing scheme information
+-          e.g. [ id:'test', single_end:false ]
+-    - fasta:
+-        type: file
+-        description: Scheme reference fasta file
+-        pattern: "*.{fasta}"
+-        ontologies: []
+-    - bed:
+-        type: file
+-        description: Scheme BED file
+-        pattern: "*.{bed}"
+-        ontologies: []
++  - fast5_dir:
++      type: directory
++      description: Directory containing raw FAST5 files
++      pattern: "*"
++  - sequencing_summary:
++      type: file
++      description: Sequencing summary file from Guppy
++      pattern: "*.txt"
++  - primer-schemes/${scheme}/V${scheme_version}/${scheme}.reference.fasta:
++      type: file
++      description: Reference FASTA file for ARTIC primer scheme
++      pattern: "*.fasta"
++  - primer-schemes/${scheme}/V${scheme_version}/${scheme}.scheme.bed:
++      type: file
++      description: BED file for ARTIC primer scheme
++      pattern: "*.bed"
++  - medaka_model_file:
++      type: file
++      description: File containing Medaka model to be used (if provided)
++      pattern: "*"
++  - medaka_model_string:
++      type: string
++      description: Medaka model name string (used if file not provided)
++  - scheme:
++      type: string
++      description: ARTIC primer scheme name
++  - scheme_version:
++      type: string
++      description: ARTIC primer scheme version
+ output:
+   results:
+     - - meta:
+@@ -153,7 +152,8 @@
+             e.g. [ id:'test', single_end:false ]
+       - ${prefix}.pass.vcf.gz:
+           type: file
+-          description: VCF file containing detected variants passing quality filter
++          description: VCF file containing detected variants passing quality
++            filter
+           pattern: "*.{pass.vcf.gz}"
+           ontologies: []
+   tbi:
+
+Changes in 'artic/minion/environment.yml':
+--- modules/nf-core/artic/minion/environment.yml
++++ modules/nf-core/artic/minion/environment.yml
+@@ -4,5 +4,5 @@
+   - conda-forge
+   - bioconda
+ dependencies:
+-  - bioconda::artic=1.6.2
++  - bioconda::artic=1.2.3
+   - bioconda::htslib=1.17 # can't be updated due to dependency issues
+
 'modules/nf-core/artic/minion/tests/main.nf.test' is unchanged
+'modules/nf-core/artic/minion/tests/main.nf.test.snap' is unchanged
 ************************************************************

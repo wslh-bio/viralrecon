@@ -19,26 +19,14 @@ run_modules:
   - freyja
 
 module_order:
-  - pangolin:
-      path_filters:
-        - "*.pangolin.csv"
+  - pangolin
   - pycoqc
-  - samtools:
-      path_filters:
-        - "./samtools_stats/*"
+  - samtools
   - mosdepth
-  - freyja:
-    path_filters:
-      - "./freyja_demix/*.tsv"
-  - bcftools:
-      path_filters:
-        - "./bcftools_stats/*.txt"
-  - snpeff:
-      path_filters:
-        - "./snpeff/*.csv"
-  - quast:
-      path_filters:
-        - "./quast/*.tsv"
+  - freyja
+  - bcftools
+  - snpeff
+  - quast
 
 report_section_order:
   fail_barcodes_no_sample:

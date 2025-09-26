@@ -87,17 +87,17 @@ workflow FASTQ_TRIM_FASTP_FASTQC {
     }
 
     emit:
-    reads = trim_reads // channel: [ val(meta), [ reads ] ]
-    trim_json          // channel: [ val(meta), [ json ] ]
-    trim_html          // channel: [ val(meta), [ html ] ]
-    trim_log           // channel: [ val(meta), [ log ] ]
-    trim_reads_fail    // channel: [ val(meta), [ fastq.gz ] ]
-    trim_reads_merged  // channel: [ val(meta), [ fastq.gz ] ]
+    reads    = trim_reads  // channel: [ val(meta), [ reads ] ]
+    trim_json              // channel: [ val(meta), [ json ] ]
+    trim_html              // channel: [ val(meta), [ html ] ]
+    trim_log               // channel: [ val(meta), [ log ] ]
+    trim_reads_fail        // channel: [ val(meta), [ fastq.gz ] ]
+    trim_reads_merged      // channel: [ val(meta), [ fastq.gz ] ]
 
-    fastqc_raw_html    // channel: [ val(meta), [ html ] ]
-    fastqc_raw_zip     // channel: [ val(meta), [ zip ] ]
-    fastqc_trim_html   // channel: [ val(meta), [ html ] ]
-    fastqc_trim_zip    // channel: [ val(meta), [ zip ] ]
+    fastqc_raw_html        // channel: [ val(meta), [ html ] ]
+    fastqc_raw_zip         // channel: [ val(meta), [ zip ] ]
+    fastqc_trim_html       // channel: [ val(meta), [ html ] ]
+    fastqc_trim_zip        // channel: [ val(meta), [ zip ] ]
 
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+    versions = ch_versions // channel: [ versions.yml ]
 }

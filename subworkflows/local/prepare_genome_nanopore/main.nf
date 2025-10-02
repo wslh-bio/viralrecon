@@ -13,7 +13,7 @@ include { COLLAPSE_PRIMERS            } from '../../../modules/local/collapse_pr
 include { KRAKEN2_BUILD                 } from '../../../modules/local/kraken2/build'
 include { SNPEFF_BUILD                } from '../../../modules/local/snpeff/build'
 
-workflow PREPARE_GENOME {
+workflow PREPARE_GENOME_NANOPORE {
 
     take:
     fasta

@@ -96,9 +96,9 @@ include { PREPARE_PRIMER_FASTA                                    } from '../mod
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 if (params.platform == 'illumina') {
-    include { PREPARE_GENOME          } from '../subworkflows/local/prepare_genome_illumina'
+    include { PREPARE_GENOME_ILLUMINA as PREPARE_GENOME } from '../subworkflows/local/prepare_genome_illumina'
 } else if (params.platform == 'nanopore') {
-    include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome_nanopore'
+    include { PREPARE_GENOME_NANOPORE as PREPARE_GENOME } from '../subworkflows/local/prepare_genome_nanopore'
 }
 
 include { VARIANTS_IVAR           } from '../subworkflows/local/variants_ivar'

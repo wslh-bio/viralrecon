@@ -32,7 +32,7 @@ workflow VARIANTS_LONG_TABLE {
     ch_versions = ch_versions.mix(MAKE_VARIANTS_LONG_TABLE.out.versions)
 
     emit:
-    query_table = BCFTOOLS_QUERY.out.output           // channel: [ val(meta), [ txt ] ]
+    query_table = BCFTOOLS_QUERY.out.output        // channel: [ val(meta), [ txt ] ]
     long_table  = MAKE_VARIANTS_LONG_TABLE.out.csv // channel: [ val(meta), [ csv ] ]
 
     versions    = ch_versions    // channel: [ versions.yml ]

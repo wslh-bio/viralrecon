@@ -58,8 +58,12 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 |                                 | `--min_perc_contig_aligned`  |
 |                                 | `--skip_noninternal_primers` |
 |                                 | `--threeprime_adapters`      |
+|                                 | `--freyja_depthcutoff`       |
+|                                 | `--pango_database`           |
 | `--nextclade_dataset_reference` |                              |
 | `--skip_asciigenome`            |                              |
+| `--asciigenome_read_depth`      |                              |
+| `--asciigenome_window_size`     |                              |
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present.
 > **NB:** Parameter has been **added** if just the new parameter information is present.

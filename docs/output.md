@@ -569,6 +569,30 @@ Unless you are using [UMIs](https://emea.illumina.com/science/sequencing-method-
 
 <p align="center"><img src="images/r_amplicon_barplot.png" alt="R - Sample per-amplicon coverage plot"></p>
 
+### Freyja
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `variants/freyja/demix`
+  - `*.tsv`: Analysis results including the lineages present, their corresponding abundances, and summarization by constellation
+- `variants/freyja/freyja_db`
+  - `.json`: dataset containing lineage metadata that correspond to barcodes.
+  - `.yml`: dataset containing the lineage topology.
+  - `barcodes.feather`: dataset containing lineage defining barcodes.
+- `variants/freyja/variants`
+  - `*.variants.tsv`: Analysis results including identified variants in a gff-like format
+  - `*.depth.tsv`: Analysis results including the depth of the identified variants
+- `variants/freyja/bootstrap`
+  - `*lineages.csv` Analysis results inculding lineages present and their corresponding abundances with variation identified through bootstrapping
+  - `*summarized.csv`Analysis results inculding lineages present but summarized by constellation and their corresponding abundances with variation identified through bootstrapping
+
+</details>
+
+[Freyja](https://github.com/andersen-lab/Freyja) is a tool to recover relative lineage abundances from mixed SARS-CoV-2 samples from a sequencing dataset (BAM aligned to the Hu-1 reference). The method uses lineage-determining mutational "barcodes" derived from the [UShER](https://usher-wiki.readthedocs.io/en/latest/#) global phylogenetic tree as a basis set to solve the constrained (unit sum, non-negative) de-mixing problem.
+
+<p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
+
 ### iVar variants
 
 <details markdown="1">
@@ -633,30 +657,6 @@ iVar outputs a tsv format which is not compatible with downstream analysis such 
 
 ![MultiQC - SnpEff annotation counts](images/mqc_snpeff_plot.png)
 
-### Freyja
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `<CALLER>/freyja/demix`
-  - `*.tsv`: Analysis results including the lineages present, their corresponding abundances, and summarization by constellation
-- `<CALLER>/freyja/freyja_db`
-  - `.json`: dataset containing lineage metadata that correspond to barcodes.
-  - `.yml`: dataset containing the lineage topology.
-  - `.csv`: dataset containing lineage defining barcodes.
-- `<CALLER>/freyja/variants`
-  - `*.variants.tsv`: Analysis results including identified variants in a gff-like format
-  - `*.depth.tsv`: Analysis results including the depth of the identified variants
-- `<CALLER>/freyja/boot`
-  - `*lineages.csv` Analysis results inculding lineages present and their corresponding abundances with variation identified through bootstrapping
-  - `*summarized.csv`Analysis results inculding lineages present but summarized by constellation and their corresponding abundances with variation identified through bootstrapping
-
-</details>
-
-[Freyja](https://github.com/andersen-lab/Freyja) is a tool to recover relative lineage abundances from mixed SARS-CoV-2 samples from a sequencing dataset (BAM aligned to the Hu-1 reference). The method uses lineage-determining mutational "barcodes" derived from the [UShER](https://usher-wiki.readthedocs.io/en/latest/#) global phylogenetic tree as a basis set to solve the constrained (unit sum, non-negative) de-mixing problem.
-
-<p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
-
 ### iVar consensus
 
 <details markdown="1">
@@ -705,7 +705,7 @@ As described in the [iVar variants](#ivar-variants) section, iVar can be used in
 <details markdown="1">
 <summary>Output files</summary>
 
-- `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/quast/`
+- `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/quast.consensus/`
   - `report.html`: Results report in HTML format. Also available in various other file formats i.e. `report.pdf`, `report.tex`, `report.tsv` and `report.txt`.
 
 **NB:** The value of `<VARIANT_CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
@@ -961,7 +961,7 @@ In the variant calling branch of the pipeline we are using [iVar trim](#ivar-tri
 <details markdown="1">
 <summary>Output files</summary>
 
-- `assembly/<ASSEMBLER>/quast/`
+- `assembly/<ASSEMBLER>/quast.<ASSEMBLER>/`
   - `report.html`: Results report in HTML format. Also available in various other file formats i.e. `report.pdf`, `report.tex`, `report.tsv` and `report.txt`.
 
 **NB:** The value of `<ASSEMBLER>` in the output directory name above is determined by the `--assemblers` parameter (Default: 'spades').

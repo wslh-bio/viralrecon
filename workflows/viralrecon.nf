@@ -1001,9 +1001,12 @@ workflow VIRALRECON {
             ch_versions = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_GENOME.out.versions)
 
             MOSDEPTH_AMPLICON (
-                ARTIC_MINION.out.bam_primertrimmed.join(ARTIC_MINION.out.bai_primertrimmed, by: [0]).join(PREPARE_GENOME.out.primer_collapsed_bed),
+                ARTIC_MINION.out.bam_primertrimmed
+                    .join(ARTIC_MINION.out.bai_primertrimmed, by: [0])
+                    .combine(PREPARE_GENOME.out.primer_collapsed_bed),
                 [ [:], [] ]
            )
+
             ch_versions = ch_versions.mix(MOSDEPTH_AMPLICON.out.versions.first())
 
             PLOT_MOSDEPTH_REGIONS_AMPLICON (

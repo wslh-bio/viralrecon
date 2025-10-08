@@ -722,6 +722,7 @@ As described in the [iVar variants](#ivar-variants) section, iVar can be used in
 
 - `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will atempt to auto-update its database before runing the pipeline. The used database is stored in this folder. Useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<VARIANT_CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
 **NB:** The value of `<CONSENSUS_CALLER>` in the output directory name above is determined by the `--consensus_caller` parameter (Default: 'bcftools' for both '--protocol amplicon' and '--protocol metagenomic').

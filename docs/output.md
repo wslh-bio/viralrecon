@@ -223,6 +223,7 @@ BAM files containing the original alignments from either Minimap2 or BWA are fur
 
 - `<CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will atempt to auto-update its database before runing the pipeline. The used database is stored in this folder. Useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<CALLER>` in the output directory name above is determined by the `--artic_minion_caller` parameter (Default: 'nanopolish').
 
@@ -321,7 +322,7 @@ Table columns:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `multiqc/<CALLER>/`
+- `multiqc/`
   - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
   - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
   - `summary_variants_metrics_mqc.csv`: file containing a selection of read alignmnet and variant calling metrics. The same metrics will also be added to the top of the MultiQC report.

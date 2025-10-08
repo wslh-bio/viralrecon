@@ -12,6 +12,7 @@ The directories listed below will be created in the results directory after the 
     - [Nanopore: pycoQC](#nanopore-pycoqc)
     - [Nanopore: artic guppyplex](#nanopore-artic-guppyplex)
     - [Nanopore: NanoPlot](#nanopore-nanoplot)
+    - [Nanopore: Kraken2](#nanopore-kraken2)
   - [Nanopore: Variant calling](#nanopore-variant-calling)
     - [Nanopore: artic minion](#nanopore-artic-minion)
   - [Nanopore: Downstream analysis](#nanopore-downstream-analysis)
@@ -81,6 +82,24 @@ The [artic guppyplex](https://artic.readthedocs.io/en/latest/commands/) tool fro
 [NanoPlot](https://github.com/wdecoster/NanoPlot) it a tool that can be used to produce general quality metrics from various Nanopore-based input files including fastq files e.g. quality score distribution, read lengths and other general stats.
 
 <p align="center"><img src="images/nanoplot_readlengthquality.png" alt="Nanoplot - Read quality vs read length" width="600"></p>
+
+### Nanoplot: Kraken2
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `kraken2/`
+  - `*.kraken2.report.txt`: Kraken 2 taxonomic report. See [here](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual#sample-report-output-format) for a detailed description of the format.
+  - `*.classified.fastq.gz`: Fastq file with reads that classified with the database.
+  - `*.unclassified.fastq.gz`: Fastq file with reads that did not classified with the database.
+
+</details>
+
+[Kraken 2](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) is a sequence classifier that assigns taxonomic labels to DNA sequences. Kraken 2 examines the k-mers within a query sequence and uses the information within those k-mers to query a database. That database maps k-mers to the lowest common ancestor (LCA) of all genomes known to contain a given k-mer.
+
+We use a Kraken 2 database in this workflow to filter out reads specific to the host genome before performing the _de novo_ assembly steps in the pipeline. This filtering is not performed in the variant calling arm of the pipeline by default but Kraken 2 is still run to obtain an estimate of host reads, however, the filtering can be amended via the `--kraken2_variants_host_filter` parameter.
+
+![MultiQC - Kraken 2 classification plot](images/mqc_kraken2_plot.png)
 
 ## Nanopore: Variant calling
 

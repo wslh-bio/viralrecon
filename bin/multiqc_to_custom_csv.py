@@ -285,10 +285,10 @@ def main(args=None):
             [
                 (
                     "Coverage median",
-                    ["variants_mosdepth-median_coverage"],
+                    ["mosdepth-median_coverage"],
                 ),
-                ("% Coverage > 1x", ["variants_mosdepth-1_x_pc"]),
-                ("% Coverage > 10x", ["variants_mosdepth-10_x_pc"]),
+                ("% Coverage > 1x", ["mosdepth-1_x_pc"]),
+                ("% Coverage > 10x", ["mosdepth-10_x_pc"]),
             ],
         ),
         (

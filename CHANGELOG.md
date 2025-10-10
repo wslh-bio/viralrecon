@@ -90,7 +90,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `cutadapt`        | 4.2         | 5.0         |
 | `fastp`           | 0.23.2      | 1.0.1       |
 | `fastqc`          | 0.11.9      | 0.12.1      |
-| `freyja`          |             | 1.5.3       |
+| `freyja`          |             | 2.0.1       |
 | `grep`            | 3.4         | 3.11        |
 | `gzip`            |             | 1.13        |
 | `htslib`          | 1.20        | 1.22.1      |

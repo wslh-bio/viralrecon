@@ -12,6 +12,7 @@ The directories listed below will be created in the results directory after the 
     - [Nanopore: pycoQC](#nanopore-pycoqc)
     - [Nanopore: artic guppyplex](#nanopore-artic-guppyplex)
     - [Nanopore: NanoPlot](#nanopore-nanoplot)
+    - [Nanopore: Kraken2](#nanopore-kraken2)
   - [Nanopore: Variant calling](#nanopore-variant-calling)
     - [Nanopore: artic minion](#nanopore-artic-minion)
   - [Nanopore: Downstream analysis](#nanopore-downstream-analysis)
@@ -81,6 +82,24 @@ The [artic guppyplex](https://artic.readthedocs.io/en/latest/commands/) tool fro
 [NanoPlot](https://github.com/wdecoster/NanoPlot) it a tool that can be used to produce general quality metrics from various Nanopore-based input files including fastq files e.g. quality score distribution, read lengths and other general stats.
 
 <p align="center"><img src="images/nanoplot_readlengthquality.png" alt="Nanoplot - Read quality vs read length" width="600"></p>
+
+### Nanoplot: Kraken2
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `kraken2/`
+  - `*.kraken2.report.txt`: Kraken 2 taxonomic report. See [here](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual#sample-report-output-format) for a detailed description of the format.
+  - `*.classified.fastq.gz`: Fastq file with reads that classified with the database.
+  - `*.unclassified.fastq.gz`: Fastq file with reads that were not classified with the database.
+
+</details>
+
+[Kraken 2](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) is a sequence classifier that assigns taxonomic labels to DNA sequences. Kraken 2 examines the k-mers within a query sequence and uses the information within those k-mers to query a database. That database maps k-mers to the lowest common ancestor (LCA) of all genomes known to contain a given k-mer.
+
+We use a Kraken 2 database in this workflow to filter out reads specific to the host genome before performing the _de novo_ assembly steps in the pipeline. This filtering is not performed in the variant calling arm of the pipeline by default but Kraken 2 is still run to obtain an estimate of host reads, however, the filtering can be amended via the `--kraken2_variants_host_filter` parameter.
+
+![MultiQC - Kraken 2 classification plot](images/mqc_kraken2_plot.png)
 
 ## Nanopore: Variant calling
 
@@ -223,6 +242,7 @@ BAM files containing the original alignments from either Minimap2 or BWA are fur
 
 - `<CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will attempt to auto-update its database before running the pipeline. The used database is stored in this folder and may be useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<CALLER>` in the output directory name above is determined by the `--artic_minion_caller` parameter (Default: 'nanopolish').
 
@@ -321,7 +341,7 @@ Table columns:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `multiqc/<CALLER>/`
+- `multiqc/`
   - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
   - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
   - `summary_variants_metrics_mqc.csv`: file containing a selection of read alignmnet and variant calling metrics. The same metrics will also be added to the top of the MultiQC report.
@@ -354,10 +374,10 @@ An example MultiQC report generated from a full-sized dataset can be viewed on t
     - [picard MarkDuplicates](#picard-markduplicates)
     - [picard CollectMultipleMetrics](#picard-collectmultiplemetrics)
     - [mosdepth](#mosdepth)
+    - [Freyja](#freyja)
     - [iVar variants](#ivar-variants)
     - [BCFTools call](#bcftools-call)
     - [SnpEff and SnpSift](#snpeff-and-snpsift)
-    - [Freyja](#freyja)
     - [iVar consensus](#ivar-consensus)
     - [BCFTools and BEDTools](#bcftools-and-bedtools)
     - [QUAST](#quast)
@@ -569,6 +589,30 @@ Unless you are using [UMIs](https://emea.illumina.com/science/sequencing-method-
 
 <p align="center"><img src="images/r_amplicon_barplot.png" alt="R - Sample per-amplicon coverage plot"></p>
 
+### Freyja
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `variants/freyja/demix`
+  - `*.tsv`: Analysis results including the lineages present, their corresponding abundances, and summarization by constellation
+- `variants/freyja/freyja_db`
+  - `.json`: dataset containing lineage metadata that correspond to barcodes.
+  - `.yml`: dataset containing the lineage topology.
+  - `barcodes.feather`: dataset containing lineage defining barcodes.
+- `variants/freyja/variants`
+  - `*.variants.tsv`: Analysis results including identified variants in a gff-like format
+  - `*.depth.tsv`: Analysis results including the depth of the identified variants
+- `variants/freyja/bootstrap`
+  - `*lineages.csv` Analysis results inculding lineages present and their corresponding abundances with variation identified through bootstrapping
+  - `*summarized.csv`Analysis results inculding lineages present but summarized by constellation and their corresponding abundances with variation identified through bootstrapping
+
+</details>
+
+[Freyja](https://github.com/andersen-lab/Freyja) is a tool to recover relative lineage abundances from mixed SARS-CoV-2 samples from a sequencing dataset (BAM aligned to the Hu-1 reference). The method uses lineage-determining mutational "barcodes" derived from the [UShER](https://usher-wiki.readthedocs.io/en/latest/#) global phylogenetic tree as a basis set to solve the constrained (unit sum, non-negative) de-mixing problem.
+
+<p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
+
 ### iVar variants
 
 <details markdown="1">
@@ -633,30 +677,6 @@ iVar outputs a tsv format which is not compatible with downstream analysis such 
 
 ![MultiQC - SnpEff annotation counts](images/mqc_snpeff_plot.png)
 
-### Freyja
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `<CALLER>/freyja/demix`
-  - `*.tsv`: Analysis results including the lineages present, their corresponding abundances, and summarization by constellation
-- `<CALLER>/freyja/freyja_db`
-  - `.json`: dataset containing lineage metadata that correspond to barcodes.
-  - `.yml`: dataset containing the lineage topology.
-  - `.csv`: dataset containing lineage defining barcodes.
-- `<CALLER>/freyja/variants`
-  - `*.variants.tsv`: Analysis results including identified variants in a gff-like format
-  - `*.depth.tsv`: Analysis results including the depth of the identified variants
-- `<CALLER>/freyja/boot`
-  - `*lineages.csv` Analysis results inculding lineages present and their corresponding abundances with variation identified through bootstrapping
-  - `*summarized.csv`Analysis results inculding lineages present but summarized by constellation and their corresponding abundances with variation identified through bootstrapping
-
-</details>
-
-[Freyja](https://github.com/andersen-lab/Freyja) is a tool to recover relative lineage abundances from mixed SARS-CoV-2 samples from a sequencing dataset (BAM aligned to the Hu-1 reference). The method uses lineage-determining mutational "barcodes" derived from the [UShER](https://usher-wiki.readthedocs.io/en/latest/#) global phylogenetic tree as a basis set to solve the constrained (unit sum, non-negative) de-mixing problem.
-
-<p align="center"><img src="images/freyja_screenshot.png" alt="Freyja screenshot"></p>
-
 ### iVar consensus
 
 <details markdown="1">
@@ -705,7 +725,7 @@ As described in the [iVar variants](#ivar-variants) section, iVar can be used in
 <details markdown="1">
 <summary>Output files</summary>
 
-- `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/quast/`
+- `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/quast.consensus/`
   - `report.html`: Results report in HTML format. Also available in various other file formats i.e. `report.pdf`, `report.tex`, `report.tsv` and `report.txt`.
 
 **NB:** The value of `<VARIANT_CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
@@ -722,6 +742,7 @@ As described in the [iVar variants](#ivar-variants) section, iVar can be used in
 
 - `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will attempt to auto-update its database before running the pipeline. The used database is stored in this folder and may be useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<VARIANT_CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
 **NB:** The value of `<CONSENSUS_CALLER>` in the output directory name above is determined by the `--consensus_caller` parameter (Default: 'bcftools' for both '--protocol amplicon' and '--protocol metagenomic').
@@ -961,7 +982,7 @@ In the variant calling branch of the pipeline we are using [iVar trim](#ivar-tri
 <details markdown="1">
 <summary>Output files</summary>
 
-- `assembly/<ASSEMBLER>/quast/`
+- `assembly/<ASSEMBLER>/quast.<ASSEMBLER>/`
   - `report.html`: Results report in HTML format. Also available in various other file formats i.e. `report.pdf`, `report.tex`, `report.tsv` and `report.txt`.
 
 **NB:** The value of `<ASSEMBLER>` in the output directory name above is determined by the `--assemblers` parameter (Default: 'spades').

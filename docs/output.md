@@ -91,7 +91,7 @@ The [artic guppyplex](https://artic.readthedocs.io/en/latest/commands/) tool fro
 - `kraken2/`
   - `*.kraken2.report.txt`: Kraken 2 taxonomic report. See [here](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual#sample-report-output-format) for a detailed description of the format.
   - `*.classified.fastq.gz`: Fastq file with reads that classified with the database.
-  - `*.unclassified.fastq.gz`: Fastq file with reads that did not classified with the database.
+  - `*.unclassified.fastq.gz`: Fastq file with reads that were not classified with the database.
 
 </details>
 
@@ -242,7 +242,7 @@ BAM files containing the original alignments from either Minimap2 or BWA are fur
 
 - `<CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
-  - `pangolin_db`: When `pango_database` is not provided, pangolin will atempt to auto-update its database before runing the pipeline. The used database is stored in this folder. Useful for replication. Can be given as `pango_database` input directory.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will attempt to auto-update its database before running the pipeline. The used database is stored in this folder and may be useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<CALLER>` in the output directory name above is determined by the `--artic_minion_caller` parameter (Default: 'nanopolish').
 
@@ -742,7 +742,7 @@ As described in the [iVar variants](#ivar-variants) section, iVar can be used in
 
 - `variants/<VARIANT_CALLER>/consensus/<CONSENSUS_CALLER>/pangolin/`
   - `*.pangolin.csv`: Lineage analysis results from Pangolin.
-  - `pangolin_db`: When `pango_database` is not provided, pangolin will atempt to auto-update its database before runing the pipeline. The used database is stored in this folder. Useful for replication. Can be given as `pango_database` input directory.
+  - `pangolin_db`: When `pango_database` is not provided, pangolin will attempt to auto-update its database before running the pipeline. The used database is stored in this folder and may be useful for replication. Can be given as `pango_database` input directory.
 
 **NB:** The value of `<VARIANT_CALLER>` in the output directory name above is determined by the `--variant_caller` parameter (Default: 'ivar' for '--protocol amplicon' and 'bcftools' for '--protocol metagenomic').
 **NB:** The value of `<CONSENSUS_CALLER>` in the output directory name above is determined by the `--consensus_caller` parameter (Default: 'bcftools' for both '--protocol amplicon' and '--protocol metagenomic').

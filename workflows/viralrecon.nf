@@ -1079,7 +1079,7 @@ workflow VIRALRECON {
         //
         if (!params.skip_freyja) {
             BAM_VARIANT_DEMIX_BOOT_FREYJA(
-                ARTIC_MINION.out.bam_primertrimmed,
+                ch_filtered_bam_nanopore,
                 PREPARE_GENOME.out.fasta,
                 params.skip_freyja_boot,
                 params.freyja_repeats,

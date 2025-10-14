@@ -1,0 +1,14 @@
+{
+    "input": {
+        "description": "Path to csv samplesheet of samples.",
+        "optional":false
+    },
+    "outdir": {
+        "description": "The output directory where the results will be saved",
+        "optional":false
+    },
+    "genome" : {
+        "description" : "Reference genome",
+        "optional":false
+    }
+}

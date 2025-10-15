@@ -987,25 +987,25 @@ workflow VIRALRECON {
         //
         ch_fail_mapping_multiqc_nanopore = Channel.empty()
         FILTER_BAM_SAMTOOLS.out.flagstat
-            .map { meta, flagstat -> 
+            .map { meta, flagstat ->
                 def (mapped_reads, pass) = getFlagstatMappedReads(flagstat, params)
-                [ meta, mapped_reads, pass ] 
+                [ meta, mapped_reads, pass ]
             }
             .set { ch_mapped_reads_nanopore }
 
         // Filter BAM files based on mapping threshold
         ARTIC_MINION.out.bam_primertrimmed
             .join(ch_mapped_reads_nanopore, by: [0])
-            .map { meta, bam, mapped, pass -> 
-                if (pass) [ meta, bam ] 
+            .map { meta, bam, mapped, pass ->
+                if (pass) [ meta, bam ]
             }
             .set { ch_filtered_bam_nanopore }
 
-        // Filter BAI files based on mapping threshold  
+        // Filter BAI files based on mapping threshold
         ARTIC_MINION.out.bai_primertrimmed
             .join(ch_mapped_reads_nanopore, by: [0])
-            .map { meta, bai, mapped, pass -> 
-                if (pass) [ meta, bai ] 
+            .map { meta, bai, mapped, pass ->
+                if (pass) [ meta, bai ]
             }
             .set { ch_filtered_bai_nanopore }
 

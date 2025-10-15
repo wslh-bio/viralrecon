@@ -1157,7 +1157,7 @@ workflow VIRALRECON {
                 PREPARE_GENOME.out.fasta.collect().map { [ [:], it ] },
                 ch_genome_gff ? PREPARE_GENOME.out.gff.map { [ [:], it ] } : [ [:], [] ],
             )
-            ch_multiqc_files  = ch_multiqc_files.mix( QUAST.out.tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files = ch_multiqc_files.mix(QUAST.out.results.collect{it[1]}.ifEmpty([]))
             ch_versions      = ch_versions.mix(QUAST.out.versions)
         }
 

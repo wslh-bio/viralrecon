@@ -28,7 +28,9 @@ module_order:
   - freyja
   - bcftools
   - snpeff
-  - quast
+  - quast:
+      path_filters:
+        - "./*/quast/report.tsv"
 
 report_section_order:
   fail_barcodes_no_sample:

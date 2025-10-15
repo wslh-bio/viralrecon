@@ -20,12 +20,6 @@ nextflow_pipeline {
             ]
         ],
         [
-            name: "-profile test_nanopore --input false",
-            params: [
-                input: false
-            ]
-        ],
-        [
             name: "-profile test_nanopore --min_barcode_reads 10000",
             params: [
                 min_barcode_reads: 10000

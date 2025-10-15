@@ -1008,6 +1008,14 @@ workflow VIRALRECON {
             }
             .set { ch_filtered_bai_nanopore }
 
+        // Filter FASTA files based on mapping threshold
+        ARTIC_MINION.out.fasta
+            .join(ch_mapped_reads_nanopore, by: [0])
+            .map { meta, fasta, mapped_reads, pass ->
+                if (pass) [ meta, fasta ]
+            }
+            .set { ch_filtered_fasta_nanopore }
+
         // Track passed/failed samples for MultiQC
         ch_mapped_reads_nanopore
             .branch { meta, mapped, pass ->
@@ -1148,7 +1156,7 @@ workflow VIRALRECON {
         // MODULE: Consensus QC across all samples with QUAST
         //
         if (!params.skip_variants_quast) {
-            ARTIC_MINION.out.fasta
+            ch_filtered_fasta_nanopore
                 .collect{ it[1] }
                 .map { consensus_collect -> tuple([id: "quast"], consensus_collect) }
                 .set { ch_to_quast }

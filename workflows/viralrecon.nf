@@ -866,7 +866,6 @@ workflow VIRALRECON {
                     return [meta, fastq]
                 }
         ch_assembly_fastq  = ch_variants_fastq
-        ch_kraken2_multiqc = Channel.empty()
         if (!params.skip_kraken2) {
             KRAKEN2_KRAKEN2 (
                 ch_variants_fastq,
@@ -874,7 +873,7 @@ workflow VIRALRECON {
                 params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter,
                 params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter
             )
-            ch_kraken2_multiqc = KRAKEN2_KRAKEN2.out.report
+            ch_multiqc_files =  ch_multiqc_files.mix(KRAKEN2_KRAKEN2.out.report.collect{it[1]}.ifEmpty([]))
             ch_versions        = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
 
             if (params.kraken2_variants_host_filter) {

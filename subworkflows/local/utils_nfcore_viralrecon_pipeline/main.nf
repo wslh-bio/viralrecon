@@ -57,9 +57,9 @@ workflow PIPELINE_INITIALISATION {
         params.help,
         params.help_full,
         params.show_hidden,
-        null,
-        null,
-        null
+        '',
+        '',
+        'nextflow run nf-core/viralrecon -profile test,docker --outdir .'
     )
 
     //

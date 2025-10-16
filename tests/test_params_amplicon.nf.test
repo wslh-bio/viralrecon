@@ -68,7 +68,7 @@ nextflow_pipeline {
             ]
         ],
         [
-            name: "-profile test --skip_plasmidid",
+            name: "-profile test --skip_plasmidid false",
             params: [
                 skip_plasmidid: false
             ]

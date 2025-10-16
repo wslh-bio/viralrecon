@@ -50,7 +50,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 if (params.input)                 { ch_input          = file(params.input)                 } else { exit 1, 'Input samplesheet file not specified!' }
 if (params.spades_hmm)            { ch_spades_hmm     = file(params.spades_hmm)            } else { ch_spades_hmm = []                              }
-if (params.additional_annotation) { ch_additional_gtf = file(params.additional_annotation) } else { additional_annotation = []                      }
+if (params.additional_annotation) { ch_additional_gtf = file(params.additional_annotation) } else { ch_additional_gtf = Channel.empty()             }
 
 def assemblers = params.assemblers ? params.assemblers.split(',').collect{ it.trim().toLowerCase() } : []
 
@@ -59,7 +59,6 @@ if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' :
 
 if (params.fast5_dir)               { ch_fast5_dir          = file(params.fast5_dir)               } else { ch_fast5_dir          = [] }
 if (params.sequencing_summary)      { ch_sequencing_summary = file(params.sequencing_summary)      } else { ch_sequencing_summary = [] }
-if (params.additional_annotation)   { ch_additional_gtf     = file(params.additional_annotation)   } else { additional_annotation = [] }
 
 // Need to stage medaka model properly depending on whether it is a string or a file
 ch_medaka_model = Channel.empty()

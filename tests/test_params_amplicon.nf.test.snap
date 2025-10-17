@@ -1202,7 +1202,6 @@
     },
     "-profile test --skip_noninternal_primers --threeprime_adapters": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -2404,7 +2403,6 @@
     },
     "-profile test --skip_plasmidid false": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -3606,7 +3604,6 @@
     },
     "-profile test --skip_kraken2": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -4808,7 +4805,6 @@
     },
     "-profile test --spades_mode corona": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -6010,7 +6006,6 @@
     },
     "-profile test --bowtie2_index https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.bt2.index.tar.gz": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -7212,7 +7207,6 @@
     },
     "-profile test --skip_cutadapt --skip_snpeff": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -8414,7 +8408,6 @@
     },
     "-profile test --spades_mode metaviral": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -9616,7 +9609,6 @@
     },
     "-profile test --skip_variants": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -10818,7 +10810,6 @@
     },
     "-profile test --additional_annotation https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.gtf.gz": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -12020,7 +12011,6 @@
     },
     "-profile test --consensus_caller ivar": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -13222,7 +13212,6 @@
     },
     "-profile test --skip_assembly": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -14424,7 +14413,6 @@
     },
     "-profile test --variant_caller bcftools --consensus_caller ivar": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"

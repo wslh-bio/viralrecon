@@ -41,6 +41,9 @@ assembly/**/bandage/*.{png,svg}
 assembly/**/log/**
 assembly/cutadapt/fastqc/*.primer_trim*fastqc.{html,zip}
 assembly/minia/**
+assembly/**/plasmidid/**/*.gbk
+assembly/**/plasmidid/**/*.log
+assembly/**/plasmidid/**/kmer/**
 variants/*/consensus/*/base_qc/*.pdf
 variants/*/consensus/*/*filtered.{vcf.gz,vcf.gz.tbi}
 variants/bowtie2/picard_metrics/**

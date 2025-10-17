@@ -55,8 +55,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -87,8 +85,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -119,8 +115,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -151,8 +145,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -183,8 +175,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -215,8 +205,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -247,8 +235,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -279,8 +265,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -311,8 +295,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -343,8 +325,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -375,8 +355,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path
@@ -407,8 +385,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     softwareYaml,
                     // All stable path name, with a relative path

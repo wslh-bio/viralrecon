@@ -3952,7 +3952,6 @@
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/kmer/database.msh",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/kmer/database.screen.tab",
-                "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/kmer/mashclust_2025-10-17.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/logs",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/logs/draw_circos_images.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE1_PE/logs/plasmidID.log",
@@ -4016,7 +4015,6 @@
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/kmer/database.msh",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/kmer/database.screen.tab",
-                "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/kmer/mashclust_2025-10-17.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/logs",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/logs/draw_circos_images.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE2_PE/logs/plasmidID.log",
@@ -4080,7 +4078,6 @@
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/kmer/database.msh",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/kmer/database.screen.tab",
-                "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/kmer/mashclust_2025-10-17.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/logs",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/logs/draw_circos_images.log",
                 "assembly/spades/rnaviral/plasmidid/SAMPLE3_SE/logs/plasmidID.log",
@@ -4299,7 +4296,6 @@
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/kmer/database.msh",
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/kmer/database.screen.tab",
-                "assembly/unicycler/plasmidid/SAMPLE1_PE/kmer/mashclust_2025-10-17.log",
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/logs",
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/logs/draw_circos_images.log",
                 "assembly/unicycler/plasmidid/SAMPLE1_PE/logs/plasmidID.log",
@@ -4363,7 +4359,6 @@
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/kmer/database.msh",
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/kmer/database.screen.tab",
-                "assembly/unicycler/plasmidid/SAMPLE2_PE/kmer/mashclust_2025-10-17.log",
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/logs",
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/logs/draw_circos_images.log",
                 "assembly/unicycler/plasmidid/SAMPLE2_PE/logs/plasmidID.log",
@@ -4427,7 +4422,6 @@
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/kmer/database.filtered_0.80_term.mash.distances.tab",
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/kmer/database.msh",
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/kmer/database.screen.tab",
-                "assembly/unicycler/plasmidid/SAMPLE3_SE/kmer/mashclust_2025-10-17.log",
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/logs",
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/logs/draw_circos_images.log",
                 "assembly/unicycler/plasmidid/SAMPLE3_SE/logs/plasmidID.log",
@@ -5414,7 +5408,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-10-17T10:56:03.673072788"
+        "timestamp": "2025-10-17T15:29:36.343825388"
     },
     "-profile test --additional_annotation 'https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.gtf.gz'": {
         "content": [
@@ -6623,7 +6617,7 @@
                 "SAMPLE1_PE.variant_counts.log:md5,dca67b678c8fb1ff819c6e2549bd526d",
                 "SAMPLE2_PE.variant_counts.log:md5,3e36a199838f298a5db0e86f360d394e",
                 "SAMPLE3_SE.variant_counts.log:md5,bff4c9669df21990ba1eb566a9e6682d",
-                "SAMPLE1_PE.snpeff.genes.txt:md5,e01e2d515f38ad4c22d18b4324ab41aa",
+                "SAMPLE1_PE.snpeff.genes.txt:md5,e53d51215a73391c611d0dba515168c9",
                 "SAMPLE1_PE.snpsift.txt:md5,bec691d2192871b8091c5dff4a51d396",
                 "SAMPLE2_PE.snpeff.genes.txt:md5,771831227104a2f2462ff02547e72c97",
                 "SAMPLE2_PE.snpsift.txt:md5,b02c4532b35699c09f064f18279b4d8d",
@@ -6639,7 +6633,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-10-17T08:57:56.671549682"
+        "timestamp": "2025-10-17T15:39:36.270009784"
     },
     "-profile test --skip_kraken2": {
         "content": [

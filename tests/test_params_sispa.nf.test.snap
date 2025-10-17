@@ -1,7 +1,6 @@
 {
     "-profile test_sispa --gff false": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"

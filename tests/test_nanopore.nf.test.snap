@@ -1,7 +1,6 @@
 {
     "-profile test_nanopore": {
         "content": [
-            231,
             {
                 "ARTIC_GUPPYPLEX": {
                     "artic": "1.6.2"

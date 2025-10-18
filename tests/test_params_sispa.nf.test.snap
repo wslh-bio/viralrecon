@@ -1,7 +1,6 @@
 {
     "-profile test_sispa --gff false": {
         "content": [
-            187,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -1279,7 +1278,6 @@
     },
     "-profile test_sispa --genome 'NC_045512.2'": {
         "content": [
-            208,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"

@@ -1,7 +1,6 @@
 {
     "-profile test_nanopore": {
         "content": [
-            231,
             {
                 "ARTIC_GUPPYPLEX": {
                     "artic": "1.6.2"
@@ -904,7 +903,7 @@
                 "snpeff_variant_effects_class.yaml:md5,a390051d50c365385f73c5fd4fd0f308",
                 "snpeff_variant_effects_impact.yaml:md5,3a5795514362040257b3cbf2f4ca09b4",
                 "snpeff_variant_effects_region.yaml:md5,09af51089da122ec327d69815764d33c",
-                "NanoStats.txt:md5,b676164487423d40aef4b24e921792a8",
+                "NanoStats.txt:md5,716ec0d4ff3374e0db4f333f7b711c98",
                 "NanoStats.txt:md5,e2d2a7890875475f6d0289c0fd364756",
                 "NanoStats.txt:md5,8b19260f2bd107b0996ddad3e6e026d8",
                 "NanoStats.txt:md5,b6250725afb1f9220367ac08d3f5c317",

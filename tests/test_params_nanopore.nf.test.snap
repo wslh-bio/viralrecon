@@ -1,7 +1,6 @@
 {
     "-profile test_nanopore --gff false": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -1199,7 +1198,6 @@
     },
     "-profile test_nanopore --min_guppyplex_reads 10000": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -2397,7 +2395,6 @@
     },
     "-profile test_nanopore --artic_minion_caller medaka --sequencing_summary false --fast5_dir false": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -3595,7 +3592,6 @@
     },
     "-profile test_nanopore --additional_annotation https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.gtf.gz": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -4793,7 +4789,6 @@
     },
     "-profile test_nanopore --input false": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"
@@ -5991,7 +5986,6 @@
     },
     "-profile test_nanopore --min_barcode_reads 10000": {
         "content": [
-            200,
             {
                 "ABACAS": {
                     "abacas": "1.3.1"

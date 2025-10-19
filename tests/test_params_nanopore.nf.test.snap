@@ -802,7 +802,7 @@
                 "pycoqc_stats_table.yaml:md5,7e91d1025c519911af28386064444b9a",
                 "quast_num_contigs.yaml:md5,028eb76be9f7a0dd50abeb9be84d246b",
                 "quast_table.yaml:md5,f70c349041a3ae71c2c23328d0d2f6e8",
-                "NanoStats.txt:md5,716ec0d4ff3374e0db4f333f7b711c98",
+                "NanoStats.txt:md5,b676164487423d40aef4b24e921792a8",
                 "NanoStats.txt:md5,e2d2a7890875475f6d0289c0fd364756",
                 "NanoStats.txt:md5,8b19260f2bd107b0996ddad3e6e026d8",
                 "NanoStats.txt:md5,b6250725afb1f9220367ac08d3f5c317",
@@ -870,7 +870,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-10-17T14:29:58.591521159"
+        "timestamp": "2025-10-19T15:07:19.430765295"
     },
     "-profile test_nanopore --additional_annotation 'https://github.com/nf-core/test-datasets/raw/refs/heads/viralrecon/genome/MN908947.3/GCA_009858895.3_ASM985889v3_genomic.200409.gtf.gz'": {
         "content": [
@@ -1788,7 +1788,7 @@
                 "snpeff_variant_effects_class.yaml:md5,a390051d50c365385f73c5fd4fd0f308",
                 "snpeff_variant_effects_impact.yaml:md5,3a5795514362040257b3cbf2f4ca09b4",
                 "snpeff_variant_effects_region.yaml:md5,09af51089da122ec327d69815764d33c",
-                "NanoStats.txt:md5,b676164487423d40aef4b24e921792a8",
+                "NanoStats.txt:md5,716ec0d4ff3374e0db4f333f7b711c98",
                 "NanoStats.txt:md5,e2d2a7890875475f6d0289c0fd364756",
                 "NanoStats.txt:md5,8b19260f2bd107b0996ddad3e6e026d8",
                 "NanoStats.txt:md5,b6250725afb1f9220367ac08d3f5c317",
@@ -1856,11 +1856,10 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-10-16T13:14:13.203881645"
+        "timestamp": "2025-10-19T15:14:28.831515866"
     },
     "-profile test_nanopore --min_guppyplex_reads 10000": {
         "content": [
-            38,
             {
                 "ARTIC_GUPPYPLEX": {
                     "artic": "1.6.2"
@@ -3137,27 +3136,7 @@
     },
     "-profile test_nanopore --min_barcode_reads 10000": {
         "content": [
-            11,
             {
-                "COLLAPSE_PRIMERS": {
-                    "python": "3.13.2"
-                },
-                "CUSTOM_GETCHROMSIZES": {
-                    "getchromsizes": "1.22.1"
-                },
-                "FREYJA_UPDATE": {
-                    "freyja": "2.0.0"
-                },
-                "GUNZIP_FASTA": {
-                    "gunzip": 1.13
-                },
-                "GUNZIP_GFF": {
-                    "gunzip": 1.13
-                },
-                "PANGOLIN_UPDATEDATA": {
-                    "pangolin": "4.3.1"
-                },
-                "PYCOQC": {
                 "COLLAPSE_PRIMERS": {
                     "python": "3.13.2"
                 },

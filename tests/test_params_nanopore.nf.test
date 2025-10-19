@@ -41,8 +41,11 @@ nextflow_pipeline {
         ]
     ]
 
+    // Loop through scenarios and generate tests dynamically
+    // Run all tests
     test_scenario.each { scenario ->
         test(scenario.name) {
+
             when {
                 params {
                     outdir = "$outputDir"

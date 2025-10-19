@@ -28,6 +28,7 @@ fastp/*.fastp.html
 **/quast*/basic_stats/*.pdf
 **/quast*/quast.log
 **/snpeff/*.snpeff.{csv,summary.html}
+**/snpeff/*.snpeff.genes.txt
 **/mosdepth/*/all_samples.mosdepth.coverage.tsv
 **/mosdepth/*/*.pdf
 **/freyja/variants/*.variants.tsv

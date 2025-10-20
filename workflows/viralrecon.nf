@@ -4,11 +4,12 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog       } from 'plugin/nf-schema'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_viralrecon_pipeline'
+include { paramsSummaryLog             } from 'plugin/nf-schema'
+include { paramsSummaryMap             } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc         } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML       } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText       } from '../subworkflows/local/utils_nfcore_viralrecon_pipeline'
+include { getFlagstatMappedReads       } from '../subworkflows/local/utils_nfcore_viralrecon_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,7 +50,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 if (params.input)                 { ch_input          = file(params.input)                 } else { exit 1, 'Input samplesheet file not specified!' }
 if (params.spades_hmm)            { ch_spades_hmm     = file(params.spades_hmm)            } else { ch_spades_hmm = []                              }
-if (params.additional_annotation) { ch_additional_gtf = file(params.additional_annotation) } else { additional_annotation = []                      }
+if (params.additional_annotation) { ch_additional_gtf = file(params.additional_annotation) } else { ch_additional_gtf = Channel.empty()             }
 
 def assemblers = params.assemblers ? params.assemblers.split(',').collect{ it.trim().toLowerCase() } : []
 
@@ -58,7 +59,6 @@ if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' :
 
 if (params.fast5_dir)               { ch_fast5_dir          = file(params.fast5_dir)               } else { ch_fast5_dir          = [] }
 if (params.sequencing_summary)      { ch_sequencing_summary = file(params.sequencing_summary)      } else { ch_sequencing_summary = [] }
-if (params.additional_annotation)   { ch_additional_gtf     = file(params.additional_annotation)   } else { additional_annotation = [] }
 
 // Need to stage medaka model properly depending on whether it is a string or a file
 ch_medaka_model = Channel.empty()
@@ -351,7 +351,7 @@ workflow VIRALRECON {
         ch_fail_mapping_multiqc = Channel.empty()
         if (!params.skip_variants) {
             FASTQ_ALIGN_BOWTIE2.out.flagstat
-                .map { meta, flagstat -> [ meta ] + WorkflowIllumina.getFlagstatMappedReads(flagstat, params) }
+                .map { meta, flagstat -> [ meta ] + getFlagstatMappedReads(flagstat, params) }
                 .set { ch_mapped_reads }
 
             ch_bam
@@ -865,7 +865,6 @@ workflow VIRALRECON {
                     return [meta, fastq]
                 }
         ch_assembly_fastq  = ch_variants_fastq
-        ch_kraken2_multiqc = Channel.empty()
         if (!params.skip_kraken2) {
             KRAKEN2_KRAKEN2 (
                 ch_variants_fastq,
@@ -873,7 +872,7 @@ workflow VIRALRECON {
                 params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter,
                 params.kraken2_variants_host_filter || params.kraken2_assembly_host_filter
             )
-            ch_kraken2_multiqc = KRAKEN2_KRAKEN2.out.report
+            ch_multiqc_files =  ch_multiqc_files.mix(KRAKEN2_KRAKEN2.out.report.collect{it[1]}.ifEmpty([]))
             ch_versions        = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
 
             if (params.kraken2_variants_host_filter) {
@@ -982,13 +981,74 @@ workflow VIRALRECON {
         ch_versions = ch_versions.mix(FILTER_BAM_SAMTOOLS.out.versions)
 
         //
+        // Filter channels to get samples that passed minimum mapped reads threshold
+        //
+        ch_fail_mapping_multiqc_nanopore = Channel.empty()
+        FILTER_BAM_SAMTOOLS.out.flagstat
+            .map { meta, flagstat ->
+                def (mapped_reads, pass) = getFlagstatMappedReads(flagstat, params)
+                [ meta, mapped_reads, pass ]
+            }
+            .set { ch_mapped_reads_nanopore }
+
+        // Filter BAM files based on mapping threshold
+        ARTIC_MINION.out.bam_primertrimmed
+            .join(ch_mapped_reads_nanopore, by: [0])
+            .map { meta, bam, mapped, pass ->
+                if (pass) [ meta, bam ]
+            }
+            .set { ch_filtered_bam_nanopore }
+
+        // Filter BAI files based on mapping threshold
+        ARTIC_MINION.out.bai_primertrimmed
+            .join(ch_mapped_reads_nanopore, by: [0])
+            .map { meta, bai, mapped, pass ->
+                if (pass) [ meta, bai ]
+            }
+            .set { ch_filtered_bai_nanopore }
+
+        // Filter FASTA files based on mapping threshold
+        ARTIC_MINION.out.fasta
+            .join(ch_mapped_reads_nanopore, by: [0])
+            .map { meta, fasta, mapped_reads, pass ->
+                if (pass) [ meta, fasta ]
+            }
+            .set { ch_filtered_fasta_nanopore }
+
+        // Track passed/failed samples for MultiQC
+        ch_mapped_reads_nanopore
+            .branch { meta, mapped, pass ->
+                pass: pass
+                    pass_mapped_reads[meta.id] = mapped
+                    return [ "$meta.id\t$mapped" ]
+                fail: !pass
+                    fail_mapped_reads[meta.id] = mapped
+                    return [ "$meta.id\t$mapped" ]
+            }
+            .set { ch_pass_fail_mapped_nanopore }
+
+        // Create MultiQC report for failed samples
+        ch_pass_fail_mapped_nanopore
+            .fail
+            .collect()
+            .map {
+                tsv_data ->
+                    def header = ['Sample', 'Mapped reads']
+                    WorkflowCommons.multiqcTsvFromList(tsv_data, header)
+            }
+            .collectFile(name: 'fail_mapped_samples_nanopore_mqc.tsv')
+            .ifEmpty([])
+            .set { ch_fail_mapping_multiqc_nanopore }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc_nanopore)
+
+        //
         // MODULE: Genome-wide and amplicon-specific coverage QC plots
         //
         if (!params.skip_mosdepth) {
 
             MOSDEPTH_GENOME (
-                ARTIC_MINION.out.bam_primertrimmed
-                    .join(ARTIC_MINION.out.bai_primertrimmed, by: [0])
+                ch_filtered_bam_nanopore
+                    .join(ch_filtered_bai_nanopore, by: [0])
                     .map { meta, bam, bai -> [ meta, bam, bai, [] ] },
                 [ [:], [] ]
             )
@@ -1001,8 +1061,8 @@ workflow VIRALRECON {
             ch_versions = ch_versions.mix(PLOT_MOSDEPTH_REGIONS_GENOME.out.versions)
 
             MOSDEPTH_AMPLICON (
-                ARTIC_MINION.out.bam_primertrimmed
-                    .join(ARTIC_MINION.out.bai_primertrimmed, by: [0])
+                ch_filtered_bam_nanopore
+                    .join(ch_filtered_bai_nanopore, by: [0])
                     .combine(PREPARE_GENOME.out.primer_collapsed_bed),
                 [ [:], [] ]
            )
@@ -1079,7 +1139,7 @@ workflow VIRALRECON {
         //
         if (!params.skip_freyja) {
             BAM_VARIANT_DEMIX_BOOT_FREYJA(
-                ARTIC_MINION.out.bam_primertrimmed,
+                ch_filtered_bam_nanopore,
                 PREPARE_GENOME.out.fasta,
                 params.skip_freyja_boot,
                 params.freyja_repeats,
@@ -1095,7 +1155,7 @@ workflow VIRALRECON {
         // MODULE: Consensus QC across all samples with QUAST
         //
         if (!params.skip_variants_quast) {
-            ARTIC_MINION.out.fasta
+            ch_filtered_fasta_nanopore
                 .collect{ it[1] }
                 .map { consensus_collect -> tuple([id: "quast"], consensus_collect) }
                 .set { ch_to_quast }
@@ -1104,7 +1164,7 @@ workflow VIRALRECON {
                 PREPARE_GENOME.out.fasta.collect().map { [ [:], it ] },
                 ch_genome_gff ? PREPARE_GENOME.out.gff.map { [ [:], it ] } : [ [:], [] ],
             )
-            ch_multiqc_files  = ch_multiqc_files.mix( QUAST.out.tsv.collect{it[1]}.ifEmpty([]))
+            ch_multiqc_files = ch_multiqc_files.mix(QUAST.out.results.collect{it[1]}.ifEmpty([]))
             ch_versions      = ch_versions.mix(QUAST.out.versions)
         }
 

@@ -28,6 +28,7 @@ fastp/*.fastp.html
 **/quast*/basic_stats/*.pdf
 **/quast*/quast.log
 **/snpeff/*.snpeff.{csv,summary.html}
+**/snpeff/*.snpeff.genes.txt
 **/mosdepth/*/all_samples.mosdepth.coverage.tsv
 **/mosdepth/*/*.pdf
 **/freyja/variants/*.variants.tsv
@@ -40,6 +41,9 @@ assembly/**/bandage/*.{png,svg}
 assembly/**/log/**
 assembly/cutadapt/fastqc/*.primer_trim*fastqc.{html,zip}
 assembly/minia/**
+assembly/**/plasmidid/**/*.gbk
+assembly/**/plasmidid/**/*.log
+assembly/**/plasmidid/**/kmer/**
 variants/*/consensus/*/base_qc/*.pdf
 variants/*/consensus/*/*filtered.{vcf.gz,vcf.gz.tbi}
 variants/bowtie2/picard_metrics/**

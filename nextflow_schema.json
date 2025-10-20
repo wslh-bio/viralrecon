@@ -265,7 +265,9 @@
                     "description": "Specify the name where to store UShER database (default: 'freyja_db')."
                 },
                 "freyja_depthcutoff": {
-                    "type": "number",
+                    "type": "integer",
+                    "default": 0,
+                    "minimum": 0,
                     "description": "Specify a coverage depth minimum which excludes sites with coverage less than the specified value",
                     "fa_icon": "fas fa-hand-paper",
                     "help_text": "Using the `depthcutoff` option may result in some distinct lineages now having identical barcodes, which are grouped into the format `[lineage]-like(num)` (based on their shared phylogeny) in the output."
@@ -664,7 +666,7 @@
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
                     "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon",
                     "hidden": true
                 },
                 "trace_report_suffix": {

@@ -43,6 +43,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #509](https://github.com/nf-core/viralrecon/issues/465)] - Fix local component structure for modules and subworkflows
 - [[PR #511]](https://github.com/nf-core/viralrecon/pull/511) - Fixed nf-core pipeline lint and updated nf-core modules and subworflows
 - [[PR #520](https://github.com/nf-core/viralrecon/pull/520)] - Update of metro map for illumina workflow
+- [[PR #523]](https://github.com/nf-core/viralrecon/pull/523) - Fixed metro map for Nanopore, updated freyja version, added freyja to full testing, added min_mapped reads filter to Nanopore, added Kraken2 reports to Nanopore's MultiQC, fixed Quast report on Nanopore, re-write nf-test as scenarios.
 
 ### Parameters
 
@@ -90,7 +91,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `cutadapt`        | 4.2         | 5.0         |
 | `fastp`           | 0.23.2      | 1.0.1       |
 | `fastqc`          | 0.11.9      | 0.12.1      |
-| `freyja`          |             | 1.5.3       |
+| `freyja`          |             | 2.0.1       |
 | `grep`            | 3.4         | 3.11        |
 | `gzip`            |             | 1.13        |
 | `htslib`          | 1.20        | 1.22.1      |

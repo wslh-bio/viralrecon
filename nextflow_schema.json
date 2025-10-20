@@ -265,7 +265,7 @@
                     "description": "Specify the name where to store UShER database (default: 'freyja_db')."
                 },
                 "freyja_depthcutoff": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 0,
                     "minimum": 0,
                     "description": "Specify a coverage depth minimum which excludes sites with coverage less than the specified value",

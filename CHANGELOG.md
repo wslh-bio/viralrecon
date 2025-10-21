@@ -16,6 +16,11 @@ Special thanks to the following for their code contributions to the release:
 - [Sarai Varona](https://github.com/svarona)
 - [Jaime Ozáez](https://github.com/jaimeozaez)
 - [Sara Monzon](https://github.com/saramonzon)
+- [Matthias Hörtenhuber](https://github.com/mashehu)
+- [Anna Norén](https://github.com/AnnaNoren)
+- [JC Jossart](https://github.com/cjjossart)
+- [Leo Caparica](https://github.com/CaparicaLeo)
+- [Michael L Heuer](https://github.com/heuermh)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 

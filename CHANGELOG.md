@@ -3,7 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unpublished Version / DEV]
+<!-- Release names are chosen by a combination of Dog + Flower in Code Name Generator -->
+
+## [[3.0.0](https://github.com/nf-core/viralrecon/releases/tag/3.0.0)] Waterdog Hibiscus - 2025-10-21
 
 ### Credits
 
@@ -14,6 +16,11 @@ Special thanks to the following for their code contributions to the release:
 - [Sarai Varona](https://github.com/svarona)
 - [Jaime Ozáez](https://github.com/jaimeozaez)
 - [Sara Monzon](https://github.com/saramonzon)
+- [Matthias Hörtenhuber](https://github.com/mashehu)
+- [Anna Norén](https://github.com/AnnaNoren)
+- [JC Jossart](https://github.com/cjjossart)
+- [Leo Caparica](https://github.com/CaparicaLeo)
+- [Michael L Heuer](https://github.com/heuermh)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 

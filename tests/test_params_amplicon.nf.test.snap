@@ -175,7 +175,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -1241,7 +1241,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -1998,7 +1998,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -3076,7 +3076,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -3793,7 +3793,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -5578,7 +5578,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -6789,7 +6789,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -7925,7 +7925,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -8938,7 +8938,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -9695,7 +9695,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -10851,7 +10851,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -11505,7 +11505,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [
@@ -12253,7 +12253,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [

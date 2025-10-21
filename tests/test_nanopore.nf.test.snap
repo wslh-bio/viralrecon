@@ -109,7 +109,7 @@
                     "vcflib": "1.0.14"
                 },
                 "Workflow": {
-                    "nf-core/viralrecon": "v2.7.0dev"
+                    "nf-core/viralrecon": "v3.0.0"
                 }
             },
             [

@@ -5,4 +5,4 @@ channels:
   - bioconda
 dependencies:
   - bioconda::artic=1.2.3
-  - bioconda::htslib=1.17 # can't be updated due to dependency issues
+  - bioconda::htslib=1.15.1 # can't be updated due to dependency issues

@@ -51,6 +51,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #511]](https://github.com/nf-core/viralrecon/pull/511) - Fixed nf-core pipeline lint and updated nf-core modules and subworflows
 - [[PR #520](https://github.com/nf-core/viralrecon/pull/520)] - Update of metro map for illumina workflow
 - [[PR #523]](https://github.com/nf-core/viralrecon/pull/523) - Fixed metro map for Nanopore, updated freyja version, added freyja to full testing, added min_mapped reads filter to Nanopore, added Kraken2 reports to Nanopore's MultiQC, fixed Quast report on Nanopore, re-write nf-test as scenarios.
+- [[PR #538]](https://github.com/nf-core/viralrecon/pull/538) - Fixed some conda versions that were problematic in tests or different from singularity/docker
 
 ### Parameters
 
@@ -118,7 +119,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `python`          | 3.9.5       | 3.13.2      |
 | `quast`           | 5.2.0       | 5.3.0       |
 | `regex`           | 2021.11.10  | 2024.11.6   |
-| `r-base`          | 4.0.3       | 4.2         |
+| `r-base`          | 4.0.3       | 4.2.0       |
 | `r-ggplot2`       | 3.3.3       | 3.5.1       |
 | `r-optparse`      | 1.6.6       | 1.7.5       |
 | `r-reshape2`      | 1.4.4       | 1.4.4       |
@@ -128,7 +129,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | `r-viridis`       | 0.5.1       | 0.6.5       |
 | `samtools`        | 1.16.1      | 1.22.1      |
 | `scipy`           | 1.7.3       | 1.15.2      |
-| `sed`             | 4.7         | 4.8         |
+| `sed`             | 4.7         | 4.9         |
 | `snakemake`       | 7.30.1      | 8.30.0      |
 | `spades`          | 3.15.5      | 4.1.0       |
 | `tabix`           | 1.11        | 1.21        |

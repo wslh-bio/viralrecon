@@ -96,9 +96,6 @@
                 "MAKE_VARIANTS_LONG_TABLE": {
                     "python": "3.13.2"
                 },
-                "MINIA": {
-                    "minia": "3.2.5"
-                },
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.11"
                 },

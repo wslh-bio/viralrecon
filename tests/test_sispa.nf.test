@@ -21,6 +21,7 @@ nextflow_pipeline {
             def softwareYaml = removeNextflowVersion("$outputDir/pipeline_info/nf_core_viralrecon_software_mqc_versions.yml")
             softwareYaml.remove('NEXTCLADE_RUN')
             softwareYaml.remove('PLOT_BASE_DENSITY')
+            softwareYaml.remove('MINIA')
 
             assertAll(
                 { assert workflow.success},

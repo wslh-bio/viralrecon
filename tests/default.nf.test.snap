@@ -947,11 +947,8 @@
                 "variants/ivar/variants_long_table.csv"
             ],
             [
-                "SAMPLE1_PE.assembly.gfa.gz:md5,865434788bdb68b0becc4ccff9800ab5",
                 "SAMPLE1_PE.contigs.fa.gz:md5,7c027b73ff7512e0a244416b72167d86",
-                "SAMPLE2_PE.assembly.gfa.gz:md5,eaf8651b09e9431848e8beee32a94a0a",
                 "SAMPLE2_PE.contigs.fa.gz:md5,315a0eda3a2d1be0fbbad44ebab9b05b",
-                "SAMPLE3_SE.assembly.gfa.gz:md5,162f774b21afe24f38e0036b759bae38",
                 "SAMPLE3_SE.contigs.fa.gz:md5,deea55f084df8fc24e3e70662b59af12",
                 "gc.icarus.txt:md5,f18a506ebd4e3630c7bb4cef61d30f21",
                 "gc.icarus.txt:md5,f18a506ebd4e3630c7bb4cef61d30f21",

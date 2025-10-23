@@ -1,4 +1,4 @@
 **/pangolin_db/**/LICENSE
 **/pangolin_db/**/licenses
 nanoplot/*/*.png
-assembly/spades/rnaviral/plasmidid/*/kmer/database.filtered_0.80_term.0.5.representative.fasta.blast.tmp.njs
+assembly/spades/rnaviral/plasmidid/*/kmer/*.njs

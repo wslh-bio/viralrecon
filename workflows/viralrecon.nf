@@ -1082,15 +1082,15 @@ workflow VIRALRECON {
         pango_database = Channel.empty()
         ch_pangolin_report = Channel.empty()
 
-        if (!params.pango_database) {
-            PANGOLIN_UPDATEDATA('pangolin_db')
-            pango_database = PANGOLIN_UPDATEDATA.out.db
-            ch_versions   = ch_versions.mix(PANGOLIN_UPDATEDATA.out.versions.first())
-        } else{
-            pango_database = Channel.value(file(params.pango_database, type: 'dir'))
-        }
         ch_pangolin_multiqc = Channel.empty()
         if (!params.skip_pangolin) {
+            if (!params.pango_database) {
+                PANGOLIN_UPDATEDATA('pangolin_db')
+                pango_database = PANGOLIN_UPDATEDATA.out.db
+                ch_versions   = ch_versions.mix(PANGOLIN_UPDATEDATA.out.versions.first())
+            } else{
+                pango_database = Channel.value(file(params.pango_database, type: 'dir'))
+            }
             PANGOLIN_RUN (
                 ARTIC_MINION.out.fasta,
                 pango_database

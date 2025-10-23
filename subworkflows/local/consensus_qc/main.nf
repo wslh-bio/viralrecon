@@ -47,7 +47,7 @@ workflow CONSENSUS_QC {
 
     ch_pangolin_report = Channel.empty()
     if (!params.skip_pangolin) {
-        if (!params.pango_database && !params.skip_pangolin) {
+        if (!params.pango_database) {
             PANGOLIN_UPDATEDATA('pangolin_db')
             pango_database = PANGOLIN_UPDATEDATA.out.db
             ch_versions   = ch_versions.mix(PANGOLIN_UPDATEDATA.out.versions.first())

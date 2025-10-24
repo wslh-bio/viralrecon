@@ -52,6 +52,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 - [[PR #520](https://github.com/nf-core/viralrecon/pull/520)] - Update of metro map for illumina workflow
 - [[PR #523]](https://github.com/nf-core/viralrecon/pull/523) - Fixed metro map for Nanopore, updated freyja version, added freyja to full testing, added min_mapped reads filter to Nanopore, added Kraken2 reports to Nanopore's MultiQC, fixed Quast report on Nanopore, re-write nf-test as scenarios.
 - [[PR #538]](https://github.com/nf-core/viralrecon/pull/538) - Fixed some conda versions that were problematic in tests or different from singularity/docker
+- [[PR #540]](https://github.com/nf-core/viralrecon/pull/540) - Updated artic minion, removed support for Fast5 files and fixed snaps.
 
 ### Parameters
 
@@ -74,6 +75,10 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 | `--skip_asciigenome`            |                              |
 | `--asciigenome_read_depth`      |                              |
 | `--asciigenome_window_size`     |                              |
+| `--fast5_dir`                   |                              |
+| `--artic_minion_caller`         |                              |
+| `--artic_minion_aligner`        |                              |
+| `--artic_minion_medaka_model`   | `--artic_minion_model_dir`   |
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present.
 > **NB:** Parameter has been **added** if just the new parameter information is present.
@@ -87,6 +92,7 @@ Note, since the pipeline is now using Nextflow DSL2, each process will be run wi
 | ----------------- | ----------- | ----------- |
 | `asciigenome`     | 1.16.0      |             |
 | `artic guppyplex` | 1.2.3       | 1.6.2       |
+| `artic minion`    | 1.2.3       | 1.6.2       |
 | `bandage`         | 0.8.1       | 0.9.0       |
 | `bcftools`        | 1.16        | 1.22        |
 | `bedtools`        | 2.30.0      | 2.31.1      |

@@ -58,8 +58,11 @@ variants/bowtie2/*.{bam,bam.bai}
 nanoplot/*/NanoPlot*.log
 nanoplot/*/*.html
 nanoplot/*/*.png
-nanopolish/*.{bam,bam.bai}
-nanopolish/bcftools_stats/*.bcftools_stats.txt
+nanoplot/*/NanoStats.txt
+artic_minion/*.{bam,bam.bai}
+artic_minion/bcftools_stats/*.bcftools_stats.txt
+artic_minion/*.{vcf,vcf.gz,vcf.gz.tbi,csv}
+artic_minion/**/*.{vcf,vcf.gz,vcf.gz.tbi,csv,txt}
 pycoqc/pycoqc.html
 pycoqc/pycoqc.json
 **/pangolin_db/**

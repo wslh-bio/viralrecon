@@ -87,9 +87,6 @@
                     "samtools": 1.14,
                     "python": "3.9.5"
                 },
-                "MINIA": {
-                    "minia": "3.2.5"
-                },
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.11"
                 },
@@ -1253,9 +1250,6 @@
                 },
                 "MAKE_VARIANTS_LONG_TABLE": {
                     "python": "3.13.2"
-                },
-                "MINIA": {
-                    "minia": "3.2.5"
                 },
                 "MOSDEPTH_GENOME": {
                     "mosdepth": "0.3.11"

@@ -2,10 +2,10 @@ process PICARD_COLLECTMULTIPLEMETRICS {
     tag "$meta.id"
     label 'process_single'
 
-    conda "bioconda::picard=3.0.0"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/picard:3.0.0--hdfd78af_1' :
-        'quay.io/biocontainers/picard:3.0.0--hdfd78af_1' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/08/0861295baa7c01fc593a9da94e82b44a729dcaf8da92be8e565da109aa549b25/data' :
+        'community.wave.seqera.io/library/picard:3.4.0--e9963040df0a9bf6' }"
 
     input:
     tuple val(meta) , path(bam), path(bai)
@@ -14,7 +14,7 @@ process PICARD_COLLECTMULTIPLEMETRICS {
 
     output:
     tuple val(meta), path("*_metrics"), emit: metrics
-    tuple val(meta), path("*.pdf")    , emit: pdf
+    tuple val(meta), path("*.pdf")    , emit: pdf, optional: true
     path  "versions.yml"              , emit: versions
 
     when:

@@ -14,10 +14,6 @@
 
   > Assefa S, Keane TM, Otto TD, Newbold C, Berriman M. ABACAS: algorithm-based automatic contiguation of assembled sequences. Bioinformatics. 2009 Aug 1;25(15):1968-9. doi: 10.1093/bioinformatics/btp347. Epub 2009 Jun 3. PubMed PMID: 19497936; PubMed Central PMCID: PMC2712343.
 
-- [ASCIIGenome](https://www.ncbi.nlm.nih.gov/pubmed/28119307/)
-
-  > Beraldi D. ASCIIGenome: a command line genome browser for console terminals. Bioinformatics. 2017 May 15;33(10):1568-1569. doi: 10.1093/bioinformatics/btx007. PubMed PMID: 28119307; PubMed Central PMCID: PMC5423454.
-
 - [ARTIC network](https://github.com/artic-network)
 
 - [Bandage](https://www.ncbi.nlm.nih.gov/pubmed/26099265)
@@ -49,6 +45,8 @@
   > Chen S, Zhou Y, Chen Y, Gu J. fastp: an ultra-fast all-in-one FASTQ preprocessor. Bioinformatics. 2018 Sep 1;34(17):i884-i890. doi: 10.1093/bioinformatics/bty560. PubMed PMID: 30423086; PubMed Central PMCID: PMC6129281.
 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+
+  > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
 
 - [iVar](https://www.ncbi.nlm.nih.gov/pubmed/30621750/)
 
@@ -117,6 +115,7 @@
   > Wick RR, Judd LM, Gorrie CL, Holt KE. Unicycler: Resolving bacterial genome assemblies from short and long sequencing reads. PLoS Comput Biol. 2017 Jun 8;13(6):e1005595. doi: 10.1371/journal.pcbi.1005595. eCollection 2017 Jun. PubMed PMID: 28594827; PubMed Central PMCID: PMC5481147.
 
 - [Vcflib](https://www.biorxiv.org/content/early/2021/05/23/2021.05.21.445151)
+
   > Garrison E, Kronenberg ZN, Dawson ET, Pedersen BS, P Pjotr. Vcflib and tools for processing the VCF variant call format. bioRxiv 2021 May.doi: 10.1101/2021.05.21.445151.
 
 ## Software packaging/containerisation tools
@@ -135,5 +134,8 @@
 
 - [Docker](https://dl.acm.org/doi/10.5555/2600239.2600241)
 
+  > Merkel, D. (2014). Docker: lightweight linux containers for consistent development and deployment. Linux Journal, 2014(239), 2. doi: 10.5555/2600239.2600241.
+
 - [Singularity](https://pubmed.ncbi.nlm.nih.gov/28494014/)
+
   > Kurtzer GM, Sochat V, Bauer MW. Singularity: Scientific containers for mobility of compute. PLoS One. 2017 May 11;12(5):e0177459. doi: 10.1371/journal.pone.0177459. eCollection 2017. PubMed PMID: 28494014; PubMed Central PMCID: PMC5426675.

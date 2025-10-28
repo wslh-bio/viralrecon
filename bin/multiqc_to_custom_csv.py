@@ -182,7 +182,7 @@ def main(args=None):
             [
                 (
                     "% Non-host reads (Kraken 2)",
-                    ["PREPROCESS: Kraken 2_mqc-generalstats-preprocess_kraken_2-Unclassified"],
+                    ["preprocess_kraken_2-pct_unclassified"],
                 )
             ],
         ),
@@ -200,15 +200,15 @@ def main(args=None):
             [
                 (
                     "Coverage median",
-                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-median_coverage"],
+                    ["variants_mosdepth-median_coverage"],
                 ),
                 (
                     "% Coverage > 1x",
-                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-1_x_pc"],
+                    ["variants_mosdepth-1_x_pc"],
                 ),
                 (
                     "% Coverage > 10x",
-                    ["VARIANTS: mosdepth_mqc-generalstats-variants_mosdepth-10_x_pc"],
+                    ["variants_mosdepth-10_x_pc"],
                 ),
             ],
         ),
@@ -231,7 +231,7 @@ def main(args=None):
             "multiqc_pangolin.yaml",
             [("Pangolin lineage", ["lineage"])],
         ),
-        ("multiqc_nextclade_clade-plot.yaml", [("Nextclade clade", ["clade"])]),
+        ("multiqc_nextclade_clade.yaml", [("Nextclade clade", ["clade"])]),
     ]
 
     illumina_assembly_files = [
@@ -245,7 +245,7 @@ def main(args=None):
             [
                 (
                     "% Non-host reads (Kraken 2)",
-                    ["PREPROCESS: Kraken 2_mqc-generalstats-preprocess_kraken_2-Unclassified"],
+                    ["preprocess_kraken_2-pct_unclassified"],
                 )
             ],
         ),
@@ -284,11 +284,15 @@ def main(args=None):
             "multiqc_general_stats.yaml",
             [
                 (
-                    "Coverage median",
-                    ["mosdepth_mqc-generalstats-mosdepth-median_coverage"],
+                    "% Non-host reads (Kraken 2)",
+                    ["kraken-pct_unclassified"],
                 ),
-                ("% Coverage > 1x", ["mosdepth_mqc-generalstats-mosdepth-1_x_pc"]),
-                ("% Coverage > 10x", ["mosdepth_mqc-generalstats-mosdepth-10_x_pc"]),
+                (
+                    "Coverage median",
+                    ["mosdepth-median_coverage"],
+                ),
+                ("% Coverage > 1x", ["mosdepth-1_x_pc"]),
+                ("% Coverage > 10x", ["mosdepth-10_x_pc"]),
             ],
         ),
         (
@@ -298,7 +302,7 @@ def main(args=None):
         ("multiqc_snpeff.yaml", [("# Missense variants", ["MISSENSE"])]),
         ("multiqc_quast.yaml", [("# Ns per 100kb consensus", ["# N's per 100 kbp"])]),
         ("multiqc_pangolin.yaml", [("Pangolin lineage", ["lineage"])]),
-        ("multiqc_nextclade_clade-plot.yaml", [("Nextclade clade", ["clade"])]),
+        ("multiqc_nextclade_clade.yaml", [("Nextclade clade", ["clade"])]),
     ]
 
     if args.PLATFORM == "illumina":

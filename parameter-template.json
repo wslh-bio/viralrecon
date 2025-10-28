@@ -1,0 +1,18 @@
+{
+    "input": {
+        "description": "Path to csv samplesheet of samples.",
+        "optional":false
+    },
+    "outdir": {
+        "description": "The output directory where the results will be saved",
+        "optional":false
+    },
+    "genome" : {
+        "description" : "Reference genome and database to be used: rsva or rsvb.",
+        "optional":false
+    },
+    "runname" : {
+        "description" : "A name for this analysis run. This will be used to name report.",
+        "optional":false
+    }
+}

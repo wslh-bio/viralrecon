@@ -8,7 +8,7 @@
         "optional":false
     },
     "genome" : {
-        "description" : "Reference genome and database to be used: RSVA or RSVB",
+        "description" : "Reference genome and database to be used: rsva or rsvb.",
         "optional":false
     },
     "runname" : {

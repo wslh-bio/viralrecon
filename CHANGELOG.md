@@ -3,6 +3,49 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[RSV-Viralrecon-v2.6.0-v1.0.0](https://github.com/wslh-bio/viralrecon/releases/tag/RSV-Viralrecon-v2.6.0-v1.0.0)] - 2025-10-28
+
+### Purpose
+
+This release of viralrecon is configured and modified for rsv sequencing at the Wisconsin State Laboratory of Hygiene.
+
+### Credits
+
+- [CJ Jossart](https://github.com/cjjossart)
+
+### Enhancements & fixes
+
+- Updated Nextclade modules to the latest version. Includes edits to modules and workflows where nextclade is used.
+- Uses Nextclade 3.9.1 tool with an updated databases kept on AWS renamed as latest.
+- Updated specific parameters in the nextflow.config.
+- Added parameter runname to name output files for healthomics. Included logic to use with AWS healthomics, otherwise default to nextflow runName.
+- Added runname parameter to nextflow_schema.json
+- Added wslh.config for specific process arguements; Configured to call bases and variants at 50X.
+- Edited multiqc_to_custom_csv.py and multiqc_config_illumina.yml files to use 50x coverage percentage and use it in final report.
+- Added omics.config for running with healthomics and easygenomics.
+- Created parameter-template.json for healthomics.
+- Updated base.config to all for 2 retries without exceptions.
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               | `--runname`   |
+
+> **NB:** Parameter has been **updated** if both old and new parameter information is present.
+> **NB:** Parameter has been **added** if just the new parameter information is present.
+> **NB:** Parameter has been **removed** if new parameter information isn't present.
+
+### Software dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| `nextclade` | 2.12.0      | 3.9.1       |
+
+> **NB:** Dependency has been **updated** if both old and new version information is present.
+> **NB:** Dependency has been **added** if just the new version information is present.
+> **NB:** Dependency has been **removed** if new version information isn't present.
+
 ## [[2.6.0](https://github.com/nf-core/viralrecon/releases/tag/2.6.0)] - 2023-03-23
 
 ### Credits

@@ -20,7 +20,7 @@ process NEXTCLADE_MULTIQC_INFO {
 
     script:
     """
-    nextclade_multiqc_info.py $db nextclade_clade_db_info_mqc.tsv $clade_tsv
+    nextclade_multiqc_info.py --db_dir $db --clade_tsv $clade_tsv --out_tsv nextclade_clade_db_info_mqc.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

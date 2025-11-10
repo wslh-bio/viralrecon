@@ -205,6 +205,36 @@ custom_data:
         description: "Pangolin lineage inferred from the consensus sequence"
       "Nextclade clade":
         description: "Nextclade clade inferred from the consensus sequence"
+      "Nextclade database name":
+        description: "Nextclade database used for clade assignment"
+      "Nextclade database tag":
+        description: "Nextclade database tag used for clade assignment"
+      "Nextclade database reference name":
+        description: "Nextclade database reference name used for clade assignment"
+      "Nextclade database reference accession":
+        description: "Nextclade database reference accession used for clade assignment"
+      "Nextclade overall score":
+        description: "Nextclade overall QC score"
+      "Nextclade overall status":
+        description: "Nextclade overall QC status"
+      "Nextclade coverage":
+        description: "Nextclade coverage value"
+        format: "{:.2f}"
+      "Nextclade substitutions":
+        description: "Total number of substitutions identified by Nextclade"
+        format: "{:,.0f}"
+      "Nextclade deletions":
+        description: "Total number of deletions identified by Nextclade"
+        format: "{:,.0f}"
+      "Nextclade insertions":
+        description: "Total number of insertions identified by Nextclade"
+        format: "{:,.0f}"
+      "Nextclade frameshifts":
+        description: "Total number of frameshifts identified by Nextclade"
+        format: "{:,.0f}"
+      "Nextclade missing":
+        description: "Total number of missing bases identified by Nextclade"
+        format: "{:,.0f}"
 
     pconfig:
       id: "summary_variants_metrics_plot"

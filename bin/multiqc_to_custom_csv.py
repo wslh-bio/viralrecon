@@ -154,7 +154,7 @@ def metrics_dict_to_file(file_field_list, multiqc_data_dir, out_file, valid_samp
             row_list = [k]
             for field in field_list:
                 if field in metrics_dict[k]:
-                    if metrics_dict[k][field]:
+                    if metrics_dict[k][field] is not None:
                         row_list.append(str(metrics_dict[k][field]).replace(",", ";"))
                     else:
                         row_list.append("NA")
@@ -236,8 +236,22 @@ def main(args=None):
             [("Pangolin lineage", ["lineage"])],
         ),
         (
-            "multiqc_nextclade_clade-plot.yaml",
-              [("Nextclade clade", ["clade"])]
+            "multiqc_nextclade_clade_db_info-plot.yaml",
+            [
+                ("Nextclade clade", ["clade"]),
+                ("Nextclade database name", ["nextclade_db_name"]),
+                ("Nextclade database tag", ["nextclade_db_version"]),
+                ("Nextclade database reference name", ["nextclade_db_reference_name"]),
+                ("Nextclade database reference accession", ["nextclade_db_reference_accession"]),
+                ("Nextclade overall score", ["qc.overallScore"]),
+                ("Nextclade overall status", ["qc.overallStatus"]),
+                ("Nextclade coverage", ["coverage"]),
+                ("Nextclade substitutions", ["totalSubstitutions"]),
+                ("Nextclade deletions", ["totalDeletions"]),
+                ("Nextclade insertions", ["totalInsertions"]),
+                ("Nextclade frameshifts", ["totalFrameShifts"]),
+                ("Nextclade missing", ["totalMissing"]),
+            ],   
         ),
     ]
 

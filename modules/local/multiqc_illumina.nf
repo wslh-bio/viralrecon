@@ -66,7 +66,7 @@ process MULTIQC {
     rm -f variants/report.tsv
 
     ## Run MultiQC a second time
-    multiqc -f $args -e general_stats --ignore nextclade_clade_mqc.tsv $custom_config .
+    multiqc -f $args -e general_stats --ignore nextclade_clade_db_info_mqc.tsv $custom_config .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

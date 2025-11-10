@@ -508,12 +508,17 @@ workflow ILLUMINA {
                 def qcscore = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['qc.overallScore']
                 def qcstatus = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['qc.overallStatus']
                 def coverage = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['coverage']
-                return [ "$meta.id\t$clade\t$qcscore\t$qcstatus\t$coverage" ]
+                def substitutions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalSubstitutions']
+                def deletions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalDeletions']
+                def insertions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalInsertions']
+                def frameshifts = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalFrameShifts']
+                def missing = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalMissing']
+                return [ "$meta.id\t$clade\t$qcscore\t$qcstatus\t$coverage\t$substitutions\t$deletions\t$insertions\t$frameshifts\t$missing" ]
             }
             .collect()                
             .map { 
                 tsv_data ->
-                    def header = ['Sample', 'clade', 'qc.overallScore', 'qc.overallStatus', 'coverage']
+                    def header = ['Sample', 'clade', 'qc.overallScore', 'qc.overallStatus', 'coverage', 'totalSubstitutions', 'totalDeletions', 'totalInsertions', 'totalFrameShifts', 'totalMissing']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
             .set { ch_nextclade_multiqc }

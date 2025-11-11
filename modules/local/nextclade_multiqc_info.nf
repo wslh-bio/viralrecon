@@ -2,10 +2,10 @@ process NEXTCLADE_MULTIQC_INFO {
     tag "$db"
     label 'process_medium'
 
-    conda "conda-forge::python=3.8"
+    conda "conda-forge::pandas:2.2.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.8' :
-        'quay.io/biocontainers/python:3.8' }"
+        'https://depot.galaxyproject.org/singularity/pandas:2.2.1' :
+        'quay.io/biocontainers/pandas:2.2.1' }"
 
     input:
     path db

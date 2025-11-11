@@ -3,6 +3,45 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[RSV-Viralrecon-v2.6.0-v1.1.0](https://github.com/wslh-bio/viralrecon/releases/tag/RSV-Viralrecon-v2.6.0-v1.1.0)] - 2025-11-11
+
+### Purpose
+
+This release of viralrecon is configured and modified for rsv sequencing at the Wisconsin State Laboratory of Hygiene.
+
+### Credits
+
+- [CJ Jossart](https://github.com/cjjossart)
+
+### Enhancements & fixes
+
+- Updated the final report to include nextclade database and metric information.
+- Addition of nextclade_multiqc_info module to add database information from nextclade database brought into the pipeline.
+- Addition of python script for nextclade_multiqc_info module to merge database information into tsv file for nextclade multiqc data.
+- Edited multiqc_to_custom_csv.py and multiqc_config_illumina.yml files to include addtional nextclade data.
+- Edited illumina.nf to include new module and include more columns in nextclade data channel.
+- Added the params.genome to the naming convention for reports to add rsva or rsvb to report name.
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               |               |
+
+> **NB:** Parameter has been **updated** if both old and new parameter information is present.
+> **NB:** Parameter has been **added** if just the new parameter information is present.
+> **NB:** Parameter has been **removed** if new parameter information isn't present.
+
+### Software dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| `nextclade` | 2.12.0      | 3.9.1       |
+
+> **NB:** Dependency has been **updated** if both old and new version information is present.
+> **NB:** Dependency has been **added** if just the new version information is present.
+> **NB:** Dependency has been **removed** if new version information isn't present.
+
 ## [[RSV-Viralrecon-v2.6.0-v1.0.0](https://github.com/wslh-bio/viralrecon/releases/tag/RSV-Viralrecon-v2.6.0-v1.0.0)] - 2025-10-28
 
 ### Purpose

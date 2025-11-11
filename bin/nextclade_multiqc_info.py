@@ -50,13 +50,9 @@ def build_db_info(json_path):
         data = json.load(fh)
 
     name = data.get("attributes", {}).get("name") or data.get("name", "Unknown")
-    ref_name = (
-        data.get("attributes", {}).get("reference name")
-        or data.get("reference", {}).get("name", "Unknown")
-    )
-    ref_acc = (
-        data.get("attributes", {}).get("reference accession")
-        or data.get("reference", {}).get("accession", "Unknown")
+    ref_name = data.get("attributes", {}).get("reference name") or data.get("reference", {}).get("name", "Unknown")
+    ref_acc = data.get("attributes", {}).get("reference accession") or data.get("reference", {}).get(
+        "accession", "Unknown"
     )
 
     version = None
@@ -122,7 +118,7 @@ if __name__ == "__main__":
     parser = CompileResults(
         prog="nextclade_multiqc_info.py",
         description="Update Nextclade TSV with database info for MultiQC",
-        epilog="Example usage: python nextclade_multiqc_info.py --db_dir <db_dir> --clade_tsv <clade_tsv> --out_tsv <out_tsv>"
+        epilog="Example usage: python nextclade_multiqc_info.py --db_dir <db_dir> --clade_tsv <clade_tsv> --out_tsv <out_tsv>",
     )
 
     parser.add_argument("--db_dir", required=True, help="Directory containing pathogen.json or ZIP")

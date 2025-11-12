@@ -59,6 +59,7 @@ include { CUTADAPT } from '../modules/local/cutadapt'
 include { MULTIQC  } from '../modules/local/multiqc_illumina'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
+include { NEXTCLADE_MULTIQC_INFO } from '../modules/local/nextclade_multiqc_info'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -497,22 +498,37 @@ workflow ILLUMINA {
     }
 
     //
-    // MODULE: Get Nextclade clade information for MultiQC report
+    // MODULE: Get Nextclade database and clade information for MultiQC report
     //
     ch_nextclade_multiqc = Channel.empty()
     if (!params.skip_nextclade) {
         ch_nextclade_report
             .map { meta, csv ->
                 def clade = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['clade']
-                return [ "$meta.id\t$clade" ]
+                def qcscore = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['qc.overallScore']
+                def qcstatus = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['qc.overallStatus']
+                def coverage = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['coverage']
+                def substitutions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalSubstitutions']
+                def deletions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalDeletions']
+                def insertions = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalInsertions']
+                def frameshifts = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalFrameShifts']
+                def missing = WorkflowCommons.getNextcladeFieldMapFromCsv(csv)['totalMissing']
+                return [ "$meta.id\t$clade\t$qcscore\t$qcstatus\t$coverage\t$substitutions\t$deletions\t$insertions\t$frameshifts\t$missing" ]
             }
             .collect()                
             .map { 
                 tsv_data ->
-                    def header = ['Sample', 'clade']
+                    def header = ['Sample', 'clade', 'qc.overallScore', 'qc.overallStatus', 'coverage', 'totalSubstitutions', 'totalDeletions', 'totalInsertions', 'totalFrameShifts', 'totalMissing']
                     WorkflowCommons.multiqcTsvFromList(tsv_data, header)
             }
             .set { ch_nextclade_multiqc }
+
+        // Extract database information using dedicated module
+        NEXTCLADE_MULTIQC_INFO (
+            PREPARE_GENOME.out.nextclade_db,
+            ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([])
+        )
+        ch_nextclade_multiqc = NEXTCLADE_MULTIQC_INFO.out.tsv
     }
 
     //
@@ -634,7 +650,7 @@ workflow ILLUMINA {
             ch_snpeff_multiqc.collect{it[1]}.ifEmpty([]),
             ch_quast_multiqc.collect().ifEmpty([]),
             ch_pangolin_multiqc.collect{it[1]}.ifEmpty([]),
-            ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_mqc.tsv').ifEmpty([]),
+            ch_nextclade_multiqc.collectFile(name: 'nextclade_clade_db_info_mqc.tsv').ifEmpty([]),
             ch_cutadapt_multiqc.collect{it[1]}.ifEmpty([]),
             ch_spades_quast_multiqc.collect().ifEmpty([]),
             ch_unicycler_quast_multiqc.collect().ifEmpty([]),

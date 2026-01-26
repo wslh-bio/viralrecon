@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## [[SC2-Viralrecon-2.6.0-1.0.0](https://github.com/wslh-bio/viralrecon/releases/tag/SC2-Viralrecon-2.6.0-1.0.0)]
+## [[SC2-Viralrecon-v2.6.0-v1.0.0](https://github.com/wslh-bio/viralrecon/releases/tag/SC2-Viralrecon-v2.6.0-v1.0.0)] 2026-01-26
 
 ### Credits
 
@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configure pipeline to use assets and databases saved in aws s3 bucket.
 - Updated nextclade module to version 3
 - Configured pipeline to use the latest pangolin docker container
-
 
 ### Parameters
 

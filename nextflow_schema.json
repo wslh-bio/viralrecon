@@ -40,6 +40,12 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "runname": {
+                    "type": "string",
+                    "description": "Custom name for the run to be used as a prefix for output files and folders.",
+                    "fa_icon": "fas fa-signature",
+                    "help_text": "By default, the pipeline will use the date and time of the run as a prefix for output files and folders. Use this parameter to specify a custom name for the run instead."
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",

@@ -198,7 +198,7 @@ custom_data:
       "# Missense variants":
         description: "Total number of variants identified as missense mutations with SnpEff"
         format: "{:,.0f}"
-      "# Ns per 100kb consensus":
+      "num_Ns_per_100kb_consensus":
         description: "Number of N bases per 100kb in consensus sequence"
         format: "{:,.2f}"
       "Pangolin lineage":

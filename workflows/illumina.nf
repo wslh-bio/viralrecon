@@ -125,26 +125,26 @@ workflow ILLUMINA {
     PREPARE_GENOME
         .out
         .fasta
-        .map { WorkflowIllumina.isMultiFasta(it, log) }
+        .map { sleep(10000); WorkflowIllumina.isMultiFasta(it, log) }
 
     if (params.protocol == 'amplicon' && !params.skip_variants) {
         // Check primer BED file only contains suffixes provided --primer_left_suffix / --primer_right_suffix
         PREPARE_GENOME
             .out
             .primer_bed
-            .map { WorkflowCommons.checkPrimerSuffixes(it, params.primer_left_suffix, params.primer_right_suffix, log) }
+            .map { sleep(10000); WorkflowCommons.checkPrimerSuffixes(it, params.primer_left_suffix, params.primer_right_suffix, log) }
 
         // Check whether the contigs in the primer BED file are present in the reference genome
         PREPARE_GENOME
             .out
             .primer_bed
-            .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { sleep(10000); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
             .set { ch_bed_contigs }
 
         PREPARE_GENOME
             .out
             .fai
-            .map { [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { sleep(10000); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
             .concat(ch_bed_contigs)
             .collect()
             .map { fai, bed -> WorkflowCommons.checkContigsInBED(fai, bed, log) }
@@ -154,7 +154,7 @@ workflow ILLUMINA {
             PREPARE_GENOME
                 .out
                 .primer_bed
-                .map { WorkflowIllumina.checkIfSwiftProtocol(it, 'covid19genome', log) }
+                .map { sleep(10000); WorkflowIllumina.checkIfSwiftProtocol(it, 'covid19genome', log) }
         }
     }
 

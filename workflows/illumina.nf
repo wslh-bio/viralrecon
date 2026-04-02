@@ -33,6 +33,15 @@ def assemblers = params.assemblers ? params.assemblers.split(',').collect{ it.tr
 def variant_caller = params.variant_caller
 if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' : 'bcftools' }
 
+// Function to wait for files to exist before downstream processes try to access them, to avoid workflow failures due to file system delays
+def waitForFiles = { f ->
+    int waited = 0
+    while (!f.toFile().exists() && waited < 120) {
+        sleep(10000)
+        waited += 10
+    }
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -125,26 +134,26 @@ workflow ILLUMINA {
     PREPARE_GENOME
         .out
         .fasta
-        .map { sleep(10000); WorkflowIllumina.isMultiFasta(it, log) }
+        .map { waitForFiles(it); WorkflowIllumina.isMultiFasta(it, log) }
 
     if (params.protocol == 'amplicon' && !params.skip_variants) {
         // Check primer BED file only contains suffixes provided --primer_left_suffix / --primer_right_suffix
         PREPARE_GENOME
             .out
             .primer_bed
-            .map { sleep(10000); WorkflowCommons.checkPrimerSuffixes(it, params.primer_left_suffix, params.primer_right_suffix, log) }
+            .map { waitForFiles(it); WorkflowCommons.checkPrimerSuffixes(it, params.primer_left_suffix, params.primer_right_suffix, log) }
 
         // Check whether the contigs in the primer BED file are present in the reference genome
         PREPARE_GENOME
             .out
             .primer_bed
-            .map { sleep(10000); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { waitForFiles(it); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
             .set { ch_bed_contigs }
 
         PREPARE_GENOME
             .out
             .fai
-            .map { sleep(10000); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
+            .map { waitForFiles(it); [ WorkflowCommons.getColFromFile(it, col=0, uniqify=true, sep='\t') ] }
             .concat(ch_bed_contigs)
             .collect()
             .map { fai, bed -> WorkflowCommons.checkContigsInBED(fai, bed, log) }
@@ -154,7 +163,7 @@ workflow ILLUMINA {
             PREPARE_GENOME
                 .out
                 .primer_bed
-                .map { sleep(10000); WorkflowIllumina.checkIfSwiftProtocol(it, 'covid19genome', log) }
+                .map { waitForFiles(it); WorkflowIllumina.checkIfSwiftProtocol(it, 'covid19genome', log) }
         }
     }
 

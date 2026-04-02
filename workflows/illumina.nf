@@ -36,7 +36,7 @@ if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' :
 // Function to wait for files to exist before downstream processes try to access them, to avoid workflow failures due to file system delays
 def waitForFiles = { f ->
     int waited = 0
-    while (!f.toFile().exists() && waited < 120) {
+    while (!f.exists() && waited < 120) {
         sleep(10000)
         waited += 10
     }

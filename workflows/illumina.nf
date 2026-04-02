@@ -37,8 +37,8 @@ if (!variant_caller) { variant_caller = params.protocol == 'amplicon' ? 'ivar' :
 def waitForFiles = { f ->
     int waited = 0
     while (!f.exists() && waited < 120) {
-        sleep(10000)
-        waited += 10
+        sleep(5000)
+        waited += 5
     }
 }
 

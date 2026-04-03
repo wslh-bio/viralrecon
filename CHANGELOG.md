@@ -2,13 +2,43 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [[SC2-Viralrecon-v2.6.0-v1.0.1](https://github.com/wslh-bio/viralrecon/releases/tag/SC2-Viralrecon-v2.6.0-v1.0.1)] 2026-04-03
+
+### Credits
+
+### Enhancements & fixes
+- Added a function in illumina.nf to wait for files due to a race condition issue experienced in AWS Healthomics.
+- Updated error strategy in base.config to match WSLH standards.
+- Added runname to schema.json.
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+
+> **NB:** Parameter has been **updated** if both old and new parameter information is present.
+> **NB:** Parameter has been **added** if just the new parameter information is present.
+> **NB:** Parameter has been **removed** if new parameter information isn't present.
+
+### Software dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+
+
+> **NB:** Dependency has been **updated** if both old and new version information is present.
+> **NB:** Dependency has been **added** if just the new version information is present.
+> **NB:** Dependency has been **removed** if new version information isn't present.
+
+
 ## [[SC2-Viralrecon-v2.6.0-v1.0.0](https://github.com/wslh-bio/viralrecon/releases/tag/SC2-Viralrecon-v2.6.0-v1.0.0)] 2026-01-26
 
 ### Credits
 
 ### Enhancements & fixes
 - Added wslh_report process to prepare output file to include pangolin, nextclade and qc metrics
-- Pythong script to create report file
+- Python script to create report file
 - Added specific config files for wslh and omics, which include parameter settings to mimic previous pipeline used
 - Use depth of 100x to call variants and consensus bases
 - Configure pipeline to use assets and databases saved in aws s3 bucket.

@@ -675,7 +675,7 @@ workflow ILLUMINA {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow.onComplete {Ns
+workflow.onComplete {
     if (params.email || params.email_on_fail) {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report, fail_mapped_reads)
     }

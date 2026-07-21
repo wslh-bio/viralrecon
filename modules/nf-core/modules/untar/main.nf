@@ -1,6 +1,6 @@
 process UNTAR {
     tag "$archive"
-    label 'process_low'
+    label 'process_medium'
 
     conda (params.enable_conda ? "conda-forge::sed=4.7" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -23,16 +23,13 @@ process UNTAR {
     untar     = archive.toString() - '.tar.gz'
 
     """
-    mkdir output
-
     tar \\
-        -C output --strip-components 1 \\
-        -xzvf \\
         $args \\
+        -xvf \\
         $archive \\
         $args2
 
-    mv output ${untar}
+
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

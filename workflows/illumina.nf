@@ -433,6 +433,15 @@ workflow ILLUMINA {
     }
 
     //
+    // FREYJA
+    //
+    FREYJA(
+        SAMTOOLS_SORT.out.bam, 
+        PREPARE_GENOME.out.fasta
+    )
+
+
+    //
     // SUBWORKFLOW: Call variants with BCFTools
     //
     if (!params.skip_variants && variant_caller == 'bcftools') {

@@ -35,8 +35,9 @@ process KRAKEN2_KRAKEN2 {
     def compress_reads_command = save_output_fastqs ? "pigz -p $task.cpus *.fastq" : ""
 
     """
+
     kraken2 \\
-        --db $db \\
+        --db ${db} \\
         --threads $task.cpus \\
         --report ${prefix}.kraken2.report.txt \\
         --gzip-compressed \\
@@ -46,8 +47,7 @@ process KRAKEN2_KRAKEN2 {
         $paired \\
         $args \\
         $reads
-
-    $compress_reads_command
+    
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

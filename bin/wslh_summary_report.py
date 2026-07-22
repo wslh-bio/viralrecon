@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+
+import sys
+import logging
+import argparse
+
+import numpy as np
+import pandas as pd
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(message)s')
+
+
+def create_dataframes(qc_stats, fks1_combined, clade_designation):
+
+    logging.debug("Starting to create dataframes")
+    multiqc_csv_df       = pd.DataFrame(qc_stats)
+    pangolin_df = pd.read_csv(fks1_combined, sep=',')
+    clade_df    = pd.read_csv(clade_designation, sep=',')
+
+    return multiqc_csv_df, fks1_df, clade_df
+
+
+def merge_dfs(qc, fks1, clade):
+
+    logging.debug("Clip 'Sample Name' and put into new column 'WSLH Specimen Number'")
+    qc['WSLH Specimen Number'] = qc['Sample Name'].str.split('_').str[0].str.split('-').str[0].str.split('a').str[0]
+
+    logging.debug("Renaming FKS1 columns to ensure proper merge")
+    fks1.rename(columns={"sample_id":"Sample Name"}, inplace=True)
+    fks1.rename(columns={'mutation':'fks1 mut'}, inplace=True)
+
+    logging.debug("Renaming Clade columns to ensure proper merge")
+    clade.rename(columns={'Sample':'Sample Name'}, inplace=True)
+    clade.rename(columns={'Subtype_Closest_Match':'Clade'}, inplace=True)
+
+    logging.debug("Merge databases QC and FKS1")
+    fks1 = fks1.groupby('Sample Name').agg({
+        'fks1 mut': lambda x: ', '.join(x.dropna().unique())
+    }).reset_index()
+
+    merged_df = pd.merge(qc, fks1, on='Sample Name', how='outer')
+ 
+    logging.debug("Merge databases Merged and clade designation")
+    merged_df = pd.merge(merged_df, clade, on='Sample Name', how='outer')
+
+    return merged_df
+
+
+def create_qc_reports(merged_df, run_name, wf_version):
+
+    merged_df['fks1'] = np.nan
+
+    logging.debug("Setting detected or not detected based on if mutation is present")
+    merged_df['fks1'] = np.where(merged_df['fks1 mut'] != "", 'DETECTED', merged_df['fks1'])
+    merged_df['fks1'] = np.where(merged_df['fks1 mut'].isna(), 'NOT DETECTED', merged_df['fks1'])
+
+    logging.debug("Sanitizing clade for readability")
+    merged_df = sanitize_clade(merged_df)
+
+    logging.debug("Adding Run column")
+    merged_df['Run'] = run_name
+
+    logging.debug("Adding Workflow Version column")
+    merged_df['Workflow Version'] = wf_version
+
+    logging.debug('Remove "%" from "Genome Fraction at 10X"')
+    merged_df['Genome Fraction at 10X'] = merged_df['Genome Fraction at 10X'].str.rstrip('%').astype(float)
+
+    logging.debug("Setting up columns for qc_report")
+    qc_report_columns=[
+        'Sample Name',
+        'Reads Before Trimming',
+        'GC Before Trimming',
+        'Average Q Score Before Trimming',
+        'Reference Length Coverage Before Trimming',
+        'Reads After Trimming',
+        'Paired Reads After Trimming',
+        'Unpaired Reads After Trimming',
+        'GC After Trimming',
+        'Average Q Score After Trimming',
+        'Reference Length Coverage After Trimming',
+        'Mean Coverage Depth',
+        'Reads Mapped',
+        'Genome Fraction at 10X',
+        'pass/fail',
+        'Clade',
+        'fks1',
+        'fks1 mut',
+        'Run',
+        'Workflow Version'
+    ]
+
+    logging.debug("Creating qc_report file")
+    merged_df.to_csv(run_name + '_mycosnp_qc_report.csv', columns=qc_report_columns, index=False)
+
+class CompileResults(argparse.ArgumentParser):
+
+    def error(self, message):
+        self.print_help()
+        sys.stderr.write(f'\nERROR DETECTED: {message}\n')
+
+        sys.exit(1)
+
+if __name__ == "__main__":
+
+    parser = CompileResults(prog = 'Compiles all of the mycosnp results into a WSLH specific report',
+        description = "Generate QC report and NCBI Biosample and SRA spreadsheets for Candida auris submission.",
+        epilog = "Example usage: python CA_post_mycosnp.py -qc <QC_STATS> -r <BATCH_NAME> -f <FKS1> -c <CLADE_DESIGNATION> -wv <WORKFLOW_VERSION>"
+        )
+    parser.add_argument(
+        "-qc",
+        "--qc_stats",
+        help="File containing QC stats in csv format."
+    )
+    parser.add_argument(
+        "-r",
+        "--run_name",
+        type=str,
+        help="Run name or batch of Candida auris in format CA_<machine>_YYMMDD.",
+    )
+    parser.add_argument(
+        "-f",
+        "--fks1_combined",
+        help="FKS1 gene combined spreadsheet from Pre-Mycosnp-nf in csv format.",
+    )
+    parser.add_argument(
+        "-c",
+        "--clade_designation",
+        help="Pre-mycosnp-nf summary that includes clade designation.",
+    )
+    parser.add_argument(
+        "-wv",
+        "--wf-version",
+        type=str,
+        help="Version of the workflow used to generate the results.",
+    )
+
+    logging.debug("Run parser to call arguments downstream")
+    args = parser.parse_args()
+
+    logging.info("Going through qc stats")
+    qc_stats_pass_fail = pass_fail(args.qc_stats)
+
+    logging.info("Processing all files")
+    qc_df, fks1_df, clade_df = create_dataframes(qc_stats_pass_fail, args.fks1_combined, args.clade_designation)
+
+    logging.info("Merging all data")
+    merged_data = merge_dfs(qc_df, fks1_df, clade_df)
+
+    logging.info("Creating QC reports")
+    create_qc_reports(merged_data, args.run_name, args.wf_version)
+

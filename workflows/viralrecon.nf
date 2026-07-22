@@ -1253,6 +1253,18 @@ workflow VIRALRECON {
         )
 
         multiqc_report = MULTIQC.out.report.toList()
+
+    // Merge pangolin reports into one singular csv file
+    ch_pangolin_reports = ch_pangolin_multiqc.collectFile(name: 'pangolin_report_combine.tsv', keepHeader: true).ifEmpty([]).view
+
+    //
+    // MODULE: WSLH_REPORT
+    //
+    //WSLH_REPORT (
+    //    MULTIQC.out.csv_reports,
+    //    ch_pangolin_reports,
+    //    ch_nextclade_multiqc
+    //)
     }
 
     emit:

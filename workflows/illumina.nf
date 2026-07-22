@@ -93,6 +93,7 @@ include { PICARD_COLLECTMULTIPLEMETRICS } from '../modules/nf-core/modules/picar
 include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 include { MOSDEPTH as MOSDEPTH_GENOME   } from '../modules/nf-core/modules/mosdepth/main'
 include { MOSDEPTH as MOSDEPTH_AMPLICON } from '../modules/nf-core/modules/mosdepth/main'
+include { FREYJA_VARIANTS               } from '../modules/nf-core/modules/freyja/variants/main'
 
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
@@ -101,6 +102,7 @@ include { FASTQC_FASTP           } from '../subworkflows/nf-core/fastqc_fastp'
 include { ALIGN_BOWTIE2          } from '../subworkflows/nf-core/align_bowtie2'
 include { PRIMER_TRIM_IVAR       } from '../subworkflows/nf-core/primer_trim_ivar'
 include { MARK_DUPLICATES_PICARD } from '../subworkflows/nf-core/mark_duplicates_picard'
+
 
 /*
 ========================================================================================
@@ -435,8 +437,9 @@ workflow ILLUMINA {
     //
     // FREYJA
     //
-    FREYJA(
-        SAMTOOLS_SORT.out.bam, 
+    ch_bam.view()
+    FREYJA_VARIANTS(
+        ch_bam, 
         PREPARE_GENOME.out.fasta
     )
 

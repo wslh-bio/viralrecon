@@ -19,7 +19,7 @@ process FREYJA_VARIANTS {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${runname}_${meta.id}"
     """
     freyja \\
         variants \\

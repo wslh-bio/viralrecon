@@ -440,7 +440,8 @@ workflow ILLUMINA {
     ch_bam.view()
     FREYJA_VARIANTS(
         ch_bam, 
-        PREPARE_GENOME.out.fasta
+        PREPARE_GENOME.out.fasta,
+        params.runname
     )
 
 

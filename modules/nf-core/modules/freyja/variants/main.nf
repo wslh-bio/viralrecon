@@ -9,6 +9,7 @@ process FREYJA_VARIANTS {
     input:
     tuple val(meta), path(bam)
     path fasta
+    val runname
 
     output:
     tuple val(meta), path("*.variants.tsv"), path("*.depth.tsv"), emit: variants
@@ -19,14 +20,14 @@ process FREYJA_VARIANTS {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${runname}_${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     freyja \\
         variants \\
         $args \\
         --ref $fasta \\
-        --variants ${prefix}.variants.tsv \\
-        --depths ${prefix}.depth.tsv \\
+        --variants ${runname}_${prefix}.variants.tsv \\
+        --depths ${runname}_${prefix}.depth.tsv \\
         $bam
 
     """

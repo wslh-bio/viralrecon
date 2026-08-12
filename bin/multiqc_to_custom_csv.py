@@ -229,7 +229,7 @@ def main(args=None):
         ),
         (
             "multiqc_quast_quast_variants.yaml",
-            [("# Ns per 100kb consensus", ["# N's per 100 kbp"])],
+            [("num_Ns_per_100kb_consensus", ["# N's per 100 kbp"])],
         ),
         (
             "multiqc_pangolin.yaml",
@@ -318,7 +318,7 @@ def main(args=None):
             [("# SNPs", ["number_of_SNPs"]), ("# INDELs", ["number_of_indels"])],
         ),
         ("multiqc_snpeff.yaml", [("# Missense variants", ["MISSENSE"])]),
-        ("multiqc_quast.yaml", [("# Ns per 100kb consensus", ["# N's per 100 kbp"])]),
+        ("multiqc_quast.yaml", [("num_Ns_per_100kb_consensus", ["# N's per 100 kbp"])]),
         ("multiqc_pangolin.yaml", [("Pangolin lineage", ["lineage"])]),
         ("multiqc_nextclade_clade-plot.yaml", [("Nextclade clade", ["clade"])]),
     ]

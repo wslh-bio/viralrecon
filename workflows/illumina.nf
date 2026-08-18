@@ -60,7 +60,7 @@ include { MULTIQC  } from '../modules/local/multiqc_illumina'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
 include { NEXTCLADE_MULTIQC_INFO } from '../modules/local/nextclade_multiqc_info'
-
+include { WSLH_SUMMARY } from '../modules/local/wslh_summary.nf'
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
@@ -658,6 +658,13 @@ workflow ILLUMINA {
         )
         multiqc_report = MULTIQC.out.report.toList()
     }
+
+    //
+    // MODULE: WSLH summary report
+    //
+    WSLH_SUMMARY (
+        MULTIQC.out.csv_variants
+    )
 }
 
 /*

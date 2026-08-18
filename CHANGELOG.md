@@ -3,6 +3,44 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[RSV-Viralrecon-v2.6.0-v1.2.0](https://github.com/wslh-bio/viralrecon/releases/tag/RSV-Viralrecon-v2.6.0-v1.2.0)]
+
+### Purpose
+
+This release of viralrecon updates include:
+- Change to a column name to work with LIMS system.
+- Adds runname and pipeline version to the wslh report.
+- Locks down the nextflow version used to 25.10.0.
+
+### Credits
+
+- [CJ Jossart](https://github.com/cjjossart)
+
+### Enhancements & fixes
+
+- Edited column name  in multiqc yaml file and python script to match LIMS system; "# Ns per 100kb consensus" to "num_Ns_per_100kb_consensus."
+- Added column in final report for runname and pipeline version.
+- Locks down the nextflow version to 25.10.0.
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+
+> **NB:** Parameter has been **updated** if both old and new parameter information is present.
+> **NB:** Parameter has been **added** if just the new parameter information is present.
+> **NB:** Parameter has been **removed** if new parameter information isn't present.
+
+### Software dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+
+> **NB:** Dependency has been **updated** if both old and new version information is present.
+> **NB:** Dependency has been **added** if just the new version information is present.
+> **NB:** Dependency has been **removed** if new version information isn't present.
+
+
 ## [[RSV-Viralrecon-v2.6.0-v1.1.0](https://github.com/wslh-bio/viralrecon/releases/tag/RSV-Viralrecon-v2.6.0-v1.1.0)] - 2025-11-11
 
 ### Purpose

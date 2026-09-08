@@ -47,6 +47,7 @@ process KRAKEN2_KRAKEN2 {
         $args \\
         $reads
 
+        $compress_reads_command
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -9,4 +9,3 @@ testing*
 null/
 .nf-test.log
 .nf-test
-conf/base.config

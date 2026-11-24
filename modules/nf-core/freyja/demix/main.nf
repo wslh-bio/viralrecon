@@ -38,6 +38,7 @@ process FREYJA_DEMIX {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
+            freyja: \$(echo \$(freyja --version 2>&1) | sed 's/^.*version //' )
             freyja database: \$(freyja demix --version --pathogen SARS-CoV-2 2>&1 | sed -n '2p')
     END_VERSIONS
     """
@@ -49,6 +50,7 @@ process FREYJA_DEMIX {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
+            freyja: \$(echo \$(freyja --version 2>&1) | sed 's/^.*version //' )
             freyja database: \$(freyja demix --version --pathogen SARS-CoV-2 2>&1 | sed -n '2p')
     END_VERSIONS
     """
